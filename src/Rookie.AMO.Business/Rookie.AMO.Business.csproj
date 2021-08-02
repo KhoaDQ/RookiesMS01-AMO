@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\Directory.Build.props" />
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Rookie.AMO.Contracts\Rookie.AMO.Contracts.csproj" />
+    <ProjectReference Include="..\Rookie.AMO.DataAccessor\Rookie.AMO.DataAccessor.csproj" />
+  </ItemGroup>
+
+</Project>
