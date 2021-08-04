@@ -8,12 +8,15 @@ namespace Rookie.AMO.DataAccessor.Entities
         [Key]
         public Guid Id { get; set; }
 
+        [Required]
+        [StringLength(maximumLength: 100)]
+        public string Name { get; set; }
+
         public DateTime CreatedDate { get; set; }
 
         public DateTime UpdatedDate { get; set; }
 
-        public Guid? CreatorId { get; set; }
+        public string CreatorId { get; set; }
 
-        public bool Pubished { get; set; }
     }
 }

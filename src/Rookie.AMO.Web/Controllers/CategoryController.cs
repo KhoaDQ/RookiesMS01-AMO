@@ -4,6 +4,7 @@ using Rookie.AMO.Business.Interfaces;
 using Rookie.AMO.Contracts;
 using Rookie.AMO.Contracts.Constants;
 using Rookie.AMO.Contracts.Dtos;
+using Rookie.AMO.Contracts.Dtos.Category;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -20,10 +21,10 @@ namespace Rookie.AMO.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<CategoryDto>> CreateAsync([FromBody] CategoryDto categoryDto)
+        public async Task<ActionResult<CategoryDto>> CreateAsync([FromBody] CategoryRequest categoryRequest)
         {
-            Ensure.Any.IsNotNull(categoryDto, nameof(categoryDto));
-            var asset = await _categoryService.AddAsync(categoryDto);
+            Ensure.Any.IsNotNull(categoryRequest, nameof(categoryRequest));
+            var asset = await _categoryService.AddAsync(categoryRequest);
             return Created(Endpoints.Category, asset);
         }
 
@@ -31,7 +32,6 @@ namespace Rookie.AMO.Web.Controllers
         public async Task<ActionResult> UpdateAsync([FromBody] CategoryDto categoryDto)
         {
             Ensure.Any.IsNotNull(categoryDto, nameof(categoryDto));
-            Ensure.Any.IsNotNull(categoryDto.Id, nameof(categoryDto.Id));
             await _categoryService.UpdateAsync(categoryDto);
             return NoContent();
         }
@@ -53,9 +53,5 @@ namespace Rookie.AMO.Web.Controllers
         public async Task<IEnumerable<CategoryDto>> GetAsync()
             => await _categoryService.GetAllAsync();
 
-        [HttpGet("find")]
-        public async Task<PagedResponseModel<CategoryDto>>
-            FindAsync(string name, int page = 1, int limit = 10)
-            => await _categoryService.PagedQueryAsync(name, page, limit);
     }
 }

@@ -16,6 +16,7 @@ namespace Rookie.AMO.Business
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddTransient(typeof(IBaseRepository<>), typeof(BaseRepository<>));
             services.AddTransient<ICategoryService, CategoryService>();
+            services.AddTransient<IAssetService, AssetService>();
         }
     }
 }

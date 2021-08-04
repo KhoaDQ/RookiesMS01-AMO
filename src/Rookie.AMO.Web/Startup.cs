@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using Rookie.AMO.Business;
 using Rookie.AMO.Web.Filters;
 using System.Reflection;
@@ -33,19 +34,22 @@ namespace Rookie.AMO.Web
             {
                 fv.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly());
                 fv.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
-            })
-            .AddJsonOptions(ops =>
+            });
+            /*.AddJsonOptions(ops =>
             {
                 ops.JsonSerializerOptions.IgnoreNullValues = true;
                 ops.JsonSerializerOptions.WriteIndented = true;
                 ops.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
                 ops.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
                 ops.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-            });
+            });*/
 
-            services.AddHttpContextAccessor();
+            //services.AddHttpContextAccessor();
             services.AddBusinessLayer(Configuration);
-            services.AddSwaggerGen();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "EcomWeb.API", Version = "v1" });
+            });
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
