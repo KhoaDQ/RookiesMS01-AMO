@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using Rookie.AMO.Contracts.Constants;
 using Rookie.AMO.Contracts.Dtos;
+using Rookie.AMO.Contracts.Dtos.Category;
 
 namespace Rookie.AMO.Web.Validators
 {
@@ -21,10 +22,7 @@ namespace Rookie.AMO.Web.Validators
                .WithMessage(string.Format(ErrorTypes.Common.MaxLengthError, ValidationRules.CategoryRules.MaxLenghCharactersForName))
                .When(m => !string.IsNullOrWhiteSpace(m.Name));
 
-            RuleFor(m => m.Desc)
-               .MaximumLength(ValidationRules.CategoryRules.MaxLenghCharactersForDesc)
-               .WithMessage(string.Format(ErrorTypes.Common.MaxLengthError, ValidationRules.CategoryRules.MaxLenghCharactersForDesc))
-               .When(m => !string.IsNullOrWhiteSpace(m.Desc));
+          
         }
     }
 }

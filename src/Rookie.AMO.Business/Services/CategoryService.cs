@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Rookie.AMO.Business.Interfaces;
 using Rookie.AMO.Contracts;
 using Rookie.AMO.Contracts.Dtos;
+using Rookie.AMO.Contracts.Dtos.Category;
 using Rookie.AMO.DataAccessor.Entities;
 using System;
 using System.Collections.Generic;
@@ -23,10 +24,13 @@ namespace Rookie.AMO.Business.Services
             _mapper = mapper;
         }
 
-        public async Task<CategoryDto> AddAsync(CategoryDto categoryDto)
+        public async Task<CategoryDto> AddAsync(CategoryRequest categoryRequest)
         {
-            Ensure.Any.IsNotNull(categoryDto, nameof(categoryDto));
-            var category = _mapper.Map<Category>(categoryDto);
+            Ensure.Any.IsNotNull(categoryRequest, nameof(categoryRequest));
+            var category = _mapper.Map<Category>(categoryRequest);
+
+            category.Id = Guid.NewGuid();
+
             var item = await _baseRepository.AddAsync(category);
             return _mapper.Map<CategoryDto>(item);
         }
@@ -61,26 +65,6 @@ namespace Rookie.AMO.Business.Services
             return _mapper.Map<CategoryDto>(category);
         }
 
-        public async Task<PagedResponseModel<CategoryDto>> PagedQueryAsync(string name, int page, int limit)
-        {
-            var query = _baseRepository.Entities;
-
-            query = query.Where(x => string.IsNullOrEmpty(name) || x.Name.Contains(name));
-
-            query = query.OrderBy(x => x.Name);
-
-            var assets = await query
-                .AsNoTracking()
-                .PaginateAsync(page, limit);
-
-            return new PagedResponseModel<CategoryDto>
-            {
-                CurrentPage = assets.CurrentPage,
-                TotalPages = assets.TotalPages,
-                TotalItems = assets.TotalItems,
-                Items = _mapper.Map<IEnumerable<CategoryDto>>(assets.Items)
-            };
-        }
 
     }
 }

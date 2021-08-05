@@ -3,5 +3,8 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Rookie.AMO.DataAccessor\Rookie.AMO.DataAccessor.csproj" />
+  </ItemGroup>
 
 </Project>
