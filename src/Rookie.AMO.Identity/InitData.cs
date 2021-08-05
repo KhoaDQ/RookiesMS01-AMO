@@ -64,7 +64,7 @@ namespace Rookie.AMO.Identity
                     AllowedGrantTypes = GrantTypes.Implicit,
                     RedirectUris = new List<string>()
                     {
-                        "https://localhost:5001/callback"
+                        "https://localhost:5001/swagger/oauth2-redirect.html"
                     },
                     PostLogoutRedirectUris = new List<string>()
                     {
