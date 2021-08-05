@@ -49,7 +49,7 @@ namespace Rookie.AMO.Identity
             {
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
-                new IdentityResource("roles", "Your role(s)", new List<string>() { "role" })
+                new IdentityResource("roles", "Your role(s)", new List<string>() { "role" }),
             };
         }
 

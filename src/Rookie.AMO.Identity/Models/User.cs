@@ -15,7 +15,6 @@ namespace Rookie.AMO.Identity.Models
         public string Gender { get; set; }
         public string Type { get; set; }
         public string CodeStaff { get; set; }
-        public string UsernameLogin { get; set; }
         public string Location { get; set; }
     }
 }

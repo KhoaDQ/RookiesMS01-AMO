@@ -10,7 +10,7 @@ using Rookie.AMO.Identity.Data;
 namespace Rookie.AMO.Identity.Migrations
 {
     [DbContext(typeof(AppIdentityDbContext))]
-    [Migration("20210804141743_UpdateUser")]
+    [Migration("20210804151437_UpdateUser")]
     partial class UpdateUser
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -227,9 +227,6 @@ namespace Rookie.AMO.Identity.Migrations
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("UsernameLogin")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

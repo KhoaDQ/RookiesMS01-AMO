@@ -8,9 +8,12 @@ using System.Threading.Tasks;
 
 namespace Rookie.AMO.Identity.Data
 {
-    public class AppConfigurationDbContext : ConfigurationDbContext
+    public class AppConfigurationDbContext : ConfigurationDbContext<AppConfigurationDbContext>
     {
-        public AppConfigurationDbContext(DbContextOptions<ConfigurationDbContext> options, ConfigurationStoreOptions storeOptions) : base(options, storeOptions)
+        public AppConfigurationDbContext(
+            DbContextOptions<AppConfigurationDbContext> options,
+            ConfigurationStoreOptions storeOptions)
+            : base(options, storeOptions)
         {
         }
     }

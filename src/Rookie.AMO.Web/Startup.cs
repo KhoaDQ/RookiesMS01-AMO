@@ -44,6 +44,28 @@ namespace Rookie.AMO.Web
             });
 
             services.AddHttpContextAccessor();
+            services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = "Cookies";
+                options.DefaultChallengeScheme = "oidc";
+            })
+                 .AddCookie("Cookies")
+                 .AddOpenIdConnect("oidc", options =>
+                 {
+                     options.Authority = "https://localhost:5001/";
+                     options.RequireHttpsMetadata = false;
+                     options.GetClaimsFromUserInfoEndpoint = true;
+
+                     options.Scope.Add("rookie.amo.identity");
+                     options.Scope.Add("openid");
+                     options.Scope.Add("profile");
+
+                     options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+                     {
+                         NameClaimType = "name",
+                         RoleClaimType = "role"
+                     };
+                 });
             services.AddBusinessLayer(Configuration);
             services.AddSwaggerGen();
 

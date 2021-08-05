@@ -56,12 +56,6 @@ namespace Rookie.AMO.Identity.Migrations
                 table: "AspNetUsers",
                 type: "nvarchar(max)",
                 nullable: true);
-
-            migrationBuilder.AddColumn<string>(
-                name: "UsernameLogin",
-                table: "AspNetUsers",
-                type: "nvarchar(max)",
-                nullable: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -96,10 +90,6 @@ namespace Rookie.AMO.Identity.Migrations
 
             migrationBuilder.DropColumn(
                 name: "Type",
-                table: "AspNetUsers");
-
-            migrationBuilder.DropColumn(
-                name: "UsernameLogin",
                 table: "AspNetUsers");
         }
     }

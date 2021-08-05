@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
@@ -13,6 +14,28 @@ namespace Rookie.AMO.Identity
     {
         public static void Main(string[] args)
         {
+            var seed = args.Contains("/seed");
+            if (seed)
+            {
+                args = args.Except(new[] { "/seed" }).ToArray();
+            }
+
+            var host = CreateHostBuilder(args).Build();
+
+            if (seed)
+            {
+                var config = host.Services.GetRequiredService<IConfiguration>();
+                var identityConnection = config.GetConnectionString("AppIdentityDbContext");
+                var configurationConnection = config.GetConnectionString("AppConfigurationDbContext");
+                var operationConnection = config.GetConnectionString("AppOperationDbContext");
+                SeedIdentityData.EnsureSeedData(identityConnection);
+                SeedConfigurationData.EnsureSeedData(configurationConnection, operationConnection);
+                return;
+            }
+
+            host.Run();
+            return;
+
             CreateHostBuilder(args).Build().Run();
         }
 

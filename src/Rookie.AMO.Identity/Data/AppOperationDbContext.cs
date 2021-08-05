@@ -8,10 +8,18 @@ using System.Threading.Tasks;
 
 namespace Rookie.AMO.Identity.Data
 {
-    public class AppOperationDbContext : PersistedGrantDbContext
+    public class AppOperationDbContext : PersistedGrantDbContext<AppOperationDbContext>
     {
-        public AppOperationDbContext(DbContextOptions<PersistedGrantDbContext> options, OperationalStoreOptions storeOptions) : base(options, storeOptions)
+        public AppOperationDbContext(
+            DbContextOptions options,
+            OperationalStoreOptions storeOptions) 
+            : base(options, storeOptions)
         {
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

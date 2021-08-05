@@ -3,6 +3,9 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Helpers\UserHelper.cs~RF1ee4fe2.TMP" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="IdentityServer4" Version="4.1.2" />

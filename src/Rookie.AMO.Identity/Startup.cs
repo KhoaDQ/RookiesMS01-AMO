@@ -40,6 +40,15 @@ namespace Rookie.AMO.Identity
                 options.UseSqlServer(Configuration.GetConnectionString("AppIdentityDbContext"));
             });
 
+            services.AddDbContext<AppConfigurationDbContext>(options =>
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("AppConfigurationDbContext"));
+            });
+            services.AddDbContext<AppOperationDbContext>(options =>
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("AppOperationDbContext"));
+            });
+
             services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<AppIdentityDbContext>()
                 .AddDefaultTokenProviders();
