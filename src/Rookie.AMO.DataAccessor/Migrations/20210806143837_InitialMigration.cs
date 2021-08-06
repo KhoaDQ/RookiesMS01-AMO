@@ -33,8 +33,7 @@ namespace Rookie.AMO.DataAccessor.Migrations
                     Specification = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
                     State = table.Column<int>(type: "int", nullable: false),
                     Location = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CategoryId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CategoryId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -44,17 +43,17 @@ namespace Rookie.AMO.DataAccessor.Migrations
                 {
                     table.PrimaryKey("PK_Asset", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Asset_Category_CategoryId1",
-                        column: x => x.CategoryId1,
+                        name: "FK_Asset_Category_CategoryId",
+                        column: x => x.CategoryId,
                         principalTable: "Category",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Asset_CategoryId1",
+                name: "IX_Asset_CategoryId",
                 table: "Asset",
-                column: "CategoryId1");
+                column: "CategoryId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
