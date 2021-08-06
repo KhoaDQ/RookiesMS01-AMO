@@ -10,8 +10,8 @@ using Rookie.AMO.DataAccessor.Data;
 namespace Rookie.AMO.DataAccessor.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210804101750_NewMigration")]
-    partial class NewMigration
+    [Migration("20210806143837_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

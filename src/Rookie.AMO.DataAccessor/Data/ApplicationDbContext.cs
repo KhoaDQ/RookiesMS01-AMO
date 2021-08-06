@@ -7,6 +7,8 @@ namespace Rookie.AMO.DataAccessor.Data
     {
         public DbSet<Category> Categories { get; set; }
         public DbSet<Asset> Assets { get; set; }
+        public DbSet<Assignment> Assignments { get; set; }
+        public DbSet<Request> Requests { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
@@ -27,6 +29,16 @@ namespace Rookie.AMO.DataAccessor.Data
             builder.Entity<Asset>(entity =>
             {
                 entity.ToTable(name: "Asset");
+            });
+
+            builder.Entity<Assignment>(entity =>
+            {
+                entity.ToTable(name: "Assignment");
+            });
+
+            builder.Entity<Request>(entity =>
+            {
+                entity.ToTable(name: "Request");
             });
         }
     }

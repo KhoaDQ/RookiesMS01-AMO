@@ -68,6 +68,56 @@ namespace Rookie.AMO.DataAccessor.Migrations
                     b.ToTable("Asset");
                 });
 
+            modelBuilder.Entity("Rookie.AMO.DataAccessor.Entities.Assignment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("Admin_ID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("AssetId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("Asset_ID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("AssignedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatorId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Note")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<int>("State")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("User_ID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AssetId");
+
+                    b.ToTable("Assignment");
+                });
+
             modelBuilder.Entity("Rookie.AMO.DataAccessor.Entities.Category", b =>
                 {
                     b.Property<Guid>("Id")
@@ -97,6 +147,62 @@ namespace Rookie.AMO.DataAccessor.Migrations
                     b.ToTable("Category");
                 });
 
+            modelBuilder.Entity("Rookie.AMO.DataAccessor.Entities.Request", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("AcceptedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Admin_ID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("AssetId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("Asset_ID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("AssignedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatorId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Note")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<DateTime>("ReturnedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("State")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("User_ID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AssetId");
+
+                    b.ToTable("Request");
+                });
+
             modelBuilder.Entity("Rookie.AMO.DataAccessor.Entities.Asset", b =>
                 {
                     b.HasOne("Rookie.AMO.DataAccessor.Entities.Category", "Category")
@@ -106,6 +212,24 @@ namespace Rookie.AMO.DataAccessor.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("Rookie.AMO.DataAccessor.Entities.Assignment", b =>
+                {
+                    b.HasOne("Rookie.AMO.DataAccessor.Entities.Asset", "Asset")
+                        .WithMany()
+                        .HasForeignKey("AssetId");
+
+                    b.Navigation("Asset");
+                });
+
+            modelBuilder.Entity("Rookie.AMO.DataAccessor.Entities.Request", b =>
+                {
+                    b.HasOne("Rookie.AMO.DataAccessor.Entities.Asset", "Asset")
+                        .WithMany()
+                        .HasForeignKey("AssetId");
+
+                    b.Navigation("Asset");
                 });
 
             modelBuilder.Entity("Rookie.AMO.DataAccessor.Entities.Category", b =>

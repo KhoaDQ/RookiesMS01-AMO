@@ -12,6 +12,8 @@ namespace Rookie.AMO.DataAccessor.Enums
         Available = 2,
         NotAvailable = 3,
         Waiting = 4,
-        Recycled = 5
+        Recycled = 5,
+        Accepted = 6,
+        Completed = 7
     }
 }
