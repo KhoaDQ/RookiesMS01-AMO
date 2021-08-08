@@ -1,58 +1,82 @@
 import React from "react";
 
 const EditUser = () => {
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    this.setState({
+      [name]: value,
+    });
+  };
+
   return (
     <div>
       <h5 className="right-title">Edit User</h5>
       <form>
         <div className="form-group row">
-          <label htmlFor="EmailEditUser" className="col-sm-2 col-form-label">
-            Email
-          </label>
-          <div className="col-sm-10" className="resize">
-            <input type="email" className="form-control" id="EmailEditUser" />
-          </div>
-        </div>
-        <br></br>
-        <div className="form-group row">
-          <label htmlFor="PasswordEditUser" className="col-sm-2 col-form-label">
-            Password
+          <label
+            htmlFor="FirstNameEditUser"
+            className="col-sm-2 col-form-label"
+          >
+            First Name
           </label>
           <div className="col-sm-10" className="resize">
             <input
-              type="password"
+              type="text"
               className="form-control"
-              id="PasswordEditUser"
+              id="FirstNameEditUser"
+              defaultValue="user.FirstName"
+              placeholder="FirstName"
             />
           </div>
         </div>
         <br></br>
         <div className="form-group row">
-          <label htmlFor="GenderEditUser" className="col-sm-2 col-form-label">
-            Gender
+          <label htmlFor="LastNameEditUser" className="col-sm-2 col-form-label">
+            Last Name
+          </label>
+          <div className="col-sm-10" className="resize">
+            <input
+              type="text"
+              className="form-control"
+              id="LastNameEditUser"
+              defaultValue="user.LastName"
+              placeholder="LastName"
+            />
+          </div>
+        </div>
+        <br></br>
+        <div className="form-group row">
+          <label
+            htmlFor="DateofBirthEditUser"
+            className="col-sm-2 col-form-label"
+          >
+            Date of Birth
           </label>
           <div className="col-sm-10" className="resize">
             <input
               type="date"
               className="form-control "
-              id="GenderEditUser"
-              name="GenderEditUser"
+              id="DateofBirthEditUser"
+              name="DateofBirthEditUser"
+              defaultValue="user.DateofBirth"
+              placeholder="DateofBirth"
             />
           </div>
         </div>
         <br></br>
         <fieldset className="form-group">
           <div className="row">
-            <legend className="col-form-label col-sm-2 pt-0">Radios</legend>
+            <legend className="col-form-label col-sm-2 pt-0">Gender</legend>
             <div className="col-sm-10">
               <div>
                 <div className="form-check form-check-inline">
                   <input
                     className="form-check-input"
                     type="radio"
-                    name="FemaleEditUser"
+                    name="GenderEditUser"
                     id="gridRadios1"
-                    defaultValue="option1"
+                    value="female"
+                    onChange={this.handleChange}
                   />
                   <label className="form-check-label" htmlFor="gridRadios1">
                     Female
@@ -62,9 +86,10 @@ const EditUser = () => {
                   <input
                     className="form-check-input"
                     type="radio"
-                    name="MaleEditUser"
+                    name="GenderEditUser"
                     id="gridRadios2"
-                    defaultValue="option2"
+                    value="male"
+                    onChange={this.handleChange}
                   />
                   <label className="form-check-label" htmlFor="gridRadios2">
                     Male
@@ -76,15 +101,20 @@ const EditUser = () => {
         </fieldset>
         <br></br>
         <div className="form-group row">
-          <label htmlFor="GenderEditUser" className="col-sm-2 col-form-label">
-            Gender
+          <label
+            htmlFor="JoinedDateEditUser"
+            className="col-sm-2 col-form-label"
+          >
+            Joined Date
           </label>
           <div className="col-sm-10" className="resize">
             <input
               type="date"
               className="form-control "
-              id="GenderEditUser"
-              name="GenderEditUser"
+              id="JoinedDateEditUser"
+              name="JoinedDateEditUser"
+              defaultValue="user.JoinedDate"
+              placeholder="JoinedDate"
             />
           </div>
         </div>
