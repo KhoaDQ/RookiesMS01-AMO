@@ -1,0 +1,31 @@
+.header {
+    padding: 10px 0px;
+    background-color: #CF2338;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.header-right {
+    text-align: right;
+    background: transparent;
+}
+
+.header-right button {
+    background: transparent;
+    border: none;
+    outline: none;
+}
+
+.header-right button:hover {
+    background: transparent;
+}
+
+.header-logo{
+    color: #fff;
+    text-decoration: none;
+}
+
+.header-logo:hover{
+    color: black;
+}

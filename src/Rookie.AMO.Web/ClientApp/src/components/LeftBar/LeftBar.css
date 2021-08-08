@@ -1,0 +1,38 @@
+.left-bar__title {
+    color: #CF2338;
+    font-weight: bold;
+}
+
+.left-bar__menu {
+    margin-top: 30px;
+    background-color: #EFF1F5;
+}
+
+.left-bar__list {
+    padding-left: 0!important;
+}
+
+.left-bar__item--active {
+   
+    background-color: #CF2338;
+    color: white;
+}
+
+
+
+.left-bar__link {
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 17px;
+    color: black;
+    display: block;
+    padding: 15px 20px;
+    cursor: pointer;
+    border-bottom: 3px solid #fff;
+}
+
+.left-bar__link:hover, .left-bar__link--active {
+    background-color: #CF2338;
+    color: white;
+    transition: all 0.3s ease-in-out;
+}

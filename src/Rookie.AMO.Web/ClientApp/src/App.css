@@ -1,0 +1,50 @@
+.App {
+  margin-top: 4rem;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.margin-left {
+  margin-left: 162px;
+}
+
+.UserIcon {
+  color: #fff;
+  text-decoration: none;
+}
+
+.UserIcon:hover {
+  color: rgb(147, 173, 157);
+}
+
+.resize {
+  width: 50%;
+}
+
+
+
+.resize-margin2 {
+  margin-left: 475px;
+}
+
+.margin {
+  margin: 10px;
+}
+
+.color {
+  background-color: red;
+  border-color: red;
+  color: white;
+}
+
+.color1 {
+  background-color: white;
+  border-color: darkgrey;
+  color: darkgrey;
+}
+
+.height {
+  height: 150px;
+}

@@ -1,0 +1,28 @@
+h5.right-title{
+    color:#CF2338;
+    font-weight: bold;
+}
+.icon-nash{
+    font-size: 20px;
+    cursor: pointer;
+    margin-right: 1rem;
+}
+.icon-nash--red{
+    color: red!important;
+}
+.icon-nash--blue{
+    color: blue!important;
+}
+.icon-nash--black{
+    color: black!important;
+}
+
+.icon-nash--disabled{
+    cursor: not-allowed;
+    color: rgb(194, 194, 194)!important;
+}
+
+span.right__icon.input-group-text {
+    padding: 10px;
+    cursor: pointer;
+}
