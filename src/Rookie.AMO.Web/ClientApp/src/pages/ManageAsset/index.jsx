@@ -1,111 +1,63 @@
-import React from "react";
-import { Table } from "reactstrap";
-import { IoMdCreate } from "@react-icons/all-files/io/IoMdCreate";
-import { IoIosCloseCircleOutline } from "@react-icons/all-files/io/IoIosCloseCircleOutline";
-import { AiOutlineSearch } from "@react-icons/all-files/ai/AiOutlineSearch";
-import { AiFillFilter } from "@react-icons/all-files/ai/AiFillFilter";
-import { Link } from "react-router-dom";
-import {
-  Col,
-  Row,
-  Button,
-  InputGroupText,
-  InputGroupAddon,
-  Input,
-  InputGroup,
-} from "reactstrap";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from 'react-redux';
+import apiCaller from '../../apis/CallerApi'
+import *as action from '../../actions/ManageAsset/ActionType'
+import *as actionCategory from '../../actions/ManageCategory/ActionType'
+import AssetList from "../../components/Asset/AssetList";
+import AssetItem from "../../components/Asset/AssetItem";
+
 function ManageAsset() {
+
+  var assets = fetchAssets();
+  var categories = fetchCategories();
+
+  const showAssets = () => {
+    let result = null
+    if (assets.length > 0) {
+        result = assets.map((asset, index) => {
+            return (
+                <AssetItem
+                    key={index}
+                    asset={asset}
+                    index={index}
+                />
+            )
+        })
+    }
+    return result
+  }
   return (
-    <div>
-      <h5 className="right-title">Asset List</h5>
-      <Row from>
-        <Col md={3}>
-          <InputGroup>
-            <select
-              className="custom-select custom-select-lg mb-3"
-              className="form-control"
-            >
-              <option selected>State</option>
-              <option value={0}></option>
-              <option value={1}>Available</option>
-              <option value={2}>Not Available</option>
-            </select>
-
-            <InputGroupAddon addonType="append">
-              <InputGroupText className="right__icon">
-                <AiFillFilter />
-              </InputGroupText>
-            </InputGroupAddon>
-          </InputGroup>
-        </Col>
-        <Col md={3}>
-          <InputGroup>
-            <select
-              className="custom-select custom-select-lg mb-3"
-              className="form-control"
-            >
-              <option selected>Category</option>
-              <option value={0}></option>
-              <option value={1}>Laptop</option>
-              <option value={2}>Monitor</option>
-            </select>
-
-            <InputGroupAddon addonType="append">
-              <InputGroupText className="right__icon">
-                <AiFillFilter />
-              </InputGroupText>
-            </InputGroupAddon>
-          </InputGroup>
-        </Col>
-        <Col md={3}>
-          <InputGroup>
-            <Input placeholder="Search" />
-            <InputGroupAddon addonType="append">
-              <InputGroupText className="right__icon">
-                <AiOutlineSearch />
-              </InputGroupText>
-            </InputGroupAddon>
-          </InputGroup>
-        </Col>
-        <Col md={3} className="text-right">
-          <Button color="danger">
-            <Link to="/createassets" className="UserIcon">
-              Create New Assets
-            </Link>
-          </Button>
-        </Col>
-      </Row>
-      <Table>
-        <thead>
-          <tr>
-            <th>Asset Code</th>
-            <th>Asset Name</th>
-            <th>Category</th>
-            <th>State</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>MO100005</td>
-            <td>Monitor Dell UltraSharp</td>
-            <td>Monitor</td>
-            <td>Available</td>
-            <td>
-              <span className="icon-nash icon-nash--black">
-                <Link to="/editassets">
-                  <IoMdCreate />
-                </Link>
-              </span>
-              <span className="icon-nash icon-nash--red">
-                <IoIosCloseCircleOutline />
-              </span>
-            </td>
-          </tr>
-        </tbody>
-      </Table>
-    </div>
+    <AssetList categories = {categories}>{showAssets()}</AssetList>
   );
 }
+function fetchAssets () {
+  const dispatch = useDispatch()
 
+  useEffect(() => {
+    async function fetch() {
+    const res = await apiCaller('Asset', 'GET', null);
+    dispatch({ type: action.FETCH_ASSETS, payload: res });
+  }
+  fetch()
+  }, [])
+
+  const assets = useSelector(state => state.assets);
+
+  return assets
+}
+function fetchCategories () {
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    async function fetch() {
+    const res = await apiCaller('Category', 'GET', null);
+    dispatch({ type: actionCategory.FETCH_CATEGORIES, payload: res });
+  }
+  fetch()
+  }, [])
+
+  const categories = useSelector(state => state.categories);
+
+  return categories
+}
 export default ManageAsset;

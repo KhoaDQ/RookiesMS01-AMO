@@ -64,5 +64,9 @@ namespace Rookie.AMO.Web.Controllers
         public async Task<PagedResponseModel<AssetDto>>
             FindAsync(string key, int page = 1, int limit = 10)
             => await _assetService.PagedQueryAsync(key, page, limit);
+
+        [HttpGet("sort")]
+        public async Task<IEnumerable<AssetDto>> GetBySortAsync(string PropertyName, bool desc = false)
+            => await _assetService.GetBySortAsync(PropertyName,desc);
     }
 }

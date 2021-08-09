@@ -1,16 +1,15 @@
 ﻿using AutoMapper;
 using EnsureThat;
 using Microsoft.EntityFrameworkCore;
+using Rookie.AMO.Business.Extensions;
 using Rookie.AMO.Business.Interfaces;
 using Rookie.AMO.Contracts;
-using Rookie.AMO.Contracts.Dtos;
 using Rookie.AMO.Contracts.Dtos.Asset;
 using Rookie.AMO.DataAccessor.Data;
 using Rookie.AMO.DataAccessor.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Rookie.AMO.Business.Services
@@ -57,8 +56,8 @@ namespace Rookie.AMO.Business.Services
 
         public async Task<IEnumerable<AssetDto>> GetAllAsync()
         {
-            var categories = await _baseRepository.GetAllAsync();
-            return _mapper.Map<List<AssetDto>>(categories);
+            var assets = await _baseRepository.GetAllAsync();
+            return _mapper.Map<List<AssetDto>>(assets);
         }
 
         public async Task<AssetDto> GetByIdAsync(Guid id)
@@ -95,6 +94,11 @@ namespace Rookie.AMO.Business.Services
             };
         }
 
-
+        public async Task<IEnumerable<AssetDto>> GetBySortAsync(string propertyName,bool desc)
+        {
+            var assets = await Task.FromResult(_baseRepository.GetAllAsync().Result.OrderByPropertyName(propertyName,desc).ToList());
+            
+            return _mapper.Map<List<AssetDto>>(assets);
+        }
     }
 }

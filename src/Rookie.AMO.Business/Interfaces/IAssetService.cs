@@ -23,5 +23,7 @@ namespace Rookie.AMO.Business.Interfaces
         Task DeleteAsync(Guid id);
 
         Task UpdateAsync(AssetDto categoryDto);
+
+        Task<IEnumerable<AssetDto>> GetBySortAsync(string PropertyName, bool desc);
     }
 }
