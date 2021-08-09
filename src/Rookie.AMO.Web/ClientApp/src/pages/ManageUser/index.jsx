@@ -6,22 +6,22 @@ import *as action from '../../actions/ManageUser/ActionType'
 import UserList from '../../components/User/UserList'
 import UserItem from '../../components/User/UserItem'
 function ManageUser() {
-    const users = useSelector(state => state.users)
+    const userReducer = useSelector(state => state.userReducer)
     // const dispatch = useDispatch()
 
     // useEffect(() => {
     //     async function fetchUsers() {
     //         const res = await apiCaller('users', 'GET', null);
     //         dispatch({ type: action.FETCH_USERS, payload: res });
-    //     }
+    //     }    
     //     fetchUsers()
     // }, [])
     // console.log(users);
 
     const showUsers = () => {
         let result = null
-        if (users.length > 0) {
-            result = users.map((user, index) => {
+        if (userReducer.length > 0) {
+            result = userReducer.map((user, index) => {
                 return (
                     <UserItem
                         key={index}
