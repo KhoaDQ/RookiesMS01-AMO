@@ -6,10 +6,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using Rookie.AMO.Identity.Sercurity.Authorization.Requirement;
 using System;
 using System.Collections.Generic;
-using static IdentityServer4.IdentityServerConstants;
 
 namespace Rookie.AMO.Identity
 {
@@ -43,30 +41,10 @@ namespace Rookie.AMO.Identity
                 .AddTestUsers(InitData.GetUsers())
                 .AddInMemoryIdentityResources(InitData.GetIdentityResources())
                 .AddInMemoryClients(InitData.GetClients())
-                .AddAspNetIdentity<IdentityUser>()
+                //.AddAspNetIdentity<IdentityUser>()
                 .AddDeveloperSigningCredential();
 
-            services.AddControllersWithViews();
-
-
-            services.AddAuthentication()
-              .AddLocalApi("Bearer", option =>
-              {
-                  option.ExpectedScope = "Rookie.AMO.Identity";
-              });
-
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy(LocalApi.PolicyName, policy =>
-                {
-                    policy.AddAuthenticationSchemes("Bearer");
-                    policy.RequireAuthenticatedUser();
-                });
-
-                options.AddPolicy("ADMIN_ROLE_POLICY", policy =>
-                    policy.Requirements.Add(new AdminRoleRequirement()));
-            });
-
+            //services.AddControllers();
             services.AddSwaggerGen(c =>
                 {
                     c.SwaggerDoc(
@@ -84,7 +62,7 @@ namespace Rookie.AMO.Identity
                             Implicit = new OpenApiOAuthFlow
                             {
                                 AuthorizationUrl = new Uri(Configuration["AuthorityUrl"] + "/account/login"),
-                                Scopes = new Dictionary<string, string> { { "Rookie.AMO.Identity", "Rookie AMO IDENTITY" } }                                
+                                Scopes = new Dictionary<string, string> { { "roles", "Your role(s)" } }                                
                             },
                         },
                     });
@@ -95,7 +73,7 @@ namespace Rookie.AMO.Identity
                             {
                                 Reference = new OpenApiReference {Type = ReferenceType.SecurityScheme, Id="Bearer"}
                             },
-                            new List<string>{ "Rookie.AMO.Identity" }
+                            new List<string>{ "roles" }
                         }
                     });
                 });
@@ -112,7 +90,7 @@ namespace Rookie.AMO.Identity
             app.UseIdentityServer();
             app.UseStaticFiles();
 
-            app.UseAuthentication();
+           // app.UseAuthentication();
 
             app.UseRouting();
 
