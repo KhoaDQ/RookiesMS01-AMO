@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Rookie.AMO.Web.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize(Policy = "ADMIN_ROLE_POLICY")]
     public class SampleDataController : Controller
     {
         private static string[] Summaries = new[]
@@ -16,7 +18,7 @@ namespace Rookie.AMO.Web.Controllers
 
         [HttpGet("[action]")]
         public IEnumerable<WeatherForecast> WeatherForecasts(int startDateIndex)
-        {
+            {
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
