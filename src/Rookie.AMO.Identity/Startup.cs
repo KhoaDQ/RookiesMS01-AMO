@@ -1,3 +1,5 @@
+using IdentityServer4.Configuration;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -7,7 +9,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Rookie.AMO.Identity.Data;
+using Rookie.AMO.Identity.IdentityServer;
 using Rookie.AMO.Identity.Models;
+using Rookie.AMO.Identity.Security.Handler;
+using Rookie.AMO.Identity.Security.Requirement;
+using static IdentityServer4.IdentityServerConstants;
 
 namespace Rookie.AMO.Identity
 {
@@ -40,30 +46,30 @@ namespace Rookie.AMO.Identity
                 options.UseSqlServer(Configuration.GetConnectionString("AppIdentityDbContext"));
             });
 
-            services.AddDbContext<AppConfigurationDbContext>(options =>
-            {
-                options.UseSqlServer(Configuration.GetConnectionString("AppConfigurationDbContext"));
-            });
-            services.AddDbContext<AppOperationDbContext>(options =>
-            {
-                options.UseSqlServer(Configuration.GetConnectionString("AppOperationDbContext"));
-            });
+            services.AddSingleton<IAuthorizationHandler, AdminRoleHandler>();
 
             services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<AppIdentityDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddIdentityServer()
+            services.AddIdentityServer(options =>
+            {
+                options.Events.RaiseErrorEvents = true;
+                options.Events.RaiseInformationEvents = true;
+                options.Events.RaiseFailureEvents = true;
+                options.Events.RaiseSuccessEvents = true;
+            })
+                .AddProfileService<CustomProfileService>()
                 .AddDeveloperSigningCredential()
                 .AddConfigurationStore(options =>
                 {
-                    options.ConfigureDbContext = 
+                    options.ConfigureDbContext =
                         builder => builder.UseSqlServer(
                             Configuration.GetConnectionString("AppConfigurationDbContext"));
                 })
                 .AddOperationalStore(options =>
                 {
-                    options.ConfigureDbContext = 
+                    options.ConfigureDbContext =
                         builder => builder.UseSqlServer(
                             Configuration.GetConnectionString("AppOperationDbContext"));
                 })

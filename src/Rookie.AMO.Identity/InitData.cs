@@ -42,6 +42,13 @@ namespace Rookie.AMO.Identity
             };
         }
 
+        public static IEnumerable<ApiResource> GetApiResources()
+        {
+            return new List<ApiResource>()
+            {
+            };
+        }
+
         // identity-related resources (scopes)
         public static IEnumerable<IdentityResource> GetIdentityResources()
         {

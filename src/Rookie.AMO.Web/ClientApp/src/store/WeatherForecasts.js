@@ -11,8 +11,9 @@ export const actionCreators = {
 
     dispatch({ type: requestWeatherForecastsType, startDateIndex });
 
-    const url = `api/SampleData/WeatherForecasts?startDateIndex=${startDateIndex}`;
-    const response = await fetch(url);
+        const url = `api/SampleData/WeatherForecasts?startDateIndex=${startDateIndex}`;
+        const jwt = localStorage.getItem("jwt");
+        const response = await fetch(url, { headers: { "Authorization": "Bearer " +  jwt } });
     const forecasts = await response.json();
 
     dispatch({ type: receiveWeatherForecastsType, startDateIndex, forecasts });

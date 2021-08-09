@@ -1,12 +1,19 @@
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.OpenApi.Models;
 using Rookie.AMO.Business;
 using Rookie.AMO.Web.Filters;
+using Rookie.AMO.Web.Security;
+using Rookie.AMO.Web.Security.Requirement;
+using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -25,6 +32,17 @@ namespace Rookie.AMO.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowOrigins",
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
+                    });
+            });
+
             services.AddControllersWithViews(x =>
             {
                 x.Filters.Add(typeof(ValidatorActionFilter));
@@ -44,31 +62,38 @@ namespace Rookie.AMO.Web
             });
 
             services.AddHttpContextAccessor();
-            services.AddAuthentication(options =>
+
+            services.AddAuthentication(options => 
             {
-                options.DefaultScheme = "Cookies";
-                options.DefaultChallengeScheme = "oidc";
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-                 .AddCookie("Cookies")
-                 .AddOpenIdConnect("oidc", options =>
+                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
                  {
-                     options.Authority = "https://localhost:5001/";
-                     options.RequireHttpsMetadata = false;
-                     options.GetClaimsFromUserInfoEndpoint = true;
-
-                     options.Scope.Add("rookie.amo.identity");
-                     options.Scope.Add("openid");
-                     options.Scope.Add("profile");
-
+                     options.Authority = Configuration["IdentityServer:Authority"];
+                     options.RequireHttpsMetadata = Convert.ToBoolean(Configuration["IdentityServer:RequireHttpsMetadata"]);
+                     options.Audience = Configuration["IdentityServer:Audiance"];
                      options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
                      {
-                         NameClaimType = "name",
-                         RoleClaimType = "role"
+                         NameClaimType = IdentityModel.JwtClaimTypes.Name,
+                         RoleClaimType = IdentityModel.JwtClaimTypes.Role,
+                         ValidateAudience = Convert.ToBoolean(Configuration["IdentityServer:TokenValidationParameters:ValidateAudience"])
                      };
                  });
-            services.AddBusinessLayer(Configuration);
-            services.AddSwaggerGen();
 
+            services.AddSingleton<IAuthorizationHandler, AdminRoleHandler>();
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("ADMIN_ROLE_POLICY", policy =>
+                {
+                    policy.RequireAuthenticatedUser();
+                    policy.Requirements.Add(new AdminRoleRequirement());
+                });
+            });
+
+            services.AddBusinessLayer(Configuration);
+           
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
@@ -90,16 +115,16 @@ namespace Rookie.AMO.Web
                 app.UseHsts();
             }
 
+            app.UseCors();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
-            app.UseSwagger()
-                .UseSwaggerUI(c =>
-                {
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-                });
+
+            app.UseAuthentication();
 
             app.UseRouting();
+
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

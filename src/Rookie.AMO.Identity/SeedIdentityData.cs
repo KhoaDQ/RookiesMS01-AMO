@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using IdentityServer4.EntityFramework.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,6 +30,7 @@ namespace Rookie.AMO.Identity
             using var serviceProvider = services.BuildServiceProvider();
             using var scope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope();
             var context = scope.ServiceProvider.GetService<AppIdentityDbContext>();
+            context.Database.EnsureDeleted();
             context.Database.Migrate();
 
             var userMgr = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
@@ -121,7 +123,17 @@ namespace Rookie.AMO.Identity
                 if (!result.Succeeded)
                 {
                     throw new Exception(result.Errors.First().Description);
-                }
+                }   
+            }
+            var result1 = userMgr.AddToRoleAsync(user1, "Admin").Result;
+            if (!result1.Succeeded)
+            {
+                throw new Exception(result1.Errors.First().Description);
+            }
+            result1 = userMgr.AddToRoleAsync(user2, "Staff").Result;
+            if (!result1.Succeeded)
+            {
+                throw new Exception(result1.Errors.First().Description);
             }
         }
     }

@@ -35,128 +35,10 @@ namespace Rookie.AMO.Identity
             using var serviceProvider = services.BuildServiceProvider();
             using var scope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope();
             var operationContext = scope.ServiceProvider.GetRequiredService<AppOperationDbContext>();
-            operationContext.Database.EnsureDeleted();
             operationContext.Database.Migrate();
 
             var context = scope.ServiceProvider.GetRequiredService<AppConfigurationDbContext>();
-            context.Database.EnsureDeleted();
             context.Database.Migrate();
-
-            var clients = new List<IdentityServer4.EntityFramework.Entities.Client>()
-            {
-                new IdentityServer4.EntityFramework.Entities.Client()
-                {
-                    ClientName = "Rookie.AMO",
-                    ClientId = "rookieamoapi",
-                    AllowedGrantTypes = new List<ClientGrantType>()
-                    {
-                        new ClientGrantType()
-                        {
-                            GrantType = IdentityModel.OidcConstants.GrantTypes.Implicit
-                        }
-                    },
-                    RedirectUris = new List<ClientRedirectUri>()
-                    {
-                        new ClientRedirectUri()
-                        {
-                            RedirectUri = "https://localhost:5001/callback"
-                        }
-                    },
-                    PostLogoutRedirectUris = new List<ClientPostLogoutRedirectUri>()
-                    {
-                        new ClientPostLogoutRedirectUri()
-                        {
-                            PostLogoutRedirectUri = "https://localhost:5001/"
-                        }
-                    },
-                    AllowedScopes = new List<ClientScope>
-                    {
-                        new ClientScope()
-                        {
-                            Scope = IdentityServerConstants.StandardScopes.OpenId
-                        },
-                        new ClientScope()
-                        {
-                            Scope = IdentityServerConstants.StandardScopes.Profile
-                        },
-                        new ClientScope()
-                        {
-                            Scope = "rookie.amo.identity"
-                        }
-                    },
-                    ClientSecrets = new List<ClientSecret>
-                    {
-                        new ClientSecret()
-                        {
-                            Value = "rookieecomsecret".Sha256()
-                        }
-                    },
-                    //AllowedCorsOrigins = new List<string>
-                    //{
-                    //    "https://localhost:5001/"
-                    //},
-                    AllowAccessTokensViaBrowser = true
-                },
-                new IdentityServer4.EntityFramework.Entities.Client
-                {
-                    ClientName = "Rookie.AMO.Web",
-                    ClientId = "rookieamo",
-                    AllowedGrantTypes = new List<ClientGrantType>()
-                    {
-                        new ClientGrantType()
-                        {
-                            GrantType = IdentityModel.OidcConstants.GrantTypes.Implicit,
-                        }
-                    },
-                    RedirectUris = new List<ClientRedirectUri>()
-                    {
-                        new ClientRedirectUri()
-                        {
-                            RedirectUri = "https://localhost:5011/callback"
-                        }
-                    },
-                    PostLogoutRedirectUris = new List<ClientPostLogoutRedirectUri>()
-                    {
-                        new ClientPostLogoutRedirectUri()
-                        {
-                            PostLogoutRedirectUri = "https://localhost:5011/callback"
-                        }
-                    },
-                    AllowedScopes = new List<ClientScope>
-                    {
-                        new ClientScope()
-                        {
-                            Scope = IdentityServerConstants.StandardScopes.OpenId
-                        },
-                        new ClientScope()
-                        {
-                            Scope = IdentityServerConstants.StandardScopes.Profile
-                        },
-                        new ClientScope()
-                        {
-                            Scope = "rookie.amo.identity"
-                        },
-                    },
-                    ClientSecrets = new List<ClientSecret>()
-                    {
-                        new ClientSecret()
-                        {
-                            Value = "rookieamo".Sha256()
-                        }
-                    },
-                    //AllowedCorsOrigins = new List<string>
-                    //{
-                    //    "https://localhost:5011/"
-                    //},
-                    AllowAccessTokensViaBrowser = true
-                }
-            };
-            var result = context.Clients.AddRangeAsync(clients).IsCompletedSuccessfully;
-
-            if (!result)
-            {
-                throw new Exception("Error happens when seed clients");
-            }
 
             var identityResources = new List<IdentityServer4.EntityFramework.Entities.IdentityResource>() 
             {
@@ -167,7 +49,7 @@ namespace Rookie.AMO.Identity
                     {
                         new IdentityResourceClaim()
                         {
-                            Type = "sub"
+                            Type = "sub",
                         }
                     }
                 },
@@ -184,21 +66,121 @@ namespace Rookie.AMO.Identity
                 },
                 new IdentityServer4.EntityFramework.Entities.IdentityResource()
                 {
-                    Name = "rookie.amo.identity",
-                    UserClaims = new List<IdentityResourceClaim>()
-                    {
-                        new IdentityResourceClaim()
-                        {
-                            Type = "role"
-                        },
-                    }
+                    Name = "rookie.amo.identity"
                 }
             };
 
-            result = context.IdentityResources.AddRangeAsync(identityResources).IsCompletedSuccessfully;
+            var result = context.IdentityResources.AddRangeAsync(identityResources).IsCompletedSuccessfully;
             if (!result)
             {
                 throw new Exception("Error happens when seed identity resource");
+            }
+
+            var apiResources = new List<IdentityServer4.EntityFramework.Entities.ApiResource>()
+            {
+                new IdentityServer4.EntityFramework.Entities.ApiResource()
+                {
+                    Name = "api"
+                },
+            };
+
+            result = context.ApiResources.AddRangeAsync(apiResources).IsCompletedSuccessfully;
+            if (!result)
+            {
+                throw new Exception("Error happens when seed api resource");
+            }
+
+            var apiScopes = new List<IdentityServer4.EntityFramework.Entities.ApiScope>()
+            {
+                new IdentityServer4.EntityFramework.Entities.ApiScope()
+                {
+                    Name = "api",
+                    UserClaims = new List<ApiScopeClaim>
+                    {
+                        new ApiScopeClaim()
+                        {
+                            Type = "role",
+                        },
+                    }
+                },
+                new IdentityServer4.EntityFramework.Entities.ApiScope()
+                {
+                    Name = "identity"
+                }
+            };
+
+            result = context.ApiScopes.AddRangeAsync(apiScopes).IsCompletedSuccessfully;
+            if (!result)
+            {
+                throw new Exception("Error happens when seed api scope");
+            }
+
+
+            var clients = new List<IdentityServer4.EntityFramework.Entities.Client>()
+            {
+                new IdentityServer4.EntityFramework.Entities.Client()
+                {
+                    ClientName = "Rookie.AMO",
+                    ClientId = "rookieamo",
+                    AllowedGrantTypes = new List<ClientGrantType>()
+                    {
+                        new ClientGrantType()
+                        {
+                            GrantType = IdentityModel.OidcConstants.GrantTypes.Implicit
+                        }
+                    },
+                    RedirectUris = new List<ClientRedirectUri>()
+                    {
+                        new ClientRedirectUri()
+                        {
+                            RedirectUri = "https://localhost:5011/callback"
+                        }
+                    },
+                    PostLogoutRedirectUris = new List<ClientPostLogoutRedirectUri>()
+                    {
+                        new ClientPostLogoutRedirectUri()
+                        {
+                            PostLogoutRedirectUri = "https://localhost:5011/"
+                        }
+                    },
+                    AllowedScopes = new List<ClientScope>
+                    {
+                        new ClientScope()
+                        {
+                            Scope = IdentityServerConstants.StandardScopes.OpenId
+                        },
+                        new ClientScope()
+                        {
+                            Scope = IdentityServerConstants.StandardScopes.Profile
+                        },
+                        new ClientScope()
+                        {
+                            Scope = "identity"
+                        },
+                        new ClientScope()
+                        {
+                            Scope = "api"
+                        }
+                    },
+                    ClientSecrets = new List<ClientSecret>
+                    {
+                        new ClientSecret()
+                        {
+                            Value = "rookieamosecret".Sha256()
+                        }
+                    },
+                    //AllowedCorsOrigins = new List<string>
+                    //{
+                    //    "https://localhost:5001/"
+                    //},
+                    AllowAccessTokensViaBrowser = true
+                },
+            };
+            result = context.Clients.AddRangeAsync(clients).IsCompletedSuccessfully;
+
+            if (!result)
+            {
+                throw new Exception("Error happens when seed clients");
             }
 
             context.SaveChanges();

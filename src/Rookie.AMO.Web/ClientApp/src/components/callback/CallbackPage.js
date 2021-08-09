@@ -9,7 +9,11 @@ class CallbackPage extends React.Component {
     return (
       <CallbackComponent
         userManager={userManager}
-        successCallback={() => this.props.dispatch(push('/'))}
+            successCallback={(res) => {
+                console.log(res);
+                localStorage.setItem("jwt", res.access_token);
+                this.props.dispatch(push('/'));
+            }}
         errorCallback={error => {
           this.props.dispatch(push('/'));
           console.error(error);

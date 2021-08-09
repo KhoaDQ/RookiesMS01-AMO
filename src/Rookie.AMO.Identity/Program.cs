@@ -34,9 +34,6 @@ namespace Rookie.AMO.Identity
             }
 
             host.Run();
-            return;
-
-            CreateHostBuilder(args).Build().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
