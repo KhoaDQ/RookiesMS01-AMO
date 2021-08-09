@@ -46,8 +46,6 @@ namespace Rookie.AMO.Identity
                 options.UseSqlServer(Configuration.GetConnectionString("AppIdentityDbContext"));
             });
 
-            services.AddSingleton<IAuthorizationHandler, AdminRoleHandler>();
-
             services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<AppIdentityDbContext>()
                 .AddDefaultTokenProviders();

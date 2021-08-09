@@ -6,6 +6,7 @@ using Rookie.AMO.Business;
 using Rookie.AMO.Business.Interfaces;
 using Rookie.AMO.Business.Services;
 using Rookie.AMO.Contracts.Dtos;
+using Rookie.AMO.Contracts.Dtos.Category;
 using Rookie.AMO.DataAccessor.Entities;
 using Rookie.AMO.IntegrationTests.Common;
 using Rookie.AMO.Tests;

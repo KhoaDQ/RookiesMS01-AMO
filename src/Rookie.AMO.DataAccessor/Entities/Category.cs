@@ -9,5 +9,6 @@ namespace Rookie.AMO.DataAccessor.Entities
         public string Code { get; set; }
 
         public ICollection<Asset> Assets{ get; set; }
+        public string Desc { get; set; }
     }
 }

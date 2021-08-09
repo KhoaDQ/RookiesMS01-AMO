@@ -51,15 +51,15 @@ namespace Rookie.AMO.Web
             {
                 fv.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly());
                 fv.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
-            });
-            /*.AddJsonOptions(ops =>
+            })
+            .AddJsonOptions(ops =>
             {
                 ops.JsonSerializerOptions.IgnoreNullValues = true;
                 ops.JsonSerializerOptions.WriteIndented = true;
                 ops.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
                 ops.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
                 ops.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-            });*/
+            });
 
             services.AddHttpContextAccessor();
 
@@ -93,11 +93,6 @@ namespace Rookie.AMO.Web
             });
 
             services.AddBusinessLayer(Configuration);
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "EcomWeb.API", Version = "v1" });
-            });
-
            
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -123,6 +118,7 @@ namespace Rookie.AMO.Web
             app.UseCors();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
             app.UseSpaStaticFiles();
 
             app.UseAuthentication();
