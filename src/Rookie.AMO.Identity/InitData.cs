@@ -42,6 +42,13 @@ namespace Rookie.AMO.Identity
             };
         }
 
+        public static IEnumerable<ApiResource> GetApiResources()
+        {
+            return new List<ApiResource>()
+            {
+            };
+        }
+
         // identity-related resources (scopes)
         public static IEnumerable<IdentityResource> GetIdentityResources()
         {
@@ -49,7 +56,7 @@ namespace Rookie.AMO.Identity
             {
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
-                new IdentityResource("roles", "Your role(s)", new List<string>() { "role" })
+                new IdentityResource("roles", "Your role(s)", new List<string>() { "role" }),
             };
         }
 
