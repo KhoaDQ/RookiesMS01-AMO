@@ -8,6 +8,6 @@ namespace Rookie.AMO.DataAccessor.Entities
         [Required]
         public string Code { get; set; }
 
-        public ICollection<Asset> Assets{ get; set; }
+        public virtual ICollection<Asset> Assets{ get; set; }
     }
 }
