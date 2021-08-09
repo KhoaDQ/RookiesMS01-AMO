@@ -10,8 +10,15 @@
     border-bottom-right-radius: 0;
 }
 .multiSelectContainer input {
-    margin-top: 0px;
+    margin-top: 1px;
 }
 .chip {
     display: none;
+}
+
+table {
+    table-layout: fixed;
+}
+#modifyCol{
+    width:"150px"
 }

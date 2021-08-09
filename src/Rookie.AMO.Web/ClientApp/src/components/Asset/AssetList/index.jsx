@@ -4,7 +4,6 @@ import { AiOutlineSearch } from "@react-icons/all-files/ai/AiOutlineSearch";
 import { AiFillFilter } from "@react-icons/all-files/ai/AiFillFilter";
 import { Link } from "react-router-dom";
 import { Multiselect } from 'multiselect-react-dropdown';
-import ReactPaginate from 'react-paginate';
 import {
   Col,
   Row,
@@ -14,7 +13,8 @@ import {
   Input,
   InputGroup,
 } from "reactstrap";
-import "./styleAsset.css";
+import "./style.css";
+import Pagination from "../../common/Pagination";
 function AssetList(props){
 
   const [searchText,setSearchText] = useState("")
@@ -85,21 +85,14 @@ function AssetList(props){
             <th>Asset Name</th>
             <th>Category</th>
             <th>State</th>
-            <th></th>
+            <th style={{width:"100px"}}></th>
           </tr>
         </thead>
         <tbody>
-          {props.children}
+          {props.totalItems > 0 ? props.children : (searchText!="") ? <span>No assets are found!</span>:<span>...Loading</span>}
         </tbody>
       </Table>
-      <ReactPaginate
-          previousLabel={'Previous'}
-          nextLabel={'Next'}
-          pageCount={10}
-          marginPagesDisplayed={0}
-          pageRangeDisplayed={2}
-         
-        />
+      {props.totalPages > 1 ? <Pagination totalPages = {props.totalPages}/> : null}
     </div>
 
   );

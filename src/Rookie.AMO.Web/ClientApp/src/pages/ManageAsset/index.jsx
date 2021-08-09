@@ -5,13 +5,12 @@ import *as action from '../../actions/ManageAsset/ActionType'
 import *as actionCategory from '../../actions/ManageCategory/ActionType'
 import AssetList from "../../components/Asset/AssetList";
 import AssetItem from "../../components/Asset/AssetItem";
-import Pagination from "../../components/common/Pagination";
-
 function ManageAsset() {
 
   const [searchText,setSearchText] = useState("")
+  const [pageNumber,setPageNumber] = useState(1)
 
-  let assets = fetchAssets(searchText);
+  let assetPage = fetchAssets(searchText,pageNumber);
 
   var categories = fetchCategories();
   
@@ -22,18 +21,23 @@ function ManageAsset() {
     {name: "Waiting for recycling",value:"Waiting"},
     {name: "Recycled",value:"Recycled"}
   ]
+
   const showAssets = () => {
     let result = null
-    if (assets.length > 0) {
-        result = assets.map((asset, index) => {
+    if (assetPage!=null && 'items' in assetPage) {
+      if(assetPage.items.length > 0){
+        result = assetPage.items.map((asset, index) => {
+          console.log(stateList.filter((e) => e.value == asset.state))
             return (
                 <AssetItem
                     key={index}
                     asset={asset}
                     index={index}
+                    stateList = {stateList}
                 />
             )
         })
+      }
     }
     
     return result
@@ -43,9 +47,12 @@ function ManageAsset() {
   return (
     <div>
       <AssetList 
-      categories = {categories} 
-      setSearchText = {setSearchText}
-      stateList = {stateList}>
+        categories = {categories} 
+        setSearchText = {setSearchText}
+        stateList = {stateList}
+        totalPages= {assetPage.totalPages}
+        totalItems= {assetPage.totalItems}
+      >
 
         {showAssets()}
 
@@ -54,22 +61,22 @@ function ManageAsset() {
     
   );
 }
-function fetchAssets (searchText) {
+function fetchAssets (searchText,pageNumber) {
   const dispatch = useDispatch()
 
   useEffect(() => {
     async function fetch() {
-      let enpoint = 'Asset/find?key='+ searchText +'&page=1&limit=1';
+      let enpoint = 'Asset/find?key='+ searchText +'&page='+pageNumber+'&limit=19';
       console.log(enpoint)
       const res = await apiCaller(enpoint, 'GET', null);
     dispatch({ type: action.FETCH_ASSETS, payload: res });
   }
   fetch()
-  }, [searchText])
+  }, [searchText,pageNumber])
 
-  const assets = useSelector(state => state.assets);
+  const assetPage = useSelector(state => state.assets);
 
-  return assets
+  return assetPage
 }
 function fetchCategories () {
   const dispatch = useDispatch()
