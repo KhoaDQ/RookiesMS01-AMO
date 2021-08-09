@@ -1,16 +1,27 @@
-import React, { useEffect } from "react";
+import React, { useEffect,useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import apiCaller from '../../apis/CallerApi'
 import *as action from '../../actions/ManageAsset/ActionType'
 import *as actionCategory from '../../actions/ManageCategory/ActionType'
 import AssetList from "../../components/Asset/AssetList";
 import AssetItem from "../../components/Asset/AssetItem";
+import Pagination from "../../components/common/Pagination";
 
 function ManageAsset() {
 
-  var assets = fetchAssets();
-  var categories = fetchCategories();
+  const [searchText,setSearchText] = useState("")
 
+  let assets = fetchAssets(searchText);
+
+  var categories = fetchCategories();
+  
+  const stateList = [
+    {name: "Assigned",value: "Assigned"},
+    {name: "Available", value: "Available"},
+    {name: "Not available", value: "NotAvailable"},
+    {name: "Waiting for recycling",value:"Waiting"},
+    {name: "Recycled",value:"Recycled"}
+  ]
   const showAssets = () => {
     let result = null
     if (assets.length > 0) {
@@ -24,22 +35,37 @@ function ManageAsset() {
             )
         })
     }
+    
     return result
   }
+
+
   return (
-    <AssetList categories = {categories}>{showAssets()}</AssetList>
+    <div>
+      <AssetList 
+      categories = {categories} 
+      setSearchText = {setSearchText}
+      stateList = {stateList}>
+
+        {showAssets()}
+
+      </AssetList>
+    </div>
+    
   );
 }
-function fetchAssets () {
+function fetchAssets (searchText) {
   const dispatch = useDispatch()
 
   useEffect(() => {
     async function fetch() {
-    const res = await apiCaller('Asset', 'GET', null);
+      let enpoint = 'Asset/find?key='+ searchText +'&page=1&limit=1';
+      console.log(enpoint)
+      const res = await apiCaller(enpoint, 'GET', null);
     dispatch({ type: action.FETCH_ASSETS, payload: res });
   }
   fetch()
-  }, [])
+  }, [searchText])
 
   const assets = useSelector(state => state.assets);
 

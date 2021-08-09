@@ -1,9 +1,10 @@
-import React from "react";
+import React,{useState} from "react";
 import { Table } from "reactstrap";
 import { AiOutlineSearch } from "@react-icons/all-files/ai/AiOutlineSearch";
 import { AiFillFilter } from "@react-icons/all-files/ai/AiFillFilter";
 import { Link } from "react-router-dom";
-import Select, { components } from "react-select";
+import { Multiselect } from 'multiselect-react-dropdown';
+import ReactPaginate from 'react-paginate';
 import {
   Col,
   Row,
@@ -13,23 +14,26 @@ import {
   Input,
   InputGroup,
 } from "reactstrap";
-
+import "./styleAsset.css";
 function AssetList(props){
-    return(
-      <div>
-        <h5 className="right-title">Asset List</h5>
+
+  const [searchText,setSearchText] = useState("")
+  const handleChange = (e) => {
+    setSearchText(e.target.value)
+  }
+  return(
+    <div>
+      <h5 className="right-title">Asset List</h5>
       <Row from>
         <Col md={3}>
-          <InputGroup>
-            <select
-              className="custom-select custom-select-lg mb-3"
-              className="form-control"
-            >
-              <option selected>State</option>
-              <option value={0}></option>
-              <option value={1}>Available</option>
-              <option value={2}>Not Available</option>
-            </select>
+          <InputGroup >
+          <Multiselect
+              options={props.stateList}
+              displayValue="name"
+              showCheckbox={true}
+              closeOnSelect={false}
+              placeholder="State"
+            />       
 
             <InputGroupAddon addonType="append">
               <InputGroupText className="right__icon">
@@ -39,19 +43,16 @@ function AssetList(props){
           </InputGroup>
         </Col>
         <Col md={3}>
-          <InputGroup>
-            <select
-              className="custom-select custom-select-lg mb-3"
-              className="form-control"
-            >
-              <option selected>Category</option>
-              <option value={0}>All</option>
-              {props.categories.map((category, index) => {
-                  return(<option value={index+1}>{category.name}</option>)
-                })
-              }
-            </select>
-
+          <InputGroup >
+            <Multiselect
+              options={props.categories.map((category, index) => {
+                return({name:category.name,id:index})
+              })}
+              displayValue="name"
+              showCheckbox={true}
+              closeOnSelect={false}
+              placeholder="Category"
+            />       
             <InputGroupAddon addonType="append">
               <InputGroupText className="right__icon">
                 <AiFillFilter />
@@ -61,10 +62,10 @@ function AssetList(props){
         </Col>
         <Col md={3}>
           <InputGroup>
-            <Input placeholder="Search" />
-            <InputGroupAddon addonType="append">
+            <Input placeholder="Search" name = "searchText" value = {searchText} onChange={handleChange}/>
+            <InputGroupAddon addonType="append" >
               <InputGroupText className="right__icon">
-                <AiOutlineSearch />
+                <AiOutlineSearch onClick={()=>{props.setSearchText(searchText)}}/>
               </InputGroupText>
             </InputGroupAddon>
           </InputGroup>
@@ -91,7 +92,16 @@ function AssetList(props){
           {props.children}
         </tbody>
       </Table>
+      <ReactPaginate
+          previousLabel={'Previous'}
+          nextLabel={'Next'}
+          pageCount={10}
+          marginPagesDisplayed={0}
+          pageRangeDisplayed={2}
+         
+        />
     </div>
+
   );
 }
 

@@ -76,13 +76,10 @@ namespace Rookie.AMO.Business.Services
         public async Task<PagedResponseModel<AssetDto>> PagedQueryAsync(string key, int page, int limit)
         {
             var query = _baseRepository.Entities;
-
+            
             query = query.Where(x => string.IsNullOrEmpty(key) || x.Name.Contains(key) || x.Code.Contains(key));
 
-            query = query.OrderBy(x => x.Name);
-
             var assets = await query
-                .AsNoTracking()
                 .PaginateAsync(page, limit);
 
             return new PagedResponseModel<AssetDto>
