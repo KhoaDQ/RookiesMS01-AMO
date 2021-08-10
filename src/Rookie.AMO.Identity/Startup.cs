@@ -8,12 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Rookie.AMO.Identity.Data;
-using Rookie.AMO.Identity.IdentityServer;
-using Rookie.AMO.Identity.Models;
-using Rookie.AMO.Identity.Security.Handler;
-using Rookie.AMO.Identity.Security.Requirement;
-using static IdentityServer4.IdentityServerConstants;
+using Rookie.AMO.Identity.Business;
 
 namespace Rookie.AMO.Identity
 {
@@ -41,37 +36,7 @@ namespace Rookie.AMO.Identity
 
             services.AddControllersWithViews();
 
-            services.AddDbContext<AppIdentityDbContext>(options =>
-            {
-                options.UseSqlServer(Configuration.GetConnectionString("AppIdentityDbContext"));
-            });
-
-            services.AddIdentity<User, IdentityRole>()
-                .AddEntityFrameworkStores<AppIdentityDbContext>()
-                .AddDefaultTokenProviders();
-
-            services.AddIdentityServer(options =>
-            {
-                options.Events.RaiseErrorEvents = true;
-                options.Events.RaiseInformationEvents = true;
-                options.Events.RaiseFailureEvents = true;
-                options.Events.RaiseSuccessEvents = true;
-            })
-                .AddProfileService<CustomProfileService>()
-                .AddDeveloperSigningCredential()
-                .AddConfigurationStore(options =>
-                {
-                    options.ConfigureDbContext =
-                        builder => builder.UseSqlServer(
-                            Configuration.GetConnectionString("AppConfigurationDbContext"));
-                })
-                .AddOperationalStore(options =>
-                {
-                    options.ConfigureDbContext =
-                        builder => builder.UseSqlServer(
-                            Configuration.GetConnectionString("AppOperationDbContext"));
-                })
-                .AddAspNetIdentity<User>();
+            services.AddBusinessLayer(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

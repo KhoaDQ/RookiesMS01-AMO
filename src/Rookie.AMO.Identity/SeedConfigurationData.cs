@@ -5,7 +5,7 @@ using IdentityServer4.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Rookie.AMO.Identity.Data;
+using Rookie.AMO.Identity.DataAccessor.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;

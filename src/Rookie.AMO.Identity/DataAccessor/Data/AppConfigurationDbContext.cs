@@ -1,12 +1,8 @@
 ﻿using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Options;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace Rookie.AMO.Identity.Data
+namespace Rookie.AMO.Identity.DataAccessor.Data
 {
     public class AppConfigurationDbContext : ConfigurationDbContext<AppConfigurationDbContext>
     {
