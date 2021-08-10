@@ -21,6 +21,15 @@ namespace Rookie.AMO.Identity.DataAccessor
             var services = new ServiceCollection();
             services.AddLogging();
 
+            services.AddDbContext<AppIdentityDbContext>(options =>
+            {
+                options.UseSqlServer(connectionString);
+            });
+
+            services.AddIdentity<User, IdentityRole>()
+                    .AddEntityFrameworkStores<AppIdentityDbContext>()
+                    .AddDefaultTokenProviders();
+
             using var serviceProvider = services.BuildServiceProvider();
             using var scope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope();
             var context = scope.ServiceProvider.GetService<AppIdentityDbContext>();
