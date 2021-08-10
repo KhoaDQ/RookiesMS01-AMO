@@ -3,7 +3,6 @@ import { Table } from "reactstrap";
 import { AiOutlineSearch } from "@react-icons/all-files/ai/AiOutlineSearch";
 import { AiFillFilter } from "@react-icons/all-files/ai/AiFillFilter";
 import { Link } from "react-router-dom";
-import { Multiselect } from 'multiselect-react-dropdown';
 import {
   Col,
   Row,
@@ -14,7 +13,8 @@ import {
   InputGroup,
 } from "reactstrap";
 import "./style.css";
-import Pagination from "../../common/Pagination";
+import Pagination from "../../Pagination";
+import Filter from "../../Filter";
 function AssetList(props){
 
   const [searchText,setSearchText] = useState("")
@@ -27,14 +27,7 @@ function AssetList(props){
       <Row from>
         <Col md={3}>
           <InputGroup >
-          <Multiselect
-              options={props.stateList}
-              displayValue="name"
-              showCheckbox={true}
-              closeOnSelect={false}
-              placeholder="State"
-            />       
-
+            <Filter options = {props.stateList} displayValue = "name" placeholder="State"/>
             <InputGroupAddon addonType="append">
               <InputGroupText className="right__icon">
                 <AiFillFilter />
@@ -44,15 +37,13 @@ function AssetList(props){
         </Col>
         <Col md={3}>
           <InputGroup >
-            <Multiselect
-              options={props.categories.map((category, index) => {
-                return({name:category.name,id:index})
-              })}
-              displayValue="name"
-              showCheckbox={true}
-              closeOnSelect={false}
+            <Filter 
+              options = {props.categories.map((category, index) => {
+                  return({name:category.name,id:index})
+                })} 
+              displayValue ="name" 
               placeholder="Category"
-            />       
+            />     
             <InputGroupAddon addonType="append">
               <InputGroupText className="right__icon">
                 <AiFillFilter />

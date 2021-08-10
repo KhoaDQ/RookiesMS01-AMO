@@ -1,24 +1,3 @@
-
-.multiSelectContainer {
-    position: relative;
-    text-align: left;
-    width: 79%;
-}
-.input-group .searchWrapper {
-
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-}
-.multiSelectContainer input {
-    margin-top: 1px;
-}
-.chip {
-    display: none;
-}
-
 table {
     table-layout: fixed;
-}
-#modifyCol{
-    width:"150px"
 }
