@@ -51,7 +51,9 @@ const EditUser = (props) => {
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setCurrentUser({ ...currentUser, [name]: value });
-  };
+    };
+
+    //Initial call Api
 
   //const user = useSelector(state => state.user)
   // const dispatch = useDispatch()
