@@ -1,3 +1,9 @@
+/* PopupDetail */
+.popupdetail .auth-form {
+  width: auto;
+  min-width: 400px;
+}
+
 /* PopupInfor */
 .popup .close {
   top: 20px;
