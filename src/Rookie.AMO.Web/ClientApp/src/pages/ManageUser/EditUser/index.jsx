@@ -1,10 +1,40 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
 import { useDispatch, useSelector } from "react-redux";
 import apiCaller from "../../../apis/CallerApi";
 import * as action from "../../../actions/ManageUser/ActionType";
 import PopupInfor from "../../../components/Popup/PopupInfor";
+
+const date = new Date();
+
+const schema = yup.object().shape({
+  FirstName: yup.string().required(),
+  LastName: yup.string().required(),
+
+  DateofBirth: yup
+    .date()
+    .required()
+    .max(
+      (date.getFullYear() - 18).toString() +
+        "/" +
+        date.getMonth() +
+        "/" +
+        date.getDate(),
+      "User is under 18. Please select a different date"
+    ),
+
+  JoinedDate: yup
+    .date()
+    .required()
+    .min(
+      yup.ref("DateofBirth"),
+      "Joined date is not later than Date of Birth. Please select a different date"
+    ),
+});
 
 const EditUser = (props) => {
   const user = {
@@ -46,8 +76,8 @@ const EditUser = (props) => {
     setCurrentUser({ ...currentUser, Gender: value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const submitForm = (data) => {
+    console.log(data);
     console.log(currentUser);
     setIsModalOpen(true);
   };
@@ -56,10 +86,18 @@ const EditUser = (props) => {
     setIsModalOpen(content);
   };
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+
   return (
     <div>
       <h5 className="right-title">Edit User</h5>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit(submitForm)}>
         <div className="form-group row">
           <label
             htmlFor="FirstNameEditUser"
@@ -69,6 +107,7 @@ const EditUser = (props) => {
           </label>
           <div className="col-sm-10" className="resize">
             <input
+              {...register("FirstName")}
               type="text"
               className="form-control"
               id="FirstName"
@@ -77,6 +116,9 @@ const EditUser = (props) => {
               placeholder="FirstName"
               onChange={handleInputChange}
             />
+            {errors.FirstName && (
+              <p className="text-danger">{errors.FirstName.message} !</p>
+            )}
           </div>
         </div>
         <br></br>
@@ -86,6 +128,7 @@ const EditUser = (props) => {
           </label>
           <div className="col-sm-10" className="resize">
             <input
+              {...register("LastName")}
               type="text"
               className="form-control"
               id="LastName"
@@ -94,6 +137,9 @@ const EditUser = (props) => {
               placeholder="LastName"
               onChange={handleInputChange}
             />
+            {errors.LastName && (
+              <p className="text-danger">{errors.LastName.message} !</p>
+            )}
           </div>
         </div>
         <br></br>
@@ -106,6 +152,7 @@ const EditUser = (props) => {
           </label>
           <div className="col-sm-10" className="resize">
             <input
+              {...register("DateofBirth")}
               type="date"
               className="form-control "
               id="DateofBirth"
@@ -114,6 +161,9 @@ const EditUser = (props) => {
               placeholder="DateofBirth"
               onChange={handleInputChange}
             />
+            {errors.DateofBirth && (
+              <p className="text-danger">{errors.DateofBirth.message} !</p>
+            )}
           </div>
         </div>
         <br></br>
@@ -168,6 +218,7 @@ const EditUser = (props) => {
           </label>
           <div className="col-sm-10" className="resize">
             <input
+              {...register("JoinedDate")}
               type="date"
               className="form-control "
               id="JoinedDate"
@@ -176,6 +227,16 @@ const EditUser = (props) => {
               placeholder="JoinedDate"
               onChange={handleInputChange}
             />
+            {errors.JoinedDate && (
+              <p className="text-danger">{errors.JoinedDate.message} !</p>
+            )}
+            {(new Date(currentUser.JoinedDate).getDay() == 6 ||
+              new Date(currentUser.JoinedDate).getDay() == 0) && (
+              <p className="text-danger">
+                "Joined date is Saturday or Sunday. Please select a different
+                date" !
+              </p>
+            )}
           </div>
         </div>
         <br></br>
@@ -199,7 +260,20 @@ const EditUser = (props) => {
         </div>
         <br></br>
 
-        <button type="submit" className="btn btn-outline-danger margin color">
+        <button
+          type="submit"
+          disabled={
+            !(
+              currentUser.FirstName &&
+              currentUser.LastName &&
+              currentUser.Gender &&
+              currentUser.Type &&
+              currentUser.DateofBirth &&
+              currentUser.JoinedDate
+            )
+          }
+          className="btn btn-outline-danger margin color"
+        >
           Save
         </button>
         <button type="button" className="btn btn-outline-danger color1">
