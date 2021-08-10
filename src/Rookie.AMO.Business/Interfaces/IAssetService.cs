@@ -24,6 +24,6 @@ namespace Rookie.AMO.Business.Interfaces
 
         Task UpdateAsync(AssetDto categoryDto);
 
-        Task<IEnumerable<AssetDto>> GetBySortAsync(string PropertyName, bool desc);
+        Task<PagedResponseModel<AssetDto>> GetBySortAsync(string propertyName, bool desc, int page, int limit);
     }
 }

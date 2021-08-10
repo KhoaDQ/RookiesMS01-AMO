@@ -5,6 +5,15 @@ import *as action from '../../actions/ManageAsset/ActionType'
 import *as actionCategory from '../../actions/ManageCategory/ActionType'
 import AssetList from "../../components/Asset/AssetList";
 import AssetItem from "../../components/Asset/AssetItem";
+
+const stateList = [
+  {name: "Assigned",value: "Assigned"},
+  {name: "Available", value: "Available"},
+  {name: "Not available", value: "NotAvailable"},
+  {name: "Waiting for recycling",value:"Waiting"},
+  {name: "Recycled",value:"Recycled"}
+]
+
 function ManageAsset() {
 
   const [searchText,setSearchText] = useState("")
@@ -14,36 +23,10 @@ function ManageAsset() {
 
   var categories = fetchCategories();
   
-  const stateList = [
-    {name: "Assigned",value: "Assigned"},
-    {name: "Available", value: "Available"},
-    {name: "Not available", value: "NotAvailable"},
-    {name: "Waiting for recycling",value:"Waiting"},
-    {name: "Recycled",value:"Recycled"}
-  ]
-
-  const showAssets = () => {
-    let result = null
-    if (assetPage!=null && 'items' in assetPage) {
-      if(assetPage.items.length > 0){
-        result = assetPage.items.map((asset, index) => {
-          console.log(stateList.filter((e) => e.value == asset.state))
-            return (
-                <AssetItem
-                    key={index}
-                    asset={asset}
-                    index={index}
-                    stateList = {stateList}
-                />
-            )
-        })
-      }
-    }
-    
-    return result
+  const resetPage = () => {
+      setPageNumber(1)
   }
-
-
+  console.log(pageNumber)
   return (
     <div>
       <AssetList 
@@ -52,15 +35,19 @@ function ManageAsset() {
         stateList = {stateList}
         totalPages= {assetPage.totalPages}
         totalItems= {assetPage.totalItems}
+        pageNumber = {pageNumber}
+        setPageNumber = {setPageNumber}
+        resetPage = {resetPage}
       >
 
-        {showAssets()}
+      {showAssets(assetPage)}
 
       </AssetList>
     </div>
     
   );
 }
+
 function fetchAssets (searchText,pageNumber) {
   const dispatch = useDispatch()
 
@@ -93,4 +80,23 @@ function fetchCategories () {
 
   return categories
 }
+function showAssets (assetPage){
+  let result = null
+  if (assetPage!=null && 'items' in assetPage) {
+    if(assetPage.items.length > 0){
+      result = assetPage.items.map((asset, index) => {
+        return (
+            <AssetItem
+                key={index}
+                asset={asset}
+                index={index}
+                stateList = {stateList}
+            />
+        )
+      })
+    }
+  }
+  return result
+}
+
 export default ManageAsset;

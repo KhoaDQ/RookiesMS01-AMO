@@ -3,17 +3,10 @@ import ReactPaginate from 'react-paginate';
 import "./style.css";
 
 export default function Pagination(props) {
-  let {totalPages,pageSelected} = props
-  function goToNextPage() {
-    // not yet implemented
-  }
-
-  function goToPreviousPage() {
-      // not yet implemented
-  }
+  let {totalPages,pageNumber,setPageNumber} = props
 
   function changePage(event) {
-      console.log('a')
+      setPageNumber(event.selected+1)
   }
 
   return (
@@ -26,6 +19,7 @@ export default function Pagination(props) {
           containerClassName = "pagination"
           pageLinkClassName = "numberPage"
           onPageChange={changePage}
+          forcePage={pageNumber - 1}
       />
   )
 }

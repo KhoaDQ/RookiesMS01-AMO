@@ -91,11 +91,22 @@ namespace Rookie.AMO.Business.Services
             };
         }
 
-        public async Task<IEnumerable<AssetDto>> GetBySortAsync(string propertyName,bool desc)
+        public async Task<PagedResponseModel<AssetDto>> GetBySortAsync(string propertyName,bool desc,int page, int limit)
         {
-            var assets = await Task.FromResult(_baseRepository.GetAllAsync().Result.OrderByPropertyName(propertyName,desc).ToList());
-            
-            return _mapper.Map<List<AssetDto>>(assets);
+           
+            var query = await Task.FromResult(_baseRepository.GetAllAsync().Result.OrderByPropertyName(propertyName,desc).AsQueryable());
+
+
+            var assets = await query
+                .PaginateAsync(page, limit);
+
+            return new PagedResponseModel<AssetDto>
+            {
+                CurrentPage = assets.CurrentPage,
+                TotalPages = assets.TotalPages,
+                TotalItems = assets.TotalItems,
+                Items = _mapper.Map<IEnumerable<AssetDto>>(assets.Items)
+            };
         }
     }
 }
