@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import apiCaller from "../../../apis/CallerApi";
 import * as action from "../../../actions/ManageUser/ActionType";
+import PopupInfor from "../../../components/Popup/PopupInfor";
 
 const EditUser = (props) => {
   const user = {
@@ -15,11 +16,13 @@ const EditUser = (props) => {
     JoinedDate: "2021-11-30",
   };
   const [currentUser, setCurrentUser] = useState(user);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setCurrentUser({ ...currentUser, [name]: value });
   };
+
   //const user = useSelector(state => state.user)
   // const dispatch = useDispatch()
 
@@ -46,6 +49,11 @@ const EditUser = (props) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(currentUser);
+    setIsModalOpen(true);
+  };
+
+  const handleModelShowFunction = (content) => {
+    setIsModalOpen(content);
   };
 
   return (
@@ -198,6 +206,12 @@ const EditUser = (props) => {
           <Link to="/manage-user">Cancel</Link>
         </button>
       </form>
+      <PopupInfor
+        title="Information"
+        content="Edit user successfully"
+        handleModelShow={handleModelShowFunction}
+        isModalOpen={isModalOpen}
+      ></PopupInfor>
     </div>
   );
 };
