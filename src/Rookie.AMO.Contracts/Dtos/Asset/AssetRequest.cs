@@ -15,7 +15,7 @@ namespace Rookie.AMO.Contracts.Dtos.Asset
 
         public string Specification { get; set; }
 
-        public StateList State { get; set; }
+        public string State { get; set; }
 
         public Guid CategoryId { get; set; }
     }
