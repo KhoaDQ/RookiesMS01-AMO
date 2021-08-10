@@ -21,7 +21,7 @@ function UserList(props) {
   return (
     <div>
       <h5 className="right-title">User List</h5>
-      <Row from>
+      <Row className="right-bar">
         <Col md={3}>
           <InputGroup>
             <select
