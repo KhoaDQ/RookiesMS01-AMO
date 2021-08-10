@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Rookie.AMO.Identity.Models
+namespace Rookie.AMO.Identity.DataAccessor.Entities
 {
     public class User : IdentityUser
     {

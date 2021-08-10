@@ -3,7 +3,7 @@ using IdentityServer4.Models;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
-using Rookie.AMO.Identity.Models;
+using Rookie.AMO.Identity.DataAccessor.Entities;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -12,7 +12,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace Rookie.AMO.Identity.IdentityServer
+namespace Rookie.AMO.Identity.Business.Services
 {
     public class CustomProfileService : IProfileService
     {

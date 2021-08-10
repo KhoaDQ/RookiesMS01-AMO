@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Rookie.AMO.Identity.Data;
+using Rookie.AMO.Identity.DataAccessor.Data;
 
-namespace Rookie.AMO.Identity.Migrations.AppOperationDb
+namespace Rookie.AMO.Identity.DataAccessor.Migrations.AppOperationDb
 {
     [DbContext(typeof(AppOperationDbContext))]
     [Migration("20210804111539_InitCreateOperationDb")]

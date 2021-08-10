@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Rookie.AMO.Identity.Migrations
+namespace Rookie.AMO.Identity.DataAccessor.Migrations
 {
     public partial class InitialCreate : Migration
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Rookie.AMO.Identity.Migrations.AppConfigurationDb
+namespace Rookie.AMO.Identity.DataAccessor.Migrations.AppConfigurationDb
 {
     public partial class InitCreateOperationDb : Migration
     {

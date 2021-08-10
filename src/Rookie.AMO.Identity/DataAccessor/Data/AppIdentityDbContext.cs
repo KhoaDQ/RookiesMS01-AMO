@@ -1,12 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Rookie.AMO.Identity.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Rookie.AMO.Identity.DataAccessor.Entities;
 
-namespace Rookie.AMO.Identity.Data
+namespace Rookie.AMO.Identity.DataAccessor.Data
 {
     public class AppIdentityDbContext : IdentityDbContext<User>
     {
