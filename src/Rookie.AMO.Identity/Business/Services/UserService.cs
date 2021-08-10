@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Rookie.AMO.Contracts;
 using Rookie.AMO.Contracts.Constants;
 using Rookie.AMO.Contracts.Dtos.User;
+using Rookie.AMO.Identity.Business.Extensions;
 using Rookie.AMO.Identity.Business.Interfaces;
 using Rookie.AMO.Identity.DataAccessor.Entities;
 using System;
@@ -40,9 +41,10 @@ namespace Rookie.AMO.Identity.Business.Services
             return _mapper.Map<UserDto>(user);
         }
 
-        public Task DeleteUserAsync(Guid userId)
+        public async Task DeleteUserAsync(Guid userId)
         {
-            throw new NotImplementedException();
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+            await _userManager.DeleteAsync(user);
         }
 
         public async Task<IEnumerable<UserDto>> GetAllAsync()
@@ -55,9 +57,23 @@ namespace Rookie.AMO.Identity.Business.Services
             return _mapper.Map<UserDto>(await _userManager.FindByIdAsync(userId.ToString()));
         }
 
-        public Task<PagedResponseModel<UserDto>> PagedQueryAsync(string name, int page, int limit)
+        public async Task<PagedResponseModel<UserDto>> PagedQueryAsync(string name, int page, int limit)
         {
-            throw new NotImplementedException();
+            var query = _userManager.Users
+                                .Where(x => String.IsNullOrEmpty(name) || x.UserName.Contains(name))
+                                .OrderBy(x => x.CodeStaff);
+
+            var assets = await query
+                .AsNoTracking()
+                .PaginateAsync(page, limit);
+
+            return new PagedResponseModel<UserDto>
+            {
+                CurrentPage = assets.CurrentPage,
+                TotalPages = assets.TotalPages,
+                TotalItems = assets.TotalItems,
+                Items = _mapper.Map<IEnumerable<UserDto>>(assets.Items)
+            };
         }
 
         public Task UpdateUserAsync(UserDto userDto)
