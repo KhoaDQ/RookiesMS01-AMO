@@ -8,7 +8,7 @@ import {
   } from "reactstrap";
 import "./style.css";
 export default function Filter(props) {
-    let {options, displayValue, placeholder} = props
+    let {options, displayValue, placeholder, handleFilter} = props
 
     const handleSelect=(e)=>{
         console.log(e)
@@ -28,7 +28,7 @@ export default function Filter(props) {
             onSelect={handleSelect}
             onRemove={handleUnSelect}
             />      
-            <InputGroupAddon addonType="append" onClick = {()=>{console.log('a')}}>
+            <InputGroupAddon addonType="append" onClick = {handleFilter}>
               <InputGroupText className="right__icon">
                 <AiFillFilter />
               </InputGroupText>

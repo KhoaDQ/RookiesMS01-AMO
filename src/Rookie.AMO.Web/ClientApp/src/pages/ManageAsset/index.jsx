@@ -16,17 +16,28 @@ const stateList = [
 
 function ManageAsset() {
 
+  const [stateFilter,setStateFilter] = useState([])
+  const [categoryFilter,setCategoryFilter] = useState([])
   const [searchText,setSearchText] = useState("")
   const [pageNumber,setPageNumber] = useState(1)
 
-  let assetPage = fetchAssets(searchText,pageNumber);
+  const optionSort = {propertyName: "", desc: false}
+
+  let assetPage = fetchPageAsset(searchText,pageNumber,optionSort);
 
   var categories = fetchCategories();
   
+  let assets = {}
+  if (assetPage!=null && 'items' in assetPage) {
+    assets = assetPage.items
+    assets = filterAssets(assets,"state",stateFilter)
+    assets = filterAssets(assets,"category",categoryFilter)
+  }
+
   const resetPage = () => {
       setPageNumber(1)
   }
-  console.log(pageNumber)
+
   return (
     <div>
       <AssetList 
@@ -38,9 +49,10 @@ function ManageAsset() {
         pageNumber = {pageNumber}
         setPageNumber = {setPageNumber}
         resetPage = {resetPage}
+        setOptionSort = {setOptionSort}
       >
 
-      {showAssets(assetPage)}
+      {showAssets(assets)}
 
       </AssetList>
     </div>
@@ -48,23 +60,24 @@ function ManageAsset() {
   );
 }
 
-function fetchAssets (searchText,pageNumber) {
+function fetchPageAsset(searchText,pageNumber,optionSort={propertyName: "", desc: false}) {
   const dispatch = useDispatch()
 
   useEffect(() => {
     async function fetch() {
-      let enpoint = 'Asset/find?key='+ searchText +'&page='+pageNumber+'&limit=19';
+      let enpoint = 'Asset/find?KeySearch='+ searchText+'&OrderProperty='+optionSort.propertyName+'&Desc='+optionSort.desc+'&Page='+pageNumber+'&Limit=19';
       console.log(enpoint)
       const res = await apiCaller(enpoint, 'GET', null);
     dispatch({ type: action.FETCH_ASSETS, payload: res });
   }
   fetch()
-  }, [searchText,pageNumber])
+  }, [searchText,pageNumber,optionSort])
 
   const assetPage = useSelector(state => state.assets);
 
   return assetPage
 }
+
 function fetchCategories () {
   const dispatch = useDispatch()
 
@@ -80,23 +93,24 @@ function fetchCategories () {
 
   return categories
 }
-function showAssets (assetPage){
+
+function showAssets (assets){
   let result = null
-  if (assetPage!=null && 'items' in assetPage) {
-    if(assetPage.items.length > 0){
-      result = assetPage.items.map((asset, index) => {
-        return (
-            <AssetItem
-                key={index}
-                asset={asset}
-                index={index}
-                stateList = {stateList}
-            />
-        )
-      })
-    }
+  if(assets.length > 0){
+    result = assets.map((asset, index) => {
+      return (
+          <AssetItem
+              key={index}
+              asset={asset}
+              index={index}
+              stateList = {stateList}
+          />
+      )
+    })
   }
+  
   return result
 }
+
 
 export default ManageAsset;

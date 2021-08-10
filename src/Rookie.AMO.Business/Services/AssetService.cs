@@ -73,14 +73,18 @@ namespace Rookie.AMO.Business.Services
             return _mapper.Map<AssetDto>(asset);
         }
 
-        public async Task<PagedResponseModel<AssetDto>> PagedQueryAsync(string key, int page, int limit)
+        public async Task<PagedResponseModel<AssetDto>> PagedQueryAsync(FilterAssetsModel filter)
         {
             var query = _baseRepository.Entities;
+
+            query = query.Where(x => string.IsNullOrEmpty(filter.KeySearch) || x.Name.Contains(filter.KeySearch) || x.Code.Contains(filter.KeySearch));
             
-            query = query.Where(x => string.IsNullOrEmpty(key) || x.Name.Contains(key) || x.Code.Contains(key));
-
+            if(!string.IsNullOrEmpty(filter.OrderProperty))
+                query = query.OrderByPropertyName(filter.OrderProperty, filter.Desc);
+             
+                        
             var assets = await query
-                .PaginateAsync(page, limit);
+                .PaginateAsync(filter.Page, filter.Limit);
 
             return new PagedResponseModel<AssetDto>
             {
@@ -91,22 +95,5 @@ namespace Rookie.AMO.Business.Services
             };
         }
 
-        public async Task<PagedResponseModel<AssetDto>> GetBySortAsync(string propertyName,bool desc,int page, int limit)
-        {
-           
-            var query = await Task.FromResult(_baseRepository.GetAllAsync().Result.OrderByPropertyName(propertyName,desc).AsQueryable());
-
-
-            var assets = await query
-                .PaginateAsync(page, limit);
-
-            return new PagedResponseModel<AssetDto>
-            {
-                CurrentPage = assets.CurrentPage,
-                TotalPages = assets.TotalPages,
-                TotalItems = assets.TotalItems,
-                Items = _mapper.Map<IEnumerable<AssetDto>>(assets.Items)
-            };
-        }
     }
 }
