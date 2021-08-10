@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Rookie.AMO.Identity.Data;
+using Rookie.AMO.Identity.DataAccessor.Data;
 
-namespace Rookie.AMO.Identity.Migrations.AppConfigurationDb
+namespace Rookie.AMO.Identity.DataAccessor.Migrations.AppConfigurationDb
 {
     [DbContext(typeof(AppConfigurationDbContext))]
     partial class AppConfigurationDbContextModelSnapshot : ModelSnapshot

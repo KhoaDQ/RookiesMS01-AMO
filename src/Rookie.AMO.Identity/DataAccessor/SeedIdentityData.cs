@@ -3,16 +3,16 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Rookie.AMO.Identity.Data;
+using Rookie.AMO.Identity.DataAccessor.Data;
+using Rookie.AMO.Identity.DataAccessor.Entities;
 using Rookie.AMO.Identity.Helpers;
-using Rookie.AMO.Identity.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace Rookie.AMO.Identity
+namespace Rookie.AMO.Identity.DataAccessor
 {
     public class SeedIdentityData
     {
@@ -20,12 +20,15 @@ namespace Rookie.AMO.Identity
         {
             var services = new ServiceCollection();
             services.AddLogging();
+
             services.AddDbContext<AppIdentityDbContext>(options =>
-               options.UseSqlServer(connectionString));
+            {
+                options.UseSqlServer(connectionString);
+            });
 
             services.AddIdentity<User, IdentityRole>()
-                .AddEntityFrameworkStores<AppIdentityDbContext>()
-                .AddDefaultTokenProviders();
+                    .AddEntityFrameworkStores<AppIdentityDbContext>()
+                    .AddDefaultTokenProviders();
 
             using var serviceProvider = services.BuildServiceProvider();
             using var scope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope();
