@@ -44,5 +44,12 @@ namespace Rookie.AMO.Identity.Quickstart.Account
             }
             return Ok("Update successfully");
         }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(Guid id)
+        {
+            var user = await _userService.GetByIdAsync(id);
+            return Ok(user);
+        }
     }
 }
