@@ -13,7 +13,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using static IdentityModel.OidcConstants;
 
-namespace Rookie.AMO.Identity
+namespace Rookie.AMO.Identity.DataAccessor
 {
     public class SeedConfigurationData
     {

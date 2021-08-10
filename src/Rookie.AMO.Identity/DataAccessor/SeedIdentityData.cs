@@ -12,7 +12,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace Rookie.AMO.Identity
+namespace Rookie.AMO.Identity.DataAccessor
 {
     public class SeedIdentityData
     {

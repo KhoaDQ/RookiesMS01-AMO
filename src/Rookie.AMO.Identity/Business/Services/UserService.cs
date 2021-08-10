@@ -1,12 +1,15 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Rookie.AMO.Contracts;
+using Rookie.AMO.Contracts.Constants;
 using Rookie.AMO.Contracts.Dtos.User;
 using Rookie.AMO.Identity.Business.Interfaces;
 using Rookie.AMO.Identity.DataAccessor.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Rookie.AMO.Identity.Business.Services
@@ -23,7 +26,17 @@ namespace Rookie.AMO.Identity.Business.Services
         public async Task<UserDto> CreateUserAsync(UserRequest userRequest)
         {
             var user = _mapper.Map<User>(userRequest);
-            var result = await _userManager.CreateAsync(user);
+
+            user.UserName = AutoGenerateUserName(user.FirstName, user.LastName);
+            user.CodeStaff = AutoGenerateStaffCode();
+            var password = $"{user.UserName}@{user.DateOfBirth:ddmmyyyy}";
+            var result = await _userManager.CreateAsync(user, password);
+
+            if (!result.Succeeded)
+            {
+                throw new Exception("Unexpected errors!");
+            }
+
             return _mapper.Map<UserDto>(user);
         }
 
@@ -32,14 +45,14 @@ namespace Rookie.AMO.Identity.Business.Services
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<UserDto>> GetAllAsync()
+        public async Task<IEnumerable<UserDto>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return _mapper.Map<IEnumerable<UserDto>>(await _userManager.Users.ToListAsync());
         }
 
-        public Task<UserDto> GetByIdAsync(Guid userId)
+        public async Task<UserDto> GetByIdAsync(Guid userId)
         {
-            throw new NotImplementedException();
+            return _mapper.Map<UserDto>(await _userManager.FindByIdAsync(userId.ToString()));
         }
 
         public Task<PagedResponseModel<UserDto>> PagedQueryAsync(string name, int page, int limit)
@@ -50,6 +63,53 @@ namespace Rookie.AMO.Identity.Business.Services
         public Task UpdateUserAsync(UserDto userDto)
         {
             throw new NotImplementedException();
+        }
+
+        private string AutoGenerateStaffCode()
+        {
+            var staffCode = new StringBuilder();
+            var userList = _userManager.Users
+                                    .OrderByDescending(x => Convert.ToInt32(
+                                        x.CodeStaff.Substring(0, UserContants.PrefixUserName.Length)
+                                     ));
+            var firstUser = userList.First();
+            var currentNumber = Convert.ToInt32(firstUser.CodeStaff.Substring(0, UserContants.PrefixUserName.Length));
+            currentNumber++;
+            staffCode.Append(UserContants.PrefixUserName);
+            staffCode.Append(currentNumber.ToString("0000"));
+
+            return staffCode.ToString();
+        }
+
+        private string AutoGenerateUserName(string firstName, string lastName)
+        {
+            firstName = firstName.Trim().ToLower();
+            lastName = lastName.Trim().ToLower();
+
+            var userNameLogin = new StringBuilder(firstName);
+            var words = lastName.Split(" ");
+
+            foreach (var word in words)
+            {
+                userNameLogin.Append(word[0]);
+            }
+
+            var theSameUsernameLoginList = _userManager.Users
+                .Where(x => x.FirstName.ToLower() == firstName && x.LastName.ToLower() == lastName)
+                .OrderByDescending(x => Convert.ToInt32(x.UserName.Substring(0, userNameLogin.Length)));
+
+            if (theSameUsernameLoginList.Count() == 0)
+            {
+                return userNameLogin.ToString();
+            }
+
+            var lastUsername = theSameUsernameLoginList.First().UserName;
+            // lastUsername = usernamelogin + ordernumber ~ binhnv1 = binhnv + 1
+            var orderNumber = Convert.ToInt32(lastUsername.Replace(userNameLogin.ToString(), ""));
+            orderNumber++;
+            userNameLogin.Append(orderNumber);
+
+            return userNameLogin.ToString();
         }
     }
 }

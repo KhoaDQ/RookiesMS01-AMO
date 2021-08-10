@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Rookie.AMO.Identity.Business.Interfaces;
 using Rookie.AMO.Identity.Business.Services;
 using Rookie.AMO.Identity.DataAccessor;
 using Rookie.AMO.Identity.DataAccessor.Entities;
@@ -19,6 +20,8 @@ namespace Rookie.AMO.Identity.Business
             IIdentityServerBuilder builder;
             services.AddDataAccessorLayer(configuration, out builder);
             builder.AddProfileService<CustomProfileService>();
+
+            services.AddTransient<IUserService, UserService>();
         }
     }
 }

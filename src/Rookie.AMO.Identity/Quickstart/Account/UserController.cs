@@ -16,10 +16,19 @@ namespace Rookie.AMO.Identity.Quickstart.Account
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
-        [HttpPut]
-        public async Task AddUserAsync(UserRequest user)
+
+        public UserController(IUserService userService)
         {
-            return;
+            _userService = userService;
+        }
+        [HttpPut]
+        public async Task<ActionResult<UserDto>> AddUserAsync(UserRequest user)
+        {
+            if (!ModelState.IsValid) return BadRequest();
+
+            var userDto = await _userService.CreateUserAsync(user);
+
+            return Ok(userDto);
         }
     }
 }
