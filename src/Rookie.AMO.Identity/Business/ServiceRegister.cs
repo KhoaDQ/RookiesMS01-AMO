@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Rookie.AMO.Identity.Business.Interfaces;
 using Rookie.AMO.Identity.Business.Services;
 using Rookie.AMO.Identity.DataAccessor;
+using AutoMapper;
 using Rookie.AMO.Identity.DataAccessor.Entities;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,7 @@ namespace Rookie.AMO.Identity.Business
             services.AddDataAccessorLayer(configuration, out builder);
             builder.AddProfileService<CustomProfileService>();
 
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddTransient<IUserService, UserService>();
         }
     }
