@@ -30,5 +30,26 @@ namespace Rookie.AMO.Identity.Quickstart.Account
 
             return Ok(userDto);
         }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(Guid id, [FromBody] UserUpdateRequest request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var result = await _userService.UpdateUserAsync(id, request);
+            if (!result)
+            {
+                return BadRequest(result);
+            }
+            return Ok("Update successfully");
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(Guid id)
+        {
+            var user = await _userService.GetByIdAsync(id);
+            return Ok(user);
+        }
     }
 }
