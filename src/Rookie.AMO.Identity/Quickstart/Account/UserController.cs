@@ -32,7 +32,7 @@ namespace Rookie.AMO.Identity.Quickstart.Account
         public async Task<UserDto> GetAllAsync(Guid userId)
             => await _userService.GetByIdAsync(userId);
 
-        [HttpGet("/find")]
+        [HttpGet("find")]
         public async Task<PagedResponseModel<UserDto>> PagedQueryAsync(string name, int page, int limit)
             => await _userService.PagedQueryAsync(name, page, limit);
 
