@@ -27,7 +27,7 @@ namespace Rookie.AMO.Web.Controllers
         [HttpGet("userId")]
         public Task<UserDto> GetByIdAsync(Guid userId)
             => _userService.GetByIdAsync(userId);
-        [HttpGet]
+        [HttpGet("find")]
         public Task<PagedResponseModel<UserDto>> PagedQueryUserAsync(string name, int page, int limit)
             => _userService.PagedQueryAsync(name, page, limit);
         [HttpDelete("userid")]
@@ -36,6 +36,8 @@ namespace Rookie.AMO.Web.Controllers
         [HttpPost]
         public Task<UserDto> CreateUserAsync(UserRequest user)
             => _userService.CreateUserAsync(user);
-
+        [HttpPut]
+        public Task UpdateUserAsync(Guid id, UserUpdateRequest user)
+            => _userService.UpdateUserAsync(id, user);
     }
 }

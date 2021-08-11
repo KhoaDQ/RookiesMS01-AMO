@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { CreateUserAction } from "../../../actions/ManageUser/CreateUserAction";
-import callApi from "../../../apis/apiCaller";
+import callApi from "../../../apis/callApi";
 import { Method, UserEndpoint } from "../../../constants/config";
 import { GetAllRolesRequest } from "../../../constants/RoleConstants";
 

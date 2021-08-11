@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector, connect } from "react-redux";
-import apiCaller from "../../../apis/apiCaller";
+import apiCaller from "../../../apis/callApi";
 import * as action from "../../../actions/ManagerAsset/ActionType";
 import { useEffect } from "react";
 import { useHistory } from "react-router-dom";

@@ -13,13 +13,15 @@ namespace Rookie.AMO.Web.DataProviders
     {
         [Get(Endpoints.User)]
         Task<IEnumerable<UserDto>> GetAllUsersAsync();
-        [Get(Endpoints.User)]
+        [Get(Endpoints.User + "/{userId}")]
         Task<UserDto> GetByIdAsync(Guid userId);
         [Post(Endpoints.User)]
         Task<UserDto> CreateUserAsync(UserRequest user);
         [Delete(Endpoints.User)]
         Task<ActionResult> DeleteUserAsync(Guid userId);
-        [Get(Endpoints.User)]
+        [Put(Endpoints.User + "/{id}")]
+        Task UpdateUserAsync(Guid id, UserUpdateRequest user);
+        [Get(Endpoints.User + "/find")]
         Task<PagedResponseModel<UserDto>> PagedQueryAsync(string name, int page, int limit);
     }
 }
