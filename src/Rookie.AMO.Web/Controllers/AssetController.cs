@@ -34,11 +34,11 @@ namespace Rookie.AMO.Web.Controllers
             return Created(Endpoints.Asset, asset);
         }
 
-        [HttpPut]
-        public async Task<ActionResult> UpdateAsync([FromBody] AssetDto assetDto)
+        [HttpPut("{id}")]
+        public async Task<ActionResult> UpdateAsync(Guid id, [FromForm] AssetUpdateRequest request)
         {
-            Ensure.Any.IsNotNull(assetDto, nameof(assetDto));
-            await _assetService.UpdateAsync(assetDto);
+            Ensure.Any.IsNotNull(request, nameof(request));
+            await _assetService.UpdateAsync(id,request);
             return NoContent();
         }
 

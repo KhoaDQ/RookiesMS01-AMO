@@ -22,6 +22,6 @@ namespace Rookie.AMO.Business.Interfaces
 
         Task DeleteAsync(Guid id);
 
-        Task UpdateAsync(AssetDto categoryDto);
+        Task<AssetDto> UpdateAsync(Guid id,AssetUpdateRequest request);
     }
 }

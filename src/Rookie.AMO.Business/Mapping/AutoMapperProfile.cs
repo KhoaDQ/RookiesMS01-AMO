@@ -2,6 +2,7 @@
 using Rookie.AMO.Contracts.Dtos.Asset;
 using Rookie.AMO.Contracts.Dtos.Category;
 using Rookie.AMO.DataAccessor.Entities;
+using Rookie.AMO.DataAccessor.Enums;
 
 namespace Rookie.AMO.Business
 {
@@ -16,9 +17,10 @@ namespace Rookie.AMO.Business
         private void FromPresentationLayer()
         {
             CreateMap<CategoryDto, Category>();
-            CreateMap<AssetDto,Asset>();
+            CreateMap<AssetDto,Asset>().ForMember(u => u.State, options => options.MapFrom(input => EnumConverExtension.GetValueInt<StateList>(input.State))); 
 
             CreateMap<CategoryRequest, Category>();
+            CreateMap<AssetUpdateRequest, Asset>().ReverseMap(); 
             CreateMap<AssetRequest, Asset>();
         }
 

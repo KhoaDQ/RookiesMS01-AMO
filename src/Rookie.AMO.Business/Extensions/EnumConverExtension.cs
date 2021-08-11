@@ -9,5 +9,9 @@ namespace Rookie.AMO.Business
         {
             return Enum.GetName(typeof(T), enumType);
         }
+        public static int GetValueInt<T>(string name) where T : Enum
+        {
+            return (int)Enum.Parse(typeof(T), name);
+        }
     }
 }
