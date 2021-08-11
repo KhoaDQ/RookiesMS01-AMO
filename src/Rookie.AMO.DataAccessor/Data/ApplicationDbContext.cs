@@ -39,5 +39,9 @@ namespace Rookie.AMO.DataAccessor.Data
                 entity.ToTable(name: "Request");
             });
         }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseLazyLoadingProxies();
+        }
     }
 }

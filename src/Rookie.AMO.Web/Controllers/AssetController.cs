@@ -61,8 +61,9 @@ namespace Rookie.AMO.Web.Controllers
 
 
         [HttpGet("find")]
-        public async Task<PagedResponseModel<AssetDto>>
-            FindAsync(string key, int page = 1, int limit = 10)
-            => await _assetService.PagedQueryAsync(key, page, limit);
+        public async Task<PagedResponseModel<AssetDto>> FindAsync([FromQuery] FilterAssetsModel filterAssetsModel)
+        {
+            return await _assetService.PagedQueryAsync(filterAssetsModel);
+        }
     }
 }

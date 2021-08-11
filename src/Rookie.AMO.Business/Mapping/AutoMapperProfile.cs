@@ -27,7 +27,8 @@ namespace Rookie.AMO.Business
         private void FromDataAccessorLayer()
         {
             CreateMap<Category, CategoryDto>();
-            CreateMap<Asset, AssetDto>();
+            CreateMap<Asset, AssetDto>().ForMember(u => u.State, options => options.MapFrom(input => EnumConverExtension.GetNameString<StateList>(input.State))).ForMember(dest => dest.CategoryName, opt => opt
+                                                             .MapFrom(s => s.Category.Name)) ;
         }
     }
 }

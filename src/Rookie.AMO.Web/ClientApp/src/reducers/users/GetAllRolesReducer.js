@@ -1,4 +1,4 @@
-import { GetAllRolesFail, GetAllRolesRequest, GetAllRolesSuccess } from "../constants/RoleConstants";
+import { GetAllRolesFail, GetAllRolesRequest, GetAllRolesSuccess } from "../../constants/RoleConstants";
 
 export function GetAllRolesReducer(state = {roles: []}, action) {
     switch (action.type) {
