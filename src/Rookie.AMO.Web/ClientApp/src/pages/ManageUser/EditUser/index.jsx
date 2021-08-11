@@ -5,7 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
 import { useDispatch, useSelector } from "react-redux";
-import apiCaller from "../../../apis/apiCaller";
+import apiCaller from "../../../apis/callApi";
 import * as action from "../../../actions/ManageUser/ActionType";
 import PopupInfor from "../../../components/Popup/PopupInfor";
 

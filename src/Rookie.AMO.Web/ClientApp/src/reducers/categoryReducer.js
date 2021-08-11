@@ -8,9 +8,6 @@ function CategoryReducer(state = initialState, action) {
     switch (type) {
         case types.FETCH_CATEGORY:
             return payload;
-
-        case types.FETCH_CATEGORIES:
-            return payload.data;
        
         default:
             return state;

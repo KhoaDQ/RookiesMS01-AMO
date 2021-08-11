@@ -1,4 +1,4 @@
-import callApi from "../../apis/apiCaller";
+import callApi from "../../apis/callApi";
 import { BASE_URL, Method, RoleEndpoint} from "../../constants/config";
 import { GetAllRolesFail, GetAllRolesRequest, GetAllRolesSuccess } from "../../constants/RoleConstants";
 

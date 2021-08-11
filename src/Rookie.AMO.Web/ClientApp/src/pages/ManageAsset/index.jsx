@@ -1,6 +1,6 @@
 import React, { useEffect,useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
-import apiCaller from '../../apis/apiCaller'
+import apiCaller from '../../apis/callApi'
 import *as action from '../../actions/ManagerAsset/ActionType'
 import *as actionCategory from '../../actions/ManagerCategory/ActionType'
 import AssetList from "../../components/Asset/AssetList";

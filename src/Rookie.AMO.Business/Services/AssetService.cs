@@ -55,13 +55,17 @@ namespace Rookie.AMO.Business.Services
 
             var result = listAssets.Where(x => x.CategoryId == categoryId);
 
-            if (result.Count() > 0)
+          
+
+            if (result.Count() > 0 )
             {
-                var maxNuber = listAssets.OrderByDescending(x => x.Code).First();
 
-                int number = Convert.ToInt32(maxNuber.Code.Substring(2));
+                    var maxNuber = Category.Assets.OrderByDescending(x => x.Code).First();
 
-                return Category.Name.Substring(0, 2) + GenerateAutoNumber(number);
+                    int number = Convert.ToInt32(maxNuber.Code.Substring(2));
+
+                    return Category.Name.Substring(0, 2) + GenerateAutoNumber(number);
+
             }
             else
             {
