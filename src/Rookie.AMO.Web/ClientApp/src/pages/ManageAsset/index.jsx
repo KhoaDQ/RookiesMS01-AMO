@@ -21,9 +21,10 @@ function ManageAsset() {
   const [searchText,setSearchText] = useState("")
   const [pageNumber,setPageNumber] = useState(1)
 
-  const optionSort = {propertyName: "", desc: false}
+  const [optionSort,setOptionSort] = useState({propertyName: "", desc: false})
 
-  let assetPage = fetchPageAsset(searchText,pageNumber,optionSort.propertyName,optionSort.desc);
+  
+  let assetPage = fetchPageAsset(searchText,pageNumber,optionSort);
 
   var categories = fetchCategories();
   
@@ -31,6 +32,10 @@ function ManageAsset() {
 
   const resetPage = () => {
       setPageNumber(1)
+  }
+
+  const handleSort = (e) =>{
+      setOptionSort({propertyName: e.target.id, desc: false})
   }
 
   return (
@@ -44,7 +49,7 @@ function ManageAsset() {
         pageNumber = {pageNumber}
         setPageNumber = {setPageNumber}
         resetPage = {resetPage}
-        optionSort = {optionSort}
+        handleSort = {handleSort}
       >
 
       {showAssets(assets)}
@@ -55,18 +60,18 @@ function ManageAsset() {
   );
 }
 
-function fetchPageAsset(searchText,pageNumber,orderBy, desc = false) {
+function fetchPageAsset(searchText,pageNumber,optionSort = {propertyName: "", desc: false}) {
   const dispatch = useDispatch()
 
   useEffect(() => {
     async function fetch() {
-      let enpoint = 'Asset/find?KeySearch='+ searchText+'&OrderProperty='+orderBy+'&Desc='+desc+'&Page='+pageNumber+'&Limit=19';
-      console.log(searchText,pageNumber)
+      let enpoint = 'Asset/find?KeySearch='+ searchText+'&OrderProperty='+optionSort.propertyName+'&Desc='+optionSort.desc+'&Page='+pageNumber+'&Limit=19';
+      console.log(enpoint)
       const res = await apiCaller(enpoint, 'GET', null);
       dispatch({ type: action.FETCH_ASSETS, payload: res });
     }
   fetch()
-  }, [searchText,pageNumber])
+  }, [searchText,pageNumber,optionSort.propertyName,optionSort.desc])
 
   const assetPage = useSelector(state => state.assets);
 

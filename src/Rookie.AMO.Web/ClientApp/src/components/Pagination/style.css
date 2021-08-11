@@ -1,5 +1,6 @@
 .pagination {
     justify-content: flex-end;
+    margin-inline-end: 1rem;
 }
 
 .pagination .previous{

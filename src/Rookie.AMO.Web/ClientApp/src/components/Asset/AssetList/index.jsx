@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React,{useState, useEffect} from "react";
 import { Table } from "reactstrap";
 import { AiOutlineSearch } from "@react-icons/all-files/ai/AiOutlineSearch";
 import { Link } from "react-router-dom";
@@ -16,11 +16,12 @@ import Pagination from "../../Pagination";
 import Filter from "../../Filter";
 function AssetList(props){
 
-  let {optionSort} = props
+  let {handleSort} = props
   const [searchText,setSearchText] = useState("")
   const handleChange = (e) => {
     setSearchText(e.target.value)
   }
+  
   return(
     <div>
       <h5 className="right-title">Asset List</h5>
@@ -58,10 +59,10 @@ function AssetList(props){
       <Table className="table_border_spacing">
         <thead>
           <tr>
-            <th onClick = {()=>{console.log('header')}}>Asset Code</th>
-            <th onClick = {()=>{optionSort.propertyName = "Name"}}>Asset Name</th>
-            <th onClick = {()=>{optionSort.propertyName = "CategoryName"}}>Category</th>
-            <th onClick = {()=>{optionSort.propertyName = "State"}}>State</th>
+            <th onClick = {handleSort} id = "Code">Asset Code</th>
+            <th onClick = {handleSort} id = "Name" className = "header_name">Asset Name</th>
+            <th onClick = {handleSort} id = "Category">Category</th>
+            <th onClick = {handleSort} id = "State">State</th>
             <th className="header_tools"></th>
           </tr>
         </thead>
