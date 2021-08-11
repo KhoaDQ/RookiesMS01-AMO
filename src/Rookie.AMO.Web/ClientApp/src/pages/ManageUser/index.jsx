@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
-import apiCaller from "../../apis/apiCaller";
+import apiCaller from "../../apis/callApi";
 import * as action from "../../actions/ManageUser/ActionType";
 import UserList from "../../components/User/UserList";
 import UserItem from "../../components/User/UserItem";

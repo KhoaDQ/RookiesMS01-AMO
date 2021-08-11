@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector, connect } from "react-redux";
-import apiCaller from "../../../apis/apiCaller";
+import apiCaller from "../../../apis/callApi";
 import * as action from "../../../actions/ManagerAsset/ActionType";
 import { useEffect } from "react";
 import { useHistory } from "react-router-dom";
@@ -66,10 +66,15 @@ const CreateAssets = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(state);
-    try {
-      const res = apiCaller("Asset", "POST", state);
+
+    async function CreateAsset() {
+      const res = await apiCaller("Asset", "POST", state);
       dispatch({ type: action.CREATE_ASSET, payload: res });
       history.push("/manage-asset");
+    }
+
+    try {
+      CreateAsset();
     } catch (error) {
       console.log(error);
     }

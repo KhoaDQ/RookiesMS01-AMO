@@ -1,4 +1,4 @@
-import callApi from "../../apis/apiCaller";
+import callApi from "../../apis/callApi";
 import { BASE_URL, Method, UserEndpoint } from "../../constants/config";
 import { CreateUserFail, CreateUserRequest, CreateUserSuccess } from "../../constants/UserConstants";
 
