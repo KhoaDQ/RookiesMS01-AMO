@@ -10,6 +10,7 @@ using Rookie.AMO.Identity.DataAccessor.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,12 +19,10 @@ namespace Rookie.AMO.Identity.Business.Services
     public class UserService : IUserService
     {
         private readonly UserManager<User> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IMapper _mapper;
-        public UserService(UserManager<User> userManager, RoleManager<IdentityRole> roleManager,IMapper mapper)
+        public UserService(UserManager<User> userManager, IMapper mapper)
         {
             _userManager = userManager;
-            _roleManager = roleManager;
             _mapper = mapper;
         }
         public async Task<UserDto> CreateUserAsync(UserRequest userRequest)
@@ -34,6 +33,16 @@ namespace Rookie.AMO.Identity.Business.Services
             user.CodeStaff = AutoGenerateStaffCode();
             var password = $"{user.UserName}@{user.DateOfBirth:ddmmyyyy}";
             var createUserResult = await _userManager.CreateAsync(user, password);
+
+            var claims = new List<Claim>()
+            {
+                new Claim(IdentityModel.JwtClaimTypes.GivenName, user.FirstName),
+                new Claim(IdentityModel.JwtClaimTypes.FamilyName, user.LastName),
+                new Claim(IdentityModel.JwtClaimTypes.Role, user.Type),
+                new Claim("location", user.Location)
+            };
+
+            await _userManager.AddClaimsAsync(user, claims);
 
             if (!createUserResult.Succeeded)
             {
