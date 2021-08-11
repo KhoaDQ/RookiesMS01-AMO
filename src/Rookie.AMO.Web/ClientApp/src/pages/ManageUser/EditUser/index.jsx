@@ -51,27 +51,27 @@ const EditUser = (props) => {
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setCurrentUser({ ...currentUser, [name]: value });
-    };
+  };
 
-    //Initial call Api
+  const user = useSelector((state) => state.editUserReducer);
+  const dispatch = useDispatch();
 
-  //const user = useSelector(state => state.user)
-  // const dispatch = useDispatch()
+  //htttps://localhost:5011/api/users/{id}
+  useEffect(() => {
+    async function fetchUserById() {
+      const res = await apiCaller(`users/${props.id}`, "GET", null);
+      dispatch({ type: action.GETBYID_USER, payload: res.data });
+    }
+    fetchUserById();
+    console.log(user);
+  }, []);
 
-  // useEffect(() => {
-  //   async function fetchUserById() {
-  //     const res = await apiCaller('users', 'GET', null);
-  //     dispatch({ type: action.FETCH_USERS, payload: res });
-  //   }
-  //   fetchUserById()
-  // }, [])
-  // console.log(user);
-
-  //   async function fetchUpdateUser() {
-  //     const res = await apiCaller('users', 'PUT', null);
-  //     dispatch({ type: action.FETCH_USERS, payload: res });
-  //   }
-  //   fetchUserById()
+  //htttps://localhost:5011/api/users
+  async function fetchUpdateUser() {
+    const res = await apiCaller("users", "PUT", currentUser);
+    dispatch({ type: action.UPDATE_USER, payload: res.data });
+    console.log(user);
+  }
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -81,6 +81,7 @@ const EditUser = (props) => {
   const submitForm = (data) => {
     console.log(data);
     console.log(currentUser);
+    fetchUpdateUser();
     setIsModalOpen(true);
   };
 
