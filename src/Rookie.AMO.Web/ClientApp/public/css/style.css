@@ -32,10 +32,10 @@ span.right__icon.input-group-text {
 }
 
 table {
-    font-size: 12px;
+    font-size: 15px;
     margin-top: 1rem;
 }
 
 input, select, button {
-    font-size: 12px!important;
+    font-size: 15px!important;
 }

@@ -10,7 +10,7 @@ function AssetReducer(state = initialState, action) {
             return [...state, payload];
 
         case types.FETCH_ASSETS:
-            return payload.data;
+            return payload;
 
         default:
             return state;
