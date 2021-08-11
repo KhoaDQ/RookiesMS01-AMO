@@ -13,18 +13,6 @@ function userReducer(state = initialState, action) {
       // console.log(action.payload.data);
       return payload.data;
 
-    case types.UPDATE_USER:
-      return state.map((user) => {
-        if (user.id === payload.id) {
-          return {
-            ...user,
-            ...payload,
-          };
-        } else {
-          return user;
-        }
-      });
-
     case types.DELETE_USER:
       return state.filter(({ id }) => id !== payload.id);
 

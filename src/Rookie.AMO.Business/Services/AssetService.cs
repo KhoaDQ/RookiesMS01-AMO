@@ -27,32 +27,67 @@ namespace Rookie.AMO.Business.Services
             _mapper = mapper;
             _context = context;
         }
-
+        
         public async Task<AssetDto> AddAsync(AssetRequest assetRequest)
         {
             Ensure.Any.IsNotNull(assetRequest, nameof(assetRequest));
             var asset = _mapper.Map<Asset>(assetRequest);
-
-            asset.Id = Guid.NewGuid();
-
-            asset.Code = ""; //add code category and auto number
+            // asset.Id = Guid.NewGuid();
+            // Generate Asset Code
+            asset.Code =AutoGenerateAssetCode(asset);
 
             asset.Location = "HCM"; // location take in creator location
 
             var item = await _baseRepository.AddAsync(asset);
             return _mapper.Map<AssetDto>(item);
         }
+        
+        private string AutoGenerateAssetCode(Asset asset)
+        {
+            var categoryId = asset.CategoryId;
 
+            var Category = _context.Categories.FirstOrDefault(x => x.Id == categoryId);
+            //add code category and auto number
+            // assetcode = Categoryname + number
+
+            var listAssets =  _context.Assets.ToList();
+
+            var result = listAssets.Where(x => x.CategoryId == categoryId);
+
+            if (result.Count() > 0)
+            {
+                var maxNuber = listAssets.OrderByDescending(x => x.Code).First();
+
+                int number = Convert.ToInt32(maxNuber.Code.Substring(2));
+
+                return Category.Name.Substring(0, 2) + GenerateAutoNumber(number);
+            }
+            else
+            {
+               return Category.Name.Substring(0, 2) + "100001";
+            }
+
+        }
         public async Task DeleteAsync(Guid id)
         {
             await _baseRepository.DeleteAsync(id);
         }
 
-        public async Task UpdateAsync(AssetDto assetDto)
+        public async Task<AssetDto> UpdateAsync(Guid id, AssetUpdateRequest request)
         {
-            var asset = _mapper.Map<Asset>(assetDto);
-           
-            await _baseRepository.UpdateAsync(asset);
+         
+            var assetUpdate = _mapper.Map<Asset>(request);
+
+            var asset = await _context.Assets.FindAsync(id);
+
+            asset.Name = assetUpdate.Name;
+            asset.Specification = assetUpdate.Specification;
+            asset.InstalledDate = assetUpdate.InstalledDate;
+            asset.State = assetUpdate.State;
+
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<AssetDto>(asset);
         }
 
         public async Task<IEnumerable<AssetDto>> GetAllAsync()
@@ -95,6 +130,12 @@ namespace Rookie.AMO.Business.Services
             };
         }
 
+         private string GenerateAutoNumber(int number)
+         {
+            number++;
+            string result = number.ToString();
+            return result;
+         }
 
     }
 }

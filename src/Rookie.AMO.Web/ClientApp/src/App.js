@@ -3,22 +3,24 @@ import { Col, Container, Row } from "reactstrap";
 import "./App.css";
 import Header from "./components/Header";
 import LeftBar from "./components/LeftBar";
-import routes from "./routers/router";
-import React from "react";
+import routes from './routers/router';
+import React, { Fragment } from 'react';
 function App() {
   return (
     <Router>
-      <div>
+      <Fragment>
         <Header />
         <Container className="App">
+
           <Row>
             <Col xs="6" sm="3">
               <LeftBar />
             </Col>
             <Col sm="9">{showContentMenus(routes)}</Col>
           </Row>
+
         </Container>
-      </div>
+      </Fragment>
     </Router>
   );
 }

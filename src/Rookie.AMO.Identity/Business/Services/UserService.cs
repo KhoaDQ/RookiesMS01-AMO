@@ -95,9 +95,22 @@ namespace Rookie.AMO.Identity.Business.Services
             };
         }
 
-        public Task UpdateUserAsync(UserDto userDto)
+        public async Task<bool> UpdateUserAsync(Guid id, UserUpdateRequest request)
         {
-            throw new NotImplementedException();
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            user.DateOfBirth = request.DateOfBirth;
+            user.FirstName = request.FirstName;
+            user.LastName = request.LastName;
+            user.JoinedDate = request.JoinedDate;
+            user.Type = request.Type;
+            user.Gender = request.Gender;
+
+            var result = await _userManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                return true;
+            }
+            return false;
         }
 
         private string AutoGenerateStaffCode()
