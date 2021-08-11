@@ -14,11 +14,13 @@ namespace Rookie.AMO.Identity.Business.Services
     {
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IMapper _mapper;
+
         public RoleService(RoleManager<IdentityRole> roleManager, IMapper mapper)
         {
             _roleManager = roleManager;
             _mapper = mapper;
         }
+
         public async Task<IEnumerable<RoleDto>> GetAllRolesAsync()
         {
             return _mapper.Map<IEnumerable<RoleDto>>(await _roleManager.Roles.ToListAsync());

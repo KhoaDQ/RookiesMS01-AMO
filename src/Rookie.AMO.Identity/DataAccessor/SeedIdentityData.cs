@@ -89,10 +89,10 @@ namespace Rookie.AMO.Identity.DataAccessor
 
                 result = userMgr.AddClaimsAsync(user1, new List<Claim>
                     {
-                        new Claim("given_name", "John"),
-                        new Claim("family_name", "Doe"),
-                        new Claim("role", "Admin"),
-                        new Claim("location", "HCM")
+                        new Claim(IdentityModel.JwtClaimTypes.GivenName, "John"),
+                        new Claim(IdentityModel.JwtClaimTypes.FamilyName, "Doe"),
+                        new Claim(IdentityModel.JwtClaimTypes.Role, "Admin"),
+                        new Claim("location", "HN")
                     }).Result;
 
                 if (!result.Succeeded)
@@ -121,9 +121,9 @@ namespace Rookie.AMO.Identity.DataAccessor
 
                 result = userMgr.AddClaimsAsync(user2, new List<Claim>
                     {
-                        new Claim("given_name", "John"),
-                        new Claim("family_name", "Doe"),
-                        new Claim("role", "Staff"),
+                        new Claim(IdentityModel.JwtClaimTypes.GivenName, "John"),
+                        new Claim(IdentityModel.JwtClaimTypes.FamilyName, "Doe"),
+                        new Claim(IdentityModel.JwtClaimTypes.Role, "Staff"),
                         new Claim("location", "HN")
                     }).Result;
 

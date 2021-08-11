@@ -1,4 +1,4 @@
-import * as types from "../actions/ManageUser/ActionType";
+import * as types from "../../actions/ManageUser/ActionType";
 
 const initialState = [];
 
