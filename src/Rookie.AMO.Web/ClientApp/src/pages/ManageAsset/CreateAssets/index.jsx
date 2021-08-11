@@ -180,9 +180,9 @@ const CreateAssets = () => {
                   type="radio"
                   name="State"
                   id="gridRadios2"
-                  value="Not Available"
+                  value="NotAvailable"
                   defaultValue="option2"
-                  defaultChecked={state.State === "Not Available"}
+                  defaultChecked={state.State === "NotAvailable"}
                   onChange={(e) => {
                     handleRadioChange(e);
                   }}

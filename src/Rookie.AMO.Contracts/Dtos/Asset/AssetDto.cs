@@ -24,7 +24,6 @@ namespace Rookie.AMO.Contracts.Dtos.Asset
         public string Location { get; set; }
 
         public string CategoryName { get; set; }
-
         public Guid CategoryId { get; set; }
     }
 }
