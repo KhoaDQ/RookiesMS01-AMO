@@ -73,11 +73,21 @@ namespace Rookie.AMO.Business.Services
             await _baseRepository.DeleteAsync(id);
         }
 
-        public async Task UpdateAsync(AssetDto assetDto)
+        public async Task<AssetDto> UpdateAsync(Guid id, AssetUpdateRequest request)
         {
-            var asset = _mapper.Map<Asset>(assetDto);
-           
-            await _baseRepository.UpdateAsync(asset);
+         
+            var assetUpdate = _mapper.Map<Asset>(request);
+
+            var asset = await _context.Assets.FindAsync(id);
+
+            asset.Name = assetUpdate.Name;
+            asset.Specification = assetUpdate.Specification;
+            asset.InstalledDate = assetUpdate.InstalledDate;
+            asset.State = assetUpdate.State;
+
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<AssetDto>(asset);
         }
 
         public async Task<IEnumerable<AssetDto>> GetAllAsync()

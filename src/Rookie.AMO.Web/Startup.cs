@@ -92,6 +92,11 @@ namespace Rookie.AMO.Web
                 });
             });
 
+        
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "EcomWeb.API", Version = "v1" });
+            });
             services.AddBusinessLayer(Configuration);
            
             // In production, the React files will be served from this directory
@@ -123,6 +128,11 @@ namespace Rookie.AMO.Web
 
             app.UseAuthentication();
 
+            app.UseSwagger()
+                .UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                });
             app.UseRouting();
 
             app.UseAuthorization();
