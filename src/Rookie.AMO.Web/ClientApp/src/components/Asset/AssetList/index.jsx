@@ -11,11 +11,12 @@ import {
   Input,
   InputGroup,
 } from "reactstrap";
-import "./style.css";
+import "../style.css";
 import Pagination from "../../Pagination";
 import Filter from "../../Filter";
 function AssetList(props){
 
+  let {optionSort} = props
   const [searchText,setSearchText] = useState("")
   const handleChange = (e) => {
     setSearchText(e.target.value)
@@ -54,14 +55,14 @@ function AssetList(props){
           </Button>
         </Col>
       </Row>
-      <Table>
+      <Table className="table_border_spacing">
         <thead>
           <tr>
-            <th>Asset Code</th>
-            <th>Asset Name</th>
-            <th>Category</th>
-            <th>State</th>
-            <th style={{width:"100px"}}></th>
+            <th onClick = {()=>{console.log('header')}}>Asset Code</th>
+            <th onClick = {()=>{optionSort.propertyName = "Name"}}>Asset Name</th>
+            <th onClick = {()=>{optionSort.propertyName = "CategoryName"}}>Category</th>
+            <th onClick = {()=>{optionSort.propertyName = "State"}}>State</th>
+            <th className="header_tools"></th>
           </tr>
         </thead>
         <tbody>

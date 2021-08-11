@@ -2,6 +2,7 @@ import React from 'react'
 import { IoMdCreate } from "@react-icons/all-files/io/IoMdCreate";
 import { IoIosCloseCircleOutline } from "@react-icons/all-files/io/IoIosCloseCircleOutline";
 import { Link } from "react-router-dom";
+import "../style.css";
 function AssetItem(props) {
     let { asset, index, stateList } = props
     return(
