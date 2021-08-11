@@ -1,4 +1,4 @@
-import { CreateUserFail, CreateUserRequest, CreateUserSuccess } from "../constants/UserConstants";
+import { CreateUserFail, CreateUserRequest, CreateUserSuccess } from "../../constants/UserConstants";
 
 export function CreateUserReducer(state = {categories: {}}, action) {
     switch (action.type) {

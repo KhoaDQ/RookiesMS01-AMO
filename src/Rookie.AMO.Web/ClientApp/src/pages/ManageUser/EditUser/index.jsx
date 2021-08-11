@@ -37,7 +37,7 @@ const schema = yup.object().shape({
 });
 
 const EditUser = (props) => {
-  const user = {
+  const initialUser = {
     FirstName: "ABCFirstName",
     LastName: "ABCLastName",
     DateofBirth: "1999-11-30",
@@ -45,7 +45,7 @@ const EditUser = (props) => {
     Type: "Admin",
     JoinedDate: "2021-11-30",
   };
-  const [currentUser, setCurrentUser] = useState(user);
+  const [currentUser, setCurrentUser] = useState(initialUser);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleInputChange = (event) => {

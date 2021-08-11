@@ -1,18 +1,20 @@
-import *as types from "../actions/ManageCategory/ActionType";
+import *as types from "../actions/ManagerCategory/ActionType";
 
 const initialState = [];
 
-function categoryReducer(state = initialState, action) {
+function CategoryReducer(state = initialState, action) {
     const { type, payload } = action;
 
     switch (type) {
+        case types.FETCH_CATEGORY:
+            return payload;
 
         case types.FETCH_CATEGORIES:
             return payload.data;
-            
+       
         default:
             return state;
     }
 };
 
-export default categoryReducer;
+export default CategoryReducer;

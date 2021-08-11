@@ -1,13 +1,13 @@
 import { combineReducers } from "redux";
-import { CreateUserReducer } from "./CreateUserReducer";
+import { CreateUserReducer } from "./users/CreateUserReducer";
 import users from "./users/userReducer";
 import { reducer as oidcReducer } from "redux-oidc";
 
-import { GetAllRolesReducer } from "./GetAllRolesReducer";
+import { GetAllRolesReducer } from "./users/GetAllRolesReducer";
 import userReducer from "./users/userReducer";
-import AssetReducer from "./AssetReducer";
+import AssetReducer from "./assets/AssetReducer";
 import CategoryReducer from "./CategoryReducer";
-import editUserReducer from "./editUserReducer";
+import editUserReducer from "./users/editUserReducer";
 
 export default combineReducers({
   getAllRoles: GetAllRolesReducer,

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EnsureThat;
 using Microsoft.EntityFrameworkCore;
+using Rookie.AMO.Business.Extensions;
 using Rookie.AMO.Business.Interfaces;
 using Rookie.AMO.Contracts;
 using Rookie.AMO.Contracts.Dtos;
@@ -109,17 +110,18 @@ namespace Rookie.AMO.Business.Services
             return _mapper.Map<AssetDto>(asset);
         }
 
-        public async Task<PagedResponseModel<AssetDto>> PagedQueryAsync(string key, int page, int limit)
+        public async Task<PagedResponseModel<AssetDto>> PagedQueryAsync(FilterAssetsModel filter)
         {
             var query = _baseRepository.Entities;
 
-            query = query.Where(x => string.IsNullOrEmpty(key) || x.Name.Contains(key) || x.Code.Contains(key));
+            query = query.Where(x => string.IsNullOrEmpty(filter.KeySearch) || x.Name.Contains(filter.KeySearch) || x.Code.Contains(filter.KeySearch));
 
-            query = query.OrderBy(x => x.Name);
+            if (!string.IsNullOrEmpty(filter.OrderProperty))
+                query = query.OrderByPropertyName(filter.OrderProperty, filter.Desc);
+
 
             var assets = await query
-                .AsNoTracking()
-                .PaginateAsync(page, limit);
+                .PaginateAsync(filter.Page, filter.Limit);
 
             return new PagedResponseModel<AssetDto>
             {
@@ -130,7 +132,7 @@ namespace Rookie.AMO.Business.Services
             };
         }
 
-         private string GenerateAutoNumber(int number)
+        private string GenerateAutoNumber(int number)
          {
             number++;
             string result = number.ToString();
