@@ -1,58 +1,130 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
-const EditUser = () => {
+import { useDispatch, useSelector } from "react-redux";
+import apiCaller from "../../../apis/CallerApi";
+import * as action from "../../../actions/ManageUser/ActionType";
+
+const EditUser = (props) => {
+  const user = {
+    FirstName: "ABCFirstName",
+    LastName: "ABCLastName",
+    DateofBirth: "1999-11-30",
+    Gender: "Male",
+    Type: "Admin",
+    JoinedDate: "2021-11-30",
+  };
+  const [currentUser, setCurrentUser] = useState(user);
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setCurrentUser({ ...currentUser, [name]: value });
+  };
+  //const user = useSelector(state => state.user)
+  // const dispatch = useDispatch()
+
+  // useEffect(() => {
+  //   async function fetchUserById() {
+  //     const res = await apiCaller('users', 'GET', null);
+  //     dispatch({ type: action.FETCH_USERS, payload: res });
+  //   }
+  //   fetchUserById()
+  // }, [])
+  // console.log(user);
+
+  //   async function fetchUpdateUser() {
+  //     const res = await apiCaller('users', 'PUT', null);
+  //     dispatch({ type: action.FETCH_USERS, payload: res });
+  //   }
+  //   fetchUserById()
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setCurrentUser({ ...currentUser, Gender: value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log(currentUser);
+  };
+
   return (
     <div>
       <h5 className="right-title">Edit User</h5>
-      <form>
+      <form onSubmit={handleSubmit}>
         <div className="form-group row">
-          <label htmlFor="EmailEditUser" className="col-sm-2 col-form-label">
-            Email
-          </label>
-          <div className="col-sm-10" className="resize">
-            <input type="email" className="form-control" id="EmailEditUser" />
-          </div>
-        </div>
-        <br></br>
-        <div className="form-group row">
-          <label htmlFor="PasswordEditUser" className="col-sm-2 col-form-label">
-            Password
+          <label
+            htmlFor="FirstNameEditUser"
+            className="col-sm-2 col-form-label"
+          >
+            First Name
           </label>
           <div className="col-sm-10" className="resize">
             <input
-              type="password"
+              type="text"
               className="form-control"
-              id="PasswordEditUser"
+              id="FirstName"
+              name="FirstName"
+              defaultValue={user.FirstName}
+              placeholder="FirstName"
+              onChange={handleInputChange}
             />
           </div>
         </div>
         <br></br>
         <div className="form-group row">
-          <label htmlFor="GenderEditUser" className="col-sm-2 col-form-label">
-            Gender
+          <label htmlFor="LastNameEditUser" className="col-sm-2 col-form-label">
+            Last Name
+          </label>
+          <div className="col-sm-10" className="resize">
+            <input
+              type="text"
+              className="form-control"
+              id="LastName"
+              name="LastName"
+              defaultValue={user.LastName}
+              placeholder="LastName"
+              onChange={handleInputChange}
+            />
+          </div>
+        </div>
+        <br></br>
+        <div className="form-group row">
+          <label
+            htmlFor="DateofBirthEditUser"
+            className="col-sm-2 col-form-label"
+          >
+            Date of Birth
           </label>
           <div className="col-sm-10" className="resize">
             <input
               type="date"
               className="form-control "
-              id="GenderEditUser"
-              name="GenderEditUser"
+              id="DateofBirth"
+              name="DateofBirth"
+              defaultValue={user.DateofBirth}
+              placeholder="DateofBirth"
+              onChange={handleInputChange}
             />
           </div>
         </div>
         <br></br>
-        <fieldset className="form-group">
+        <fieldset className="form-group" id="Gender">
           <div className="row">
-            <legend className="col-form-label col-sm-2 pt-0">Radios</legend>
+            <legend className="col-form-label col-sm-2 pt-0">Gender</legend>
             <div className="col-sm-10">
               <div>
                 <div className="form-check form-check-inline">
                   <input
                     className="form-check-input"
                     type="radio"
-                    name="FemaleEditUser"
+                    name="Gender"
                     id="gridRadios1"
-                    defaultValue="option1"
+                    value="Female"
+                    defaultChecked={user.Gender === "Female"}
+                    onChange={(e) => {
+                      handleChange(e);
+                    }}
                   />
                   <label className="form-check-label" htmlFor="gridRadios1">
                     Female
@@ -62,9 +134,13 @@ const EditUser = () => {
                   <input
                     className="form-check-input"
                     type="radio"
-                    name="MaleEditUser"
+                    name="Gender"
                     id="gridRadios2"
-                    defaultValue="option2"
+                    value="Male"
+                    defaultChecked={user.Gender === "Male"}
+                    onChange={(e) => {
+                      handleChange(e);
+                    }}
                   />
                   <label className="form-check-label" htmlFor="gridRadios2">
                     Male
@@ -76,15 +152,21 @@ const EditUser = () => {
         </fieldset>
         <br></br>
         <div className="form-group row">
-          <label htmlFor="GenderEditUser" className="col-sm-2 col-form-label">
-            Gender
+          <label
+            htmlFor="JoinedDateEditUser"
+            className="col-sm-2 col-form-label"
+          >
+            Joined Date
           </label>
           <div className="col-sm-10" className="resize">
             <input
               type="date"
               className="form-control "
-              id="GenderEditUser"
-              name="GenderEditUser"
+              id="JoinedDate"
+              name="JoinedDate"
+              defaultValue={user.JoinedDate}
+              placeholder="JoinedDate"
+              onChange={handleInputChange}
             />
           </div>
         </div>
@@ -95,22 +177,25 @@ const EditUser = () => {
           </label>
           <div className="col-sm-10" className="resize">
             <select
+              name="Type"
               className="custom-select custom-select-lg mb-3"
               className="form-control"
+              defaultValue={user.Type}
+              onChange={handleInputChange}
             >
               <option value={0}></option>
-              <option value={1}>Staff</option>
-              <option value={2}>Customer</option>
+              <option value="Staff">Staff</option>
+              <option value="Admin">Admin</option>
             </select>
           </div>
         </div>
         <br></br>
 
-        <button type="button" class="btn btn-outline-danger margin color">
+        <button type="submit" className="btn btn-outline-danger margin color">
           Save
         </button>
-        <button type="button" class="btn btn-outline-danger color1">
-          Cancel
+        <button type="button" className="btn btn-outline-danger color1">
+          <Link to="/manage-user">Cancel</Link>
         </button>
       </form>
     </div>
