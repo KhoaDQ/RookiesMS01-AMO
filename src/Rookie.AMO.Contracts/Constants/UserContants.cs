@@ -8,7 +8,7 @@ namespace Rookie.AMO.Contracts.Constants
 {
     public static class UserContants
     {
-        public const string PrefixUserName = "SD";
+        public const string PrefixStaffCode = "SD";
         public const int MaxLengthCharactersForFirstName = 100;
         public const int MaxLengthCharactersForLastName = 100;
         public const string TheCharacterIsInvalid = "The character is invalid. Allow only characters include A-z,0-9";

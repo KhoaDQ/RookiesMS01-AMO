@@ -42,7 +42,7 @@ namespace Rookie.AMO.Identity.Validators
         {
             var theDateOf18YearAgo = DateTime.Now.AddYears(-18);
 
-            return dateOfBirth > theDateOf18YearAgo;
+            return dateOfBirth <= theDateOf18YearAgo;
         }
 
         private bool HaveJoinedDateGreaterThanDateOfBirth(DateTime joinedDate, DateTime dateOfBirth)
@@ -52,7 +52,7 @@ namespace Rookie.AMO.Identity.Validators
 
         private bool BeContainOnlyAZaz09Characters(string str)
         {
-            string regexPattern = @"^[A-Za-z0-9]$";
+            string regexPattern = @"[A-Za-z\s]";
             return Regex.IsMatch(str, regexPattern);
         }
 

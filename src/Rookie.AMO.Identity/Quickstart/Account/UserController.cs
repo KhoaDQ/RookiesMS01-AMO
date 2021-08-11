@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Rookie.AMO.Contracts;
 using Rookie.AMO.Contracts.Dtos.User;
 using Rookie.AMO.Identity.Business.Interfaces;
 using Rookie.AMO.Identity.DataAccessor.Entities;
@@ -14,7 +15,6 @@ namespace Rookie.AMO.Identity.Quickstart.Account
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -28,27 +28,28 @@ namespace Rookie.AMO.Identity.Quickstart.Account
         public async Task<IEnumerable<UserDto>> GetAllAsync()
             => await _userService.GetAllAsync();
 
-        [HttpGet]
+        [HttpGet("{userId}")]
         public async Task<UserDto> GetAllAsync(Guid userId)
             => await _userService.GetByIdAsync(userId);
+
+        [HttpGet("/find")]
+        public async Task<PagedResponseModel<UserDto>> PagedQueryAsync(string name, int page, int limit)
+            => await _userService.PagedQueryAsync(name, page, limit);
 
         [HttpPost]
         public async Task<ActionResult<UserDto>> CreateUserAsync(UserRequest user)
         {
-            if (!ModelState.IsValid) return BadRequest();
-
             var userDto = await _userService.CreateUserAsync(user);
 
             return Ok(userDto);
         }
 
         [HttpDelete]
-        public async Task<ActionResult> UpdateUserAsync(Guid userId)
+        public async Task<ActionResult> DeleteUserAsync(Guid userId)
         {
-            if (!ModelState.IsValid) return BadRequest();
-
             await _userService.DeleteUserAsync(userId);
             return Ok();
         }
+
     }
 }

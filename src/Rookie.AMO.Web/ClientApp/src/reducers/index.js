@@ -3,10 +3,11 @@ import { CreateUserReducer } from "./CreateUserReducer";
 import users from "./userReducer";
 import { reducer as oidcReducer } from "redux-oidc";
 
-import userReducer from "./userReducer";
+import { GetAllRolesReducer } from "./GetAllRolesReducer";
 
 export default combineReducers({
   users,
+  getAllRoles: GetAllRolesReducer,
   createUser: CreateUserReducer,
   oidc: oidcReducer
 });

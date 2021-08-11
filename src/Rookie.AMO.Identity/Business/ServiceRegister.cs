@@ -24,6 +24,7 @@ namespace Rookie.AMO.Identity.Business
 
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IRoleService, RoleService>();
         }
     }
 }

@@ -1,3 +1,4 @@
+using FluentValidation.AspNetCore;
 using IdentityServer4.Configuration;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -9,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Rookie.AMO.Identity.Business;
+using Rookie.AMO.Identity.Filters;
+using System.Reflection;
 
 namespace Rookie.AMO.Identity
 {
@@ -34,8 +37,16 @@ namespace Rookie.AMO.Identity
                     });
             });
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews(x =>
+            {
+                x.Filters.Add(typeof(ValidatorActionFilter));
+            })
+            .AddFluentValidation(fv =>
+            {
+                fv.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+            });
 
+            services.AddSwaggerGen();
             services.AddBusinessLayer(Configuration);
         }
 
@@ -46,13 +57,20 @@ namespace Rookie.AMO.Identity
             {
                 app.UseDeveloperExceptionPage();
             }
-            
+
+            app.UseSwagger();
+
             app.UseCors("AllowOrigins");
             
             app.UseIdentityServer();
             
             app.UseStaticFiles();
-            
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
+
             app.UseRouting();
             
             app.UseAuthentication();

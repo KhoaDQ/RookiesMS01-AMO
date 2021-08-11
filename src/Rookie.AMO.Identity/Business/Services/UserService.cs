@@ -18,10 +18,12 @@ namespace Rookie.AMO.Identity.Business.Services
     public class UserService : IUserService
     {
         private readonly UserManager<User> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IMapper _mapper;
-        public UserService(UserManager<User> userManager, IMapper mapper)
+        public UserService(UserManager<User> userManager, RoleManager<IdentityRole> roleManager,IMapper mapper)
         {
             _userManager = userManager;
+            _roleManager = roleManager;
             _mapper = mapper;
         }
         public async Task<UserDto> CreateUserAsync(UserRequest userRequest)
@@ -31,9 +33,21 @@ namespace Rookie.AMO.Identity.Business.Services
             user.UserName = AutoGenerateUserName(user.FirstName, user.LastName);
             user.CodeStaff = AutoGenerateStaffCode();
             var password = $"{user.UserName}@{user.DateOfBirth:ddmmyyyy}";
-            var result = await _userManager.CreateAsync(user, password);
+            var createUserResult = await _userManager.CreateAsync(user, password);
 
-            if (!result.Succeeded)
+            if (!createUserResult.Succeeded)
+            {
+                throw new Exception("Unexpected errors!");
+            }
+
+            /*var role = await _roleManager.FindByNameAsync(userRequest.Type);
+            if (role == null)
+            {
+
+            }*/
+            var addRoleResult = await _userManager.AddToRoleAsync(user, userRequest.Type);
+
+            if (!addRoleResult.Succeeded)
             {
                 throw new Exception("Unexpected errors!");
             }
@@ -44,6 +58,11 @@ namespace Rookie.AMO.Identity.Business.Services
         public async Task DeleteUserAsync(Guid userId)
         {
             var user = await _userManager.FindByIdAsync(userId.ToString());
+
+            if (user == null)
+            {
+                throw new NotFoundException("User not found!");
+            }
             await _userManager.DeleteAsync(user);
         }
 
@@ -86,12 +105,17 @@ namespace Rookie.AMO.Identity.Business.Services
             var staffCode = new StringBuilder();
             var userList = _userManager.Users
                                     .OrderByDescending(x => Convert.ToInt32(
-                                        x.CodeStaff.Substring(0, UserContants.PrefixUserName.Length)
+                                        x.CodeStaff.Replace(UserContants.PrefixStaffCode, "")
                                      ));
+            if (!userList.Any())
+            {
+                return UserContants.PrefixStaffCode + "0001";
+            }
+
             var firstUser = userList.First();
-            var currentNumber = Convert.ToInt32(firstUser.CodeStaff.Substring(0, UserContants.PrefixUserName.Length));
+            var currentNumber = Convert.ToInt32(firstUser.CodeStaff.Replace(UserContants.PrefixStaffCode, ""));
             currentNumber++;
-            staffCode.Append(UserContants.PrefixUserName);
+            staffCode.Append(UserContants.PrefixStaffCode);
             staffCode.Append(currentNumber.ToString("0000"));
 
             return staffCode.ToString();
@@ -112,9 +136,9 @@ namespace Rookie.AMO.Identity.Business.Services
 
             var theSameUsernameLoginList = _userManager.Users
                 .Where(x => x.FirstName.ToLower() == firstName && x.LastName.ToLower() == lastName)
-                .OrderByDescending(x => Convert.ToInt32(x.UserName.Substring(0, userNameLogin.Length)));
+                .OrderByDescending(x => Convert.ToInt32(x.UserName.Replace(userNameLogin.ToString(), "")));
 
-            if (theSameUsernameLoginList.Count() == 0)
+            if (!theSameUsernameLoginList.Any())
             {
                 return userNameLogin.ToString();
             }

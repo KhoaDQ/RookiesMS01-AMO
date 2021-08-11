@@ -1,5 +1,6 @@
 ﻿
 using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Rookie.AMO.Contracts.Dtos.User;
 using Rookie.AMO.Identity.DataAccessor.Entities;
 
@@ -21,6 +22,7 @@ namespace Rookie.AMO.Identity.Business.Mapping
         private void FromDataAccessorLayer()
         {
             CreateMap<User, UserDto>(MemberList.Destination);
+            CreateMap<IdentityRole, RoleDto>(MemberList.Destination);
         }
     }
 }

@@ -50,7 +50,7 @@ const routes = [
     main: () => <Request />,
   },
   {
-    path: "/createuser",
+    path: "/create-user",
     exact: false,
     main: () => <CreateUser />,
   },
