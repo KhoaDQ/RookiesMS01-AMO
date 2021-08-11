@@ -1,5 +1,6 @@
 ﻿using Rookie.AMO.Contracts.Constants;
 using Rookie.AMO.Contracts.Dtos;
+using Rookie.AMO.Contracts.Dtos.Category;
 using System.Collections.Generic;
 
 namespace Rookie.AMO.UnitTests.API.Validators.TestData

@@ -21,7 +21,7 @@ function ManageAssignment() {
   return (
     <div classname="Assignment">
       <h5 className="right-title">Assignment List</h5>
-      <Row from>
+      <Row className="right-bar">
         <Col md={3}>
           <InputGroup>
             <select

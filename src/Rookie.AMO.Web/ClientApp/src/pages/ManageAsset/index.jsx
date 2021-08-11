@@ -1,141 +1,111 @@
-import React, { useEffect,useState } from "react";
-import { useDispatch, useSelector } from 'react-redux';
-import apiCaller from '../../apis/CallerApi'
-import *as action from '../../actions/ManageAsset/ActionType'
-import *as actionCategory from '../../actions/ManageCategory/ActionType'
-import AssetList from "../../components/Asset/AssetList";
-import AssetItem from "../../components/Asset/AssetItem";
-
-const stateList = [
-  {name: "Assigned",value: "Assigned"},
-  {name: "Available", value: "Available"},
-  {name: "Not available", value: "NotAvailable"},
-  {name: "Waiting for recycling",value:"Waiting"},
-  {name: "Recycled",value:"Recycled"}
-]
-
+import React from "react";
+import { Table } from "reactstrap";
+import { IoMdCreate } from "@react-icons/all-files/io/IoMdCreate";
+import { IoIosCloseCircleOutline } from "@react-icons/all-files/io/IoIosCloseCircleOutline";
+import { AiOutlineSearch } from "@react-icons/all-files/ai/AiOutlineSearch";
+import { AiFillFilter } from "@react-icons/all-files/ai/AiFillFilter";
+import { Link } from "react-router-dom";
+import {
+  Col,
+  Row,
+  Button,
+  InputGroupText,
+  InputGroupAddon,
+  Input,
+  InputGroup,
+} from "reactstrap";
 function ManageAsset() {
-
-  const [stateFilter,setStateFilter] = useState([])
-  const [categoryFilter,setCategoryFilter] = useState([])
-  const [searchText,setSearchText] = useState("")
-  const [pageNumber,setPageNumber] = useState(1)
-
-  const [optionSort,setOptionSort] = useState({propertyName: "", desc: false})
-
-  
-  let assetPage = fetchPageAsset(searchText,pageNumber,optionSort);
-
-  var categories = fetchCategories();
-  
-  let assets = assetPage.items;
-
-  const resetPage = () => {
-      setPageNumber(1)
-  }
-
-  const handleSort = (e) =>{
-      setOptionSort({propertyName: e.target.id, desc: false})
-  }
-
   return (
     <div>
-      <AssetList 
-        categories = {categories} 
-        setSearchText = {setSearchText}
-        stateList = {stateList}
-        totalPages= {assetPage.totalPages}
-        totalItems= {assetPage.totalItems}
-        pageNumber = {pageNumber}
-        setPageNumber = {setPageNumber}
-        resetPage = {resetPage}
-        handleSort = {handleSort}
-      >
+      <h5 className="right-title">Asset List</h5>
+      <Row className="right-bar">
+        <Col md={3}>
+          <InputGroup>
+            <select
+              className="custom-select custom-select-lg mb-3"
+              className="form-control"
+            >
+              <option selected>State</option>
+              <option value={0}></option>
+              <option value={1}>Available</option>
+              <option value={2}>Not Available</option>
+            </select>
 
-      {showAssets(assets)}
+            <InputGroupAddon addonType="append">
+              <InputGroupText className="right__icon">
+                <AiFillFilter />
+              </InputGroupText>
+            </InputGroupAddon>
+          </InputGroup>
+        </Col>
+        <Col md={3}>
+          <InputGroup>
+            <select
+              className="custom-select custom-select-lg mb-3"
+              className="form-control"
+            >
+              <option selected>Category</option>
+              <option value={0}></option>
+              <option value={1}>Laptop</option>
+              <option value={2}>Monitor</option>
+            </select>
 
-      </AssetList>
+            <InputGroupAddon addonType="append">
+              <InputGroupText className="right__icon">
+                <AiFillFilter />
+              </InputGroupText>
+            </InputGroupAddon>
+          </InputGroup>
+        </Col>
+        <Col md={3}>
+          <InputGroup>
+            <Input placeholder="Search" />
+            <InputGroupAddon addonType="append">
+              <InputGroupText className="right__icon">
+                <AiOutlineSearch />
+              </InputGroupText>
+            </InputGroupAddon>
+          </InputGroup>
+        </Col>
+        <Col md={3} className="text-right">
+          <Button color="danger">
+            <Link to="/createassets" className="UserIcon">
+              Create New Assets
+            </Link>
+          </Button>
+        </Col>
+      </Row>
+      <Table>
+        <thead>
+          <tr>
+            <th>Asset Code</th>
+            <th>Asset Name</th>
+            <th>Category</th>
+            <th>State</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>MO100005</td>
+            <td>Monitor Dell UltraSharp</td>
+            <td>Monitor</td>
+            <td>Available</td>
+            <td>
+              <span className="icon-nash icon-nash--black">
+                <Link to="/editassets">
+                  <IoMdCreate />
+                </Link>
+              </span>
+              <span className="icon-nash icon-nash--red">
+                <IoIosCloseCircleOutline />
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </Table>
     </div>
-    
   );
 }
-
-function fetchPageAsset(searchText,pageNumber,optionSort = {propertyName: "", desc: false}) {
-  const dispatch = useDispatch()
-
-  useEffect(() => {
-    async function fetch() {
-      let enpoint = 'Asset/find?KeySearch='+ searchText+'&OrderProperty='+optionSort.propertyName+'&Desc='+optionSort.desc+'&Page='+pageNumber+'&Limit=19';
-      console.log(enpoint)
-      const res = await apiCaller(enpoint, 'GET', null);
-      dispatch({ type: action.FETCH_ASSETS, payload: res });
-    }
-  fetch()
-  }, [searchText,pageNumber,optionSort.propertyName,optionSort.desc])
-
-  const assetPage = useSelector(state => state.assets);
-
-  return assetPage
-}
-
-function fetchCategories () {
-  const dispatch = useDispatch()
-
-  useEffect(() => {
-    async function fetch() {
-      const res = await apiCaller('Category', 'GET', null);
-      dispatch({ type: actionCategory.FETCH_CATEGORIES, payload: res });
-    }
-    fetch()
-  }, [])
-
-  const categories = useSelector(state => state.categories);
-
-  return categories
-}
-
-function filterAssets(assets,propertyName,arrayFilter){
-  if(arrayFilter == [] || ! (propertyName in assets))
-    return assets
-  return assets.filter(asset => arrayFilter.includes(asset[propertyName]))
-}
-
-function filterPageAsset(assetPage,stateFilter,categoryFilter){
-
-    let assets = null
-    useEffect(() => {
-      async function filter() {
-        console.log(assetPage)
-        if (assetPage!=null && 'items' in assetPage){
-          assets = assetPage.items
-          //assets = filterAssets(assets,"state",stateFilter)
-          //assets = filterAssets(assets,"category",categoryFilter)
-        }
-      }
-      filter();
-    }, [assetPage])
-    
-    return assets
-
-}
-function showAssets (assets){
-  let result = null
-  if(assets != null){
-    if(assets.length > 0){
-      result = assets.map((asset, index) => {
-        return (
-            <AssetItem
-                key={index}
-                asset={asset}
-                index={index}
-                stateList = {stateList}
-            />
-        )
-      })
-    }
-  }
-  return result
-}
-
 
 export default ManageAsset;

@@ -17,10 +17,11 @@ namespace Rookie.AMO.Business
         private void FromPresentationLayer()
         {
             CreateMap<CategoryDto, Category>();
-            CreateMap<AssetDto,Asset>().ForMember(u => u.State, options => options.MapFrom(input =>EnumConverExtension.GetValueInt<StateList>(input.State)));
+            CreateMap<AssetDto,Asset>().ForMember(u => u.State, options => options.MapFrom(input => EnumConverExtension.GetValueInt<StateList>(input.State))); 
 
             CreateMap<CategoryRequest, Category>();
-            CreateMap<AssetRequest, Asset>().ForMember(u => u.State, options => options.MapFrom(input => EnumConverExtension.GetValueInt<StateList>(input.State)));
+            CreateMap<AssetUpdateRequest, Asset>().ReverseMap(); 
+            CreateMap<AssetRequest, Asset>();
         }
 
         private void FromDataAccessorLayer()

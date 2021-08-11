@@ -26,7 +26,7 @@
     font-size: 17px;
     color: black;
     display: block;
-    padding: 15px 20px;
+    padding: 10px 15px;
     cursor: pointer;
     border-bottom: 3px solid #fff;
 }
@@ -35,4 +35,9 @@
     background-color: #CF2338;
     color: white;
     transition: all 0.3s ease-in-out;
+    text-decoration: none;
+}
+
+.right-bar {
+    margin: 1rem 0;
 }
