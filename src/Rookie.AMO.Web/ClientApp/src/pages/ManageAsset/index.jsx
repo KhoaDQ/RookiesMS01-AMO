@@ -23,16 +23,11 @@ function ManageAsset() {
 
   const optionSort = {propertyName: "", desc: false}
 
-  let assetPage = fetchPageAsset(searchText,pageNumber,optionSort);
+  let assetPage = fetchPageAsset(searchText,pageNumber,optionSort.propertyName,optionSort.desc);
 
   var categories = fetchCategories();
   
-  let assets = {}
-  if (assetPage!=null && 'items' in assetPage) {
-    assets = assetPage.items
-    assets = filterAssets(assets,"state",stateFilter)
-    assets = filterAssets(assets,"category",categoryFilter)
-  }
+  let assets = assetPage.items;
 
   const resetPage = () => {
       setPageNumber(1)
@@ -49,7 +44,7 @@ function ManageAsset() {
         pageNumber = {pageNumber}
         setPageNumber = {setPageNumber}
         resetPage = {resetPage}
-        setOptionSort = {setOptionSort}
+        optionSort = {optionSort}
       >
 
       {showAssets(assets)}
@@ -60,18 +55,18 @@ function ManageAsset() {
   );
 }
 
-function fetchPageAsset(searchText,pageNumber,optionSort={propertyName: "", desc: false}) {
+function fetchPageAsset(searchText,pageNumber,orderBy, desc = false) {
   const dispatch = useDispatch()
 
   useEffect(() => {
     async function fetch() {
-      let enpoint = 'Asset/find?KeySearch='+ searchText+'&OrderProperty='+optionSort.propertyName+'&Desc='+optionSort.desc+'&Page='+pageNumber+'&Limit=19';
-      console.log(enpoint)
+      let enpoint = 'Asset/find?KeySearch='+ searchText+'&OrderProperty='+orderBy+'&Desc='+desc+'&Page='+pageNumber+'&Limit=19';
+      console.log(searchText,pageNumber)
       const res = await apiCaller(enpoint, 'GET', null);
-    dispatch({ type: action.FETCH_ASSETS, payload: res });
-  }
+      dispatch({ type: action.FETCH_ASSETS, payload: res });
+    }
   fetch()
-  }, [searchText,pageNumber,optionSort])
+  }, [searchText,pageNumber])
 
   const assetPage = useSelector(state => state.assets);
 
@@ -83,10 +78,10 @@ function fetchCategories () {
 
   useEffect(() => {
     async function fetch() {
-    const res = await apiCaller('Category', 'GET', null);
-    dispatch({ type: actionCategory.FETCH_CATEGORIES, payload: res });
-  }
-  fetch()
+      const res = await apiCaller('Category', 'GET', null);
+      dispatch({ type: actionCategory.FETCH_CATEGORIES, payload: res });
+    }
+    fetch()
   }, [])
 
   const categories = useSelector(state => state.categories);
@@ -94,21 +89,46 @@ function fetchCategories () {
   return categories
 }
 
+function filterAssets(assets,propertyName,arrayFilter){
+  if(arrayFilter == [] || ! (propertyName in assets))
+    return assets
+  return assets.filter(asset => arrayFilter.includes(asset[propertyName]))
+}
+
+function filterPageAsset(assetPage,stateFilter,categoryFilter){
+
+    let assets = null
+    useEffect(() => {
+      async function filter() {
+        console.log(assetPage)
+        if (assetPage!=null && 'items' in assetPage){
+          assets = assetPage.items
+          //assets = filterAssets(assets,"state",stateFilter)
+          //assets = filterAssets(assets,"category",categoryFilter)
+        }
+      }
+      filter();
+    }, [assetPage])
+    
+    return assets
+
+}
 function showAssets (assets){
   let result = null
-  if(assets.length > 0){
-    result = assets.map((asset, index) => {
-      return (
-          <AssetItem
-              key={index}
-              asset={asset}
-              index={index}
-              stateList = {stateList}
-          />
-      )
-    })
+  if(assets != null){
+    if(assets.length > 0){
+      result = assets.map((asset, index) => {
+        return (
+            <AssetItem
+                key={index}
+                asset={asset}
+                index={index}
+                stateList = {stateList}
+            />
+        )
+      })
+    }
   }
-  
   return result
 }
 

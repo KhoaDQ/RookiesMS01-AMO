@@ -9,17 +9,16 @@ namespace Rookie.AMO.Business.Extensions
 {
     public static class SortingExtension
     {
-		public static IEnumerable<T> OrderByPropertyName<T>(this IEnumerable<T> enumerable, string property, bool desc)
-		{
-			if(desc)
-				return enumerable.OrderByDescending(x => GetProperty(x, property));
-			else
-				return  enumerable.OrderBy(x => GetProperty(x, property));
-		}
-
-		private static object GetProperty(object o, string propertyName)
-		{
-			return o.GetType().GetProperty(propertyName).GetValue(o, null);
-		}
-	}
+        public static IQueryable<T> OrderByPropertyName<T>(this IQueryable<T> source, string ordering, bool desc)
+        {
+            var type = typeof(T);
+            var property = type.GetProperty(ordering);
+            var parameter = Expression.Parameter(type, "p");
+            var propertyAccess = Expression.MakeMemberAccess(parameter, property);
+            var orderByExp = Expression.Lambda(propertyAccess, parameter);
+            MethodCallExpression resultExp = Expression.Call(typeof(Queryable), desc? "OrderByDescending":"OrderBy", new Type[] { type, property.PropertyType }, source.Expression, Expression.Quote(orderByExp));
+        
+            return source.Provider.CreateQuery<T>(resultExp);
+        }
+    }
 }
