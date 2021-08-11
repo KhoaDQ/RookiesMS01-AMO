@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using FluentValidation.Results;
 using Rookie.AMO.Contracts.Dtos;
+using Rookie.AMO.Contracts.Dtos.Category;
 using Rookie.AMO.Tests.Validations;
 using Rookie.AMO.UnitTests.API.Validators.TestData;
 using Rookie.AMO.Web.Validators;
