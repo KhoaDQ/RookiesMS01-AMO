@@ -13,12 +13,10 @@ function App() {
         <Container className="App">
 
           <Row>
-            <Col xs="6" sm="3"><LeftBar /></Col>
-            <Col sm="9">
-              {
-                showContentMenus(routes)
-              }
+            <Col xs="6" sm="3">
+              <LeftBar />
             </Col>
+            <Col sm="9">{showContentMenus(routes)}</Col>
           </Row>
 
         </Container>
@@ -31,17 +29,18 @@ const showContentMenus = (routes) => {
   let result = null;
   if (routes.length > 0) {
     result = routes.map((route, index) => {
-      return <Route
-        key={index}
-        path={route.path}
-        exact={route.exact}
-        component={route.main}
-      />
-    })
+      return (
+        <Route
+          key={index}
+          path={route.path}
+          exact={route.exact}
+          component={route.main}
+        />
+      );
+    });
   }
 
-  return <Switch>{result}
-  </Switch>
-}
+  return <Switch>{result}</Switch>;
+};
 
 export default App;

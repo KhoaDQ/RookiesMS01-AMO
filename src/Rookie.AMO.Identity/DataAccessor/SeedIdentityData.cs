@@ -74,12 +74,12 @@ namespace Rookie.AMO.Identity.DataAccessor
             var user1 = userMgr.FindByNameAsync("johnd").Result;
             if (user1 == null)
             {
-                userMgr.FindByNameAsync("John Doe");
                 user1 = new User
                 {
                     FirstName = "John",
                     LastName = "Doe",
-                    UserName = "johnd"
+                    UserName = "johnd",
+                    CodeStaff = "SD0001"
                 };
                 var result = userMgr.CreateAsync(user1, "Pass123$").Result;
                 if (!result.Succeeded)
@@ -91,7 +91,8 @@ namespace Rookie.AMO.Identity.DataAccessor
                     {
                         new Claim("given_name", "John"),
                         new Claim("family_name", "Doe"),
-                        new Claim("role", "Admin")
+                        new Claim("role", "Admin"),
+                        new Claim("location", "HCM")
                     }).Result;
 
                 if (!result.Succeeded)
@@ -108,7 +109,9 @@ namespace Rookie.AMO.Identity.DataAccessor
                 {
                     FirstName = "John",
                     LastName = "Doe",
-                    UserName = "johnd1"
+                    UserName = "johnd1",
+                    CodeStaff = "SD0002"
+
                 };
                 var result = userMgr.CreateAsync(user2, "Pass123$").Result;
                 if (!result.Succeeded)
@@ -120,7 +123,8 @@ namespace Rookie.AMO.Identity.DataAccessor
                     {
                         new Claim("given_name", "John"),
                         new Claim("family_name", "Doe"),
-                        new Claim("role", "Staff")
+                        new Claim("role", "Staff"),
+                        new Claim("location", "HN")
                     }).Result;
 
                 if (!result.Succeeded)

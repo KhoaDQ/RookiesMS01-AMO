@@ -20,7 +20,10 @@ namespace Rookie.AMO.Identity.DataAccessor
                 options.UseSqlServer(configuration.GetConnectionString("AppIdentityDbContext"));
             });
 
-            services.AddIdentity<User, IdentityRole>()
+            services.AddIdentity<User, IdentityRole>(options => {
+                options.Password.RequireDigit = true;
+                options.Password.RequireUppercase = false;
+            })
                     .AddEntityFrameworkStores<AppIdentityDbContext>()
                     .AddDefaultTokenProviders();
 

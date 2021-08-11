@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Rookie.AMO.Contracts;
 using Rookie.AMO.Contracts.Dtos.User;
 using Rookie.AMO.Identity.Business.Interfaces;
 using Rookie.AMO.Identity.DataAccessor.Entities;
@@ -21,15 +23,34 @@ namespace Rookie.AMO.Identity.Quickstart.Account
         {
             _userService = userService;
         }
-        [HttpPut]
-        public async Task<ActionResult<UserDto>> AddUserAsync(UserRequest user)
-        {
-            if (!ModelState.IsValid) return BadRequest();
 
+        [HttpGet]
+        public async Task<IEnumerable<UserDto>> GetAllAsync()
+            => await _userService.GetAllAsync();
+
+        [HttpGet("{userId}")]
+        public async Task<UserDto> GetAllAsync(Guid userId)
+            => await _userService.GetByIdAsync(userId);
+
+        [HttpGet("/find")]
+        public async Task<PagedResponseModel<UserDto>> PagedQueryAsync(string name, int page, int limit)
+            => await _userService.PagedQueryAsync(name, page, limit);
+
+        [HttpPost]
+        public async Task<ActionResult<UserDto>> CreateUserAsync(UserRequest user)
+        {
             var userDto = await _userService.CreateUserAsync(user);
 
             return Ok(userDto);
         }
+
+        [HttpDelete]
+        public async Task<ActionResult> DeleteUserAsync(Guid userId)
+        {
+            await _userService.DeleteUserAsync(userId);
+            return Ok();
+        }
+
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(Guid id, [FromBody] UserUpdateRequest request)
