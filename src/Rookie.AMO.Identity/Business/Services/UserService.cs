@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Rookie.AMO.Identity.Business.Services
@@ -104,22 +105,23 @@ namespace Rookie.AMO.Identity.Business.Services
             };
         }
 
-        public async Task<bool> UpdateUserAsync(Guid id, UserUpdateRequest request)
+        public async Task UpdateUserAsync(Guid id, UserUpdateRequest request)
         {
             var user = await _userManager.FindByIdAsync(id.ToString());
+
+            await _userManager.RemoveFromRoleAsync(user, user.Type);
+            await _userManager.AddToRoleAsync(user, request.Type);
+
+            user.Type = request.Type;
             user.DateOfBirth = request.DateOfBirth;
             user.FirstName = request.FirstName;
             user.LastName = request.LastName;
             user.JoinedDate = request.JoinedDate;
-            user.Type = request.Type;
             user.Gender = request.Gender;
 
+            user.UserName = AutoGenerateUserName(request.FirstName, request.LastName);
+
             var result = await _userManager.UpdateAsync(user);
-            if (result.Succeeded)
-            {
-                return true;
-            }
-            return false;
         }
 
         private string AutoGenerateStaffCode()
@@ -146,6 +148,8 @@ namespace Rookie.AMO.Identity.Business.Services
         private string AutoGenerateUserName(string firstName, string lastName)
         {
             firstName = firstName.Trim().ToLower();
+            firstName = Regex.Replace(firstName, @"\s", "");
+
             lastName = lastName.Trim().ToLower();
 
             var userNameLogin = new StringBuilder(firstName);
@@ -163,6 +167,11 @@ namespace Rookie.AMO.Identity.Business.Services
             if (!theSameUsernameLoginList.Any())
             {
                 return userNameLogin.ToString();
+            }
+
+            if (theSameUsernameLoginList.Count() == 1)
+            {
+                return userNameLogin.Append(1).ToString();
             }
 
             var lastUsername = theSameUsernameLoginList.First().UserName;
