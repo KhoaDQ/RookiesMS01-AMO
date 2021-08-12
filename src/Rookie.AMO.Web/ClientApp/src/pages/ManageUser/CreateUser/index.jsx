@@ -5,12 +5,15 @@ import { useSelector } from "react-redux";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { CreateUserAction } from "../../../actions/ManageUser/CreateUserAction";
+import callApi from "../../../apis/callApi";
+import { Method, UserEndpoint } from "../../../constants/config";
+import { GetAllRolesRequest } from "../../../constants/RoleConstants";
 
 const CreateUser = () => {
   const dispatch = useDispatch();
-  const { user } = useSelector(state => state.oidc);
-  //const { roles } = useSelector(state => state.GetAllRoles);
-  //const roleOptions = roles.map((role) => (<option value={role}></option>));
+  //const { user } = useSelector(state => state.oidc);
+  const { roles } = useSelector(state => state.GetAllRoles);
+  const roleOptions = roles.map((role) => (<option value={role.name}>{role.name}</option>));
   const initUser = {
     firstName: "",
     lastName: "",
@@ -31,7 +34,10 @@ const CreateUser = () => {
   };
 
   useEffect(() => {
-    
+    async function GetAllRoles(){
+      const res = await callApi(UserEndpoint, Method.Get, null);
+      dispatch({ type: GetAllRolesRequest, payload: res })
+    }
     return () => {
       
     }

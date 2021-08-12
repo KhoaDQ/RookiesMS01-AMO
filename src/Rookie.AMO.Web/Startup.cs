@@ -17,6 +17,8 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Rookie.AMO.Web.DataProviders;
+using Refit;
 
 namespace Rookie.AMO.Web
 {
@@ -98,7 +100,14 @@ namespace Rookie.AMO.Web
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "EcomWeb.API", Version = "v1" });
             });
             services.AddBusinessLayer(Configuration);
-           
+
+            services
+                .AddRefitClient<IUserService>()
+                .ConfigureHttpClient(c => c.BaseAddress = new Uri(Configuration["IdentityServer:Authority"]));
+            services
+                .AddRefitClient<IRoleService>()
+                .ConfigureHttpClient(c => c.BaseAddress = new Uri(Configuration["IdentityServer:Authority"]));
+
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {

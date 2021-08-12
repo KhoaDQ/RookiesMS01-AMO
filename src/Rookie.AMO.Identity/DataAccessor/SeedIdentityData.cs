@@ -79,7 +79,9 @@ namespace Rookie.AMO.Identity.DataAccessor
                     FirstName = "John",
                     LastName = "Doe",
                     UserName = "johnd",
-                    CodeStaff = "SD0001"
+                    CodeStaff = "SD0001",
+                    Type = "Admin",
+                    Gender = "Male"
                 };
                 var result = userMgr.CreateAsync(user1, "Pass123$").Result;
                 if (!result.Succeeded)
@@ -110,8 +112,9 @@ namespace Rookie.AMO.Identity.DataAccessor
                     FirstName = "John",
                     LastName = "Doe",
                     UserName = "johnd1",
-                    CodeStaff = "SD0002"
-
+                    CodeStaff = "SD0002",
+                    Type = "Staff",
+                    Gender = "Male"
                 };
                 var result = userMgr.CreateAsync(user2, "Pass123$").Result;
                 if (!result.Succeeded)

@@ -52,7 +52,7 @@ namespace Rookie.AMO.Identity.Validators
 
         private bool BeContainOnlyAZaz09Characters(string str)
         {
-            string regexPattern = @"[A-Za-z\s]";
+            string regexPattern = @"^[A-Za-z\s]*$";
             return Regex.IsMatch(str, regexPattern);
         }
 

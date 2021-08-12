@@ -17,6 +17,7 @@ namespace Rookie.AMO.Identity.Business.Mapping
         private void FromPresentationLayer()
         {
             CreateMap<UserRequest, User>(MemberList.Destination);
+            CreateMap<UserUpdateRequest, User>(MemberList.Destination);
         }
 
         private void FromDataAccessorLayer()
