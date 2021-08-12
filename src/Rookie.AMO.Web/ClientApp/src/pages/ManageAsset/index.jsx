@@ -22,10 +22,10 @@ function ManageAsset() {
   const [searchText,setSearchText] = useState("")
   const [pageNumber,setPageNumber] = useState(1)
 
-  const [optionSort,setOptionSort] = useState({propertyName: "", desc: false})
+  const [optionSort,setOptionSort] = useState({propertyName: "", desc: 'false'})
 
   
-  let assetPage = fetchPageAsset(searchText,pageNumber,optionSort);
+  let assetPage = fetchPageAsset(searchText,pageNumber,setOptionSort,optionSort);
 
   var categories = fetchCategories();
   
@@ -35,15 +35,18 @@ function ManageAsset() {
       setPageNumber(1)
   }
 
-  const handleSort = (e) =>{
-      setOptionSort({propertyName: e.target.id, desc: false})
+  const handleSort = (e,option) =>{
+      setOptionSort({propertyName:option.propertyName, desc: option.desc.toString()})
   }
 
+  const handleSearch = (text,e) =>{
+      setSearchText(text)
+  }
   return (
     <div>
       <AssetList 
         categories = {categories} 
-        setSearchText = {setSearchText}
+        handleSearch = {handleSearch}
         stateList = {stateList}
         totalPages= {assetPage.totalPages}
         totalItems= {assetPage.totalItems}
@@ -61,15 +64,15 @@ function ManageAsset() {
   );
 }
 
-function fetchPageAsset(searchText,pageNumber,optionSort = {propertyName: "", desc: false}) {
+function fetchPageAsset(searchText,pageNumber,setOptionSort,optionSort = {propertyName: "", desc: "false"}) {
   const dispatch = useDispatch()
-
+  
   useEffect(() => {
     async function fetch() {
       let enpoint = 'Asset/find?KeySearch='+ searchText+'&OrderProperty='+optionSort.propertyName+'&Desc='+optionSort.desc+'&Page='+pageNumber+'&Limit=19';
-      console.log(enpoint)
+      console.log(optionSort)
       const res = await apiCaller(enpoint, 'GET', null);
-      dispatch({ type: action.FETCH_ASSETS, payload: res });
+      dispatch({ type: action.FETCH_ASSETS, payload: res.data });
     }
   fetch()
   }, [searchText,pageNumber,optionSort.propertyName,optionSort.desc])
@@ -85,7 +88,7 @@ function fetchCategories () {
   useEffect(() => {
     async function fetch() {
       const res = await apiCaller('Category', 'GET', null);
-      dispatch({ type: actionCategory.FETCH_CATEGORIES, payload: res });
+      dispatch({ type: actionCategory.FETCH_CATEGORY, payload: res.data });
     }
     fetch()
   }, [])

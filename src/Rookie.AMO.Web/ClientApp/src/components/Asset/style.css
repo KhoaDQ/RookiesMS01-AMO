@@ -1,5 +1,4 @@
 .table_border_spacing {
-    margin-top: 1.5rem;
     table-layout: fixed;
     border-spacing: 10px;
     border-collapse: separate;
@@ -15,4 +14,7 @@ th:hover{
 }
 .header_name{
     width: 40%;
+}
+th svg{
+    text-align:end;
 }

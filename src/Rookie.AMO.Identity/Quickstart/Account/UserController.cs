@@ -29,10 +29,10 @@ namespace Rookie.AMO.Identity.Quickstart.Account
             => await _userService.GetAllAsync();
 
         [HttpGet("{userId}")]
-        public async Task<UserDto> GetAllAsync(Guid userId)
+        public async Task<UserDto> GetByIdAsync(Guid userId)
             => await _userService.GetByIdAsync(userId);
 
-        [HttpGet("/find")]
+        [HttpGet("find")]
         public async Task<PagedResponseModel<UserDto>> PagedQueryAsync(string name, int page, int limit)
             => await _userService.PagedQueryAsync(name, page, limit);
 
@@ -55,14 +55,8 @@ namespace Rookie.AMO.Identity.Quickstart.Account
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(Guid id, [FromBody] UserUpdateRequest request)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            await _userService.UpdateUserAsync(id, request);
 
-            var result = await _userService.UpdateUserAsync(id, request);
-            if (!result)
-            {
-                return BadRequest(result);
-            }
             return Ok("Update successfully");
         }
     }
