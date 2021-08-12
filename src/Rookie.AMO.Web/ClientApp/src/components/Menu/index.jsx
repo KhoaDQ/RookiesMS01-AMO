@@ -9,7 +9,7 @@ const menus = [
   },
   {
     label: "Manage User",
-    to: "/edituser",
+    to: "/manage-user",
     exact: false,
   },
   {

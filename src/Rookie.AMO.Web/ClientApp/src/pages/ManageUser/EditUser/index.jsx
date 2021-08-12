@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import moment, { isMoment } from "moment";
 
 import { useDispatch, useSelector } from "react-redux";
 import apiCaller from "../../../apis/callApi";
@@ -12,9 +13,6 @@ import PopupInfor from "../../../components/Popup/PopupInfor";
 const date = new Date();
 
 const schema = yup.object().shape({
-  firstName: yup.string().required(),
-  lastName: yup.string().required(),
-
   dateOfBirth: yup
     .date()
     .required()
@@ -55,7 +53,6 @@ const EditUser = (props) => {
   };
 
   const submitForm = (data) => {
-    console.log(data);
     fetchCurrentUser(currentUser);
     //console.log(response);
     setIsModalOpen(true);
@@ -70,6 +67,7 @@ const EditUser = (props) => {
     handleSubmit,
     formState: { errors },
   } = useForm({
+    mode: "onChange",
     resolver: yupResolver(schema),
   });
 
@@ -86,7 +84,6 @@ const EditUser = (props) => {
           </label>
           <div className="col-sm-10" className="resize">
             <input
-              {...register("firstName")}
               type="text"
               className="form-control"
               id="firstName"
@@ -95,9 +92,6 @@ const EditUser = (props) => {
               placeholder="FirstName"
               onChange={handleInputChange}
             />
-            {errors.firstName && (
-              <p className="text-danger">{errors.firstName.message} !</p>
-            )}
           </div>
         </div>
         <br></br>
@@ -107,7 +101,6 @@ const EditUser = (props) => {
           </label>
           <div className="col-sm-10" className="resize">
             <input
-              {...register("lastName")}
               type="text"
               className="form-control"
               id="lastName"
@@ -116,9 +109,6 @@ const EditUser = (props) => {
               placeholder="LastName"
               onChange={handleInputChange}
             />
-            {errors.lastName && (
-              <p className="text-danger">{errors.lastName.message} !</p>
-            )}
           </div>
         </div>
         <br></br>
@@ -131,12 +121,12 @@ const EditUser = (props) => {
           </label>
           <div className="col-sm-10" className="resize">
             <input
-              {...register("dateOfBirth")}
               type="date"
+              {...register("dateOfBirth")}
               className="form-control "
               id="dateOfBirth"
               name="dateOfBirth"
-              value={currentUser.dateOfBirth}
+              value={moment(currentUser.dateOfBirth).format("YYYY-MM-DD")}
               placeholder="DateofBirth"
               onChange={handleInputChange}
             />
@@ -202,7 +192,7 @@ const EditUser = (props) => {
               className="form-control "
               id="joinedDate"
               name="joinedDate"
-              value={currentUser.joinedDate}
+              value={moment(currentUser.joinedDate).format("YYYY-MM-DD")}
               placeholder="JoinedDate"
               onChange={handleInputChange}
             />
@@ -264,6 +254,7 @@ const EditUser = (props) => {
         content="Edit user successfully"
         handleModelShow={handleModelShowFunction}
         isModalOpen={isModalOpen}
+        pathReturn="/manage-user"
       ></PopupInfor>
     </div>
   );
@@ -271,7 +262,6 @@ const EditUser = (props) => {
 
 function fetchUser() {
   const dispatch = useDispatch();
-
   //htttps://localhost:5011/api/users/{id}
   //15a9f5fd-00b9-4a55-b463-0fb7acdc6f88
   useEffect(() => {
@@ -287,25 +277,6 @@ function fetchUser() {
   const result = useSelector((state) => state.EditUserReducer);
   return result;
 }
-
-// function fetchCurrentUser(user, saveClicked) {
-//   const dispatch = useDispatch();
-
-//   //htttps://localhost:5011/api/users/{id}
-//   //15a9f5fd-00b9-4a55-b463-0fb7acdc6f88
-//   useEffect(() => {
-//     async function fetch() {
-//       let enpoint = "user/15a9f5fd-00b9-4a55-b463-0fb7acdc6f88";
-//       console.log(enpoint);
-//       const res = await apiCaller(enpoint, "PUT", user);
-//       dispatch({ type: action.UPDATE_USER, payload: res.data });
-//     }
-//     fetch();
-//   }, [saveClicked]);
-
-//   const result = useSelector((state) => state.EditUserReducer);
-//   return result;
-// }
 
 function fetchCurrentUser(user) {
   //htttps://localhost:5011/api/users/{id}
