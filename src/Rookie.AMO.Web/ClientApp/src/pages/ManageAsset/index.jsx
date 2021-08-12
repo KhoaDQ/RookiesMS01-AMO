@@ -8,6 +8,7 @@ import AssetItem from "../../components/Asset/AssetItem";
 import PopupDetailAsset from "../../components/Popup/PopupDetailAsset";
 
 const stateList = [
+  
   {name: "Assigned",value: "Assigned"},
   {name: "Available", value: "Available"},
   {name: "Not available", value: "NotAvailable"},

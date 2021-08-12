@@ -35,7 +35,7 @@ namespace Rookie.AMO.Web.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateAsync(Guid id, [FromForm] AssetUpdateRequest request)
+        public async Task<ActionResult> UpdateAsync(Guid id, [FromBody] AssetUpdateRequest request)
         {
             Ensure.Any.IsNotNull(request, nameof(request));
             await _assetService.UpdateAsync(id,request);
