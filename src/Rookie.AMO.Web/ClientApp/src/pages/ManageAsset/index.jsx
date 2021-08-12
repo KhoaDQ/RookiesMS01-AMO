@@ -54,6 +54,7 @@ function ManageAsset() {
       setStateFilter(option.map((a,index)=>a.value).join(','))
     else
       setStateFilter("")
+    resetPage()
   }
 
   const handleFilterCat = (option,e) => {
@@ -61,6 +62,7 @@ function ManageAsset() {
       setCategoryFilter(option.map((a,index)=>a.id).join(','))
     else
       setCategoryFilter("")
+    resetPage()
   }
 
   const handleDetail = (asset,e) =>{
