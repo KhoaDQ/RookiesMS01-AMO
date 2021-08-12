@@ -56,6 +56,7 @@ const EditUser = (props) => {
 
   const submitForm = (data) => {
     console.log(data);
+    fetchCurrentUser(currentUser);
     //console.log(response);
     setIsModalOpen(true);
   };
@@ -305,5 +306,17 @@ function fetchUser() {
 //   const result = useSelector((state) => state.EditUserReducer);
 //   return result;
 // }
+
+function fetchCurrentUser(user) {
+  //htttps://localhost:5011/api/users/{id}
+  //15a9f5fd-00b9-4a55-b463-0fb7acdc6f88
+  async function fetch() {
+    let enpoint = "user/15a9f5fd-00b9-4a55-b463-0fb7acdc6f88";
+    console.log(enpoint);
+    const res = await apiCaller(enpoint, "PUT", user);
+    return res;
+  }
+  return fetch();
+}
 
 export default EditUser;
