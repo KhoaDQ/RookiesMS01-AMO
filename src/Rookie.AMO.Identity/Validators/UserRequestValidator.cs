@@ -47,7 +47,7 @@ namespace Rookie.AMO.Identity.Validators
 
         private bool HaveJoinedDateGreaterThanDateOfBirth(DateTime joinedDate, DateTime dateOfBirth)
         {
-            return joinedDate > dateOfBirth;
+            return joinedDate > dateOfBirth.AddYears(18);
         }
 
         private bool BeContainOnlyAZaz09Characters(string str)

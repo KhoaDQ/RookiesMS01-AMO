@@ -12,10 +12,10 @@ namespace Rookie.AMO.Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RolesController : ControllerBase
+    public class RoleController : ControllerBase
     {
         private readonly IRoleService _roleService;
-        public RolesController(IRoleService roleService)
+        public RoleController(IRoleService roleService)
         {
             _roleService = roleService;
         }

@@ -18,7 +18,6 @@ const Header = (props) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const oidc = useSelector((state) => state.oidc);
   const { user } = oidc;
-  const signin = () => userManager.signinRedirect();
   const toggle = () => setDropdownOpen((prevState) => !prevState);
   return (
     <div className="header">
@@ -41,7 +40,7 @@ const Header = (props) => {
             </Col>
           ) : (
             <Col xs="6" className="header-right">
-              <Button onClick={this.signin}>Login</Button>
+              <Button onClick={() => userManager.signinRedirect()}>Login</Button>
             </Col>
           )}
         </Row>
