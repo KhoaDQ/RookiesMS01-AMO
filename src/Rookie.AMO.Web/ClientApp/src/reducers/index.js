@@ -7,7 +7,7 @@ import { GetAllRolesReducer } from "./users/GetAllRolesReducer";
 import userReducer from "./users/userReducer";
 import AssetReducer from "./assets/AssetReducer";
 import CategoryReducer from "./CategoryReducer";
-import editUserReducer from "./users/editUserReducer";
+import EditUserReducer from "./users/EditUserReducer";
 
 export default combineReducers({
   getAllRoles: GetAllRolesReducer,
@@ -16,6 +16,5 @@ export default combineReducers({
   userReducer,
   AssetReducer,
   CategoryReducer,
-  editUserReducer,
+  EditUserReducer,
 });
-  

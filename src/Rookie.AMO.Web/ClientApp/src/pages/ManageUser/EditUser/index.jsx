@@ -12,10 +12,10 @@ import PopupInfor from "../../../components/Popup/PopupInfor";
 const date = new Date();
 
 const schema = yup.object().shape({
-  FirstName: yup.string().required(),
-  LastName: yup.string().required(),
+  firstName: yup.string().required(),
+  lastName: yup.string().required(),
 
-  DateofBirth: yup
+  dateOfBirth: yup
     .date()
     .required()
     .max(
@@ -27,61 +27,36 @@ const schema = yup.object().shape({
       "User is under 18. Please select a different date"
     ),
 
-  JoinedDate: yup
+  joinedDate: yup
     .date()
     .required()
     .min(
-      yup.ref("DateofBirth"),
+      yup.ref("dateOfBirth"),
       "Joined date is not later than Date of Birth. Please select a different date"
     ),
 });
 
 const EditUser = (props) => {
-  const initialUser = {
-    FirstName: "ABCFirstName",
-    LastName: "ABCLastName",
-    DateofBirth: "1999-11-30",
-    Gender: "Male",
-    Type: "Admin",
-    JoinedDate: "2021-11-30",
-  };
-  const [currentUser, setCurrentUser] = useState(initialUser);
+  const [currentUser, setCurrentUser] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const result = fetchUser();
+  useEffect(() => {
+    setCurrentUser(result);
+  }, [result]);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setCurrentUser({ ...currentUser, [name]: value });
   };
 
-  const user = useSelector((state) => state.editUserReducer);
-  const dispatch = useDispatch();
-
-  //htttps://localhost:5011/api/users/{id}
-  useEffect(() => {
-    async function fetchUserById() {
-      const res = await apiCaller(`users/${props.id}`, "GET", null);
-      dispatch({ type: action.GETBYID_USER, payload: res.data });
-    }
-    fetchUserById();
-    console.log(user);
-  }, []);
-
-  //htttps://localhost:5011/api/users
-  async function fetchUpdateUser() {
-    const res = await apiCaller("users", "PUT", currentUser);
-    dispatch({ type: action.UPDATE_USER, payload: res.data });
-    console.log(user);
-  }
-
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setCurrentUser({ ...currentUser, Gender: value });
+    setCurrentUser({ ...currentUser, gender: value });
   };
 
   const submitForm = (data) => {
     console.log(data);
-    console.log(currentUser);
-    fetchUpdateUser();
+    //console.log(response);
     setIsModalOpen(true);
   };
 
@@ -110,17 +85,17 @@ const EditUser = (props) => {
           </label>
           <div className="col-sm-10" className="resize">
             <input
-              {...register("FirstName")}
+              {...register("firstName")}
               type="text"
               className="form-control"
-              id="FirstName"
-              name="FirstName"
-              defaultValue={user.FirstName}
+              id="firstName"
+              name="firstName"
+              value={currentUser.firstName}
               placeholder="FirstName"
               onChange={handleInputChange}
             />
-            {errors.FirstName && (
-              <p className="text-danger">{errors.FirstName.message} !</p>
+            {errors.firstName && (
+              <p className="text-danger">{errors.firstName.message} !</p>
             )}
           </div>
         </div>
@@ -131,17 +106,17 @@ const EditUser = (props) => {
           </label>
           <div className="col-sm-10" className="resize">
             <input
-              {...register("LastName")}
+              {...register("lastName")}
               type="text"
               className="form-control"
-              id="LastName"
-              name="LastName"
-              defaultValue={user.LastName}
+              id="lastName"
+              name="lastName"
+              value={currentUser.lastName}
               placeholder="LastName"
               onChange={handleInputChange}
             />
-            {errors.LastName && (
-              <p className="text-danger">{errors.LastName.message} !</p>
+            {errors.lastName && (
+              <p className="text-danger">{errors.lastName.message} !</p>
             )}
           </div>
         </div>
@@ -155,22 +130,22 @@ const EditUser = (props) => {
           </label>
           <div className="col-sm-10" className="resize">
             <input
-              {...register("DateofBirth")}
+              {...register("dateOfBirth")}
               type="date"
               className="form-control "
-              id="DateofBirth"
-              name="DateofBirth"
-              defaultValue={user.DateofBirth}
+              id="dateOfBirth"
+              name="dateOfBirth"
+              value={currentUser.dateOfBirth}
               placeholder="DateofBirth"
               onChange={handleInputChange}
             />
-            {errors.DateofBirth && (
-              <p className="text-danger">{errors.DateofBirth.message} !</p>
+            {errors.dateOfBirth && (
+              <p className="text-danger">{errors.dateOfBirth.message} !</p>
             )}
           </div>
         </div>
         <br></br>
-        <fieldset className="form-group" id="Gender">
+        <fieldset className="form-group" id="gender">
           <div className="row">
             <legend className="col-form-label col-sm-2 pt-0">Gender</legend>
             <div className="col-sm-10">
@@ -179,10 +154,10 @@ const EditUser = (props) => {
                   <input
                     className="form-check-input"
                     type="radio"
-                    name="Gender"
+                    name="gender"
                     id="gridRadios1"
                     value="Female"
-                    defaultChecked={user.Gender === "Female"}
+                    checked={currentUser.gender === "Female"}
                     onChange={(e) => {
                       handleChange(e);
                     }}
@@ -195,10 +170,10 @@ const EditUser = (props) => {
                   <input
                     className="form-check-input"
                     type="radio"
-                    name="Gender"
+                    name="gender"
                     id="gridRadios2"
                     value="Male"
-                    defaultChecked={user.Gender === "Male"}
+                    checked={currentUser.gender === "Male"}
                     onChange={(e) => {
                       handleChange(e);
                     }}
@@ -221,20 +196,20 @@ const EditUser = (props) => {
           </label>
           <div className="col-sm-10" className="resize">
             <input
-              {...register("JoinedDate")}
+              {...register("joinedDate")}
               type="date"
               className="form-control "
-              id="JoinedDate"
-              name="JoinedDate"
-              defaultValue={user.JoinedDate}
+              id="joinedDate"
+              name="joinedDate"
+              value={currentUser.joinedDate}
               placeholder="JoinedDate"
               onChange={handleInputChange}
             />
-            {errors.JoinedDate && (
-              <p className="text-danger">{errors.JoinedDate.message} !</p>
+            {errors.joinedDate && (
+              <p className="text-danger">{errors.joinedDate.message} !</p>
             )}
-            {(new Date(currentUser.JoinedDate).getDay() == 6 ||
-              new Date(currentUser.JoinedDate).getDay() == 0) && (
+            {(new Date(currentUser.joinedDate).getDay() == 6 ||
+              new Date(currentUser.joinedDate).getDay() == 0) && (
               <p className="text-danger">
                 "Joined date is Saturday or Sunday. Please select a different
                 date" !
@@ -252,7 +227,7 @@ const EditUser = (props) => {
               name="Type"
               className="custom-select custom-select-lg mb-3"
               className="form-control"
-              defaultValue={user.Type}
+              value={currentUser.type}
               onChange={handleInputChange}
             >
               <option value={0}></option>
@@ -267,12 +242,12 @@ const EditUser = (props) => {
           type="submit"
           disabled={
             !(
-              currentUser.FirstName &&
-              currentUser.LastName &&
-              currentUser.Gender &&
-              currentUser.Type &&
-              currentUser.DateofBirth &&
-              currentUser.JoinedDate
+              currentUser.firstName &&
+              currentUser.lastName &&
+              currentUser.gender &&
+              currentUser.type &&
+              currentUser.dateOfBirth &&
+              currentUser.joinedDate
             )
           }
           className="btn btn-outline-danger margin color"
@@ -292,4 +267,43 @@ const EditUser = (props) => {
     </div>
   );
 };
+
+function fetchUser() {
+  const dispatch = useDispatch();
+
+  //htttps://localhost:5011/api/users/{id}
+  //15a9f5fd-00b9-4a55-b463-0fb7acdc6f88
+  useEffect(() => {
+    async function fetch() {
+      let enpoint = "user/15a9f5fd-00b9-4a55-b463-0fb7acdc6f88";
+      console.log(enpoint);
+      const res = await apiCaller(enpoint, "GET", null);
+      dispatch({ type: action.GETBYID_USER, payload: res.data });
+    }
+    fetch();
+  }, []);
+
+  const result = useSelector((state) => state.EditUserReducer);
+  return result;
+}
+
+// function fetchCurrentUser(user, saveClicked) {
+//   const dispatch = useDispatch();
+
+//   //htttps://localhost:5011/api/users/{id}
+//   //15a9f5fd-00b9-4a55-b463-0fb7acdc6f88
+//   useEffect(() => {
+//     async function fetch() {
+//       let enpoint = "user/15a9f5fd-00b9-4a55-b463-0fb7acdc6f88";
+//       console.log(enpoint);
+//       const res = await apiCaller(enpoint, "PUT", user);
+//       dispatch({ type: action.UPDATE_USER, payload: res.data });
+//     }
+//     fetch();
+//   }, [saveClicked]);
+
+//   const result = useSelector((state) => state.EditUserReducer);
+//   return result;
+// }
+
 export default EditUser;

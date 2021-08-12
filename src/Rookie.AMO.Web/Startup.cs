@@ -65,7 +65,7 @@ namespace Rookie.AMO.Web
 
             services.AddHttpContextAccessor();
 
-            services.AddAuthentication(options => 
+            services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -94,7 +94,7 @@ namespace Rookie.AMO.Web
                 });
             });
 
-        
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "EcomWeb.API", Version = "v1" });
@@ -129,7 +129,9 @@ namespace Rookie.AMO.Web
                 app.UseHsts();
             }
 
-            app.UseCors();
+            app.UseCors(
+                    options => options.WithOrigins("http://localhost:3000").AllowAnyMethod()
+            );
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
