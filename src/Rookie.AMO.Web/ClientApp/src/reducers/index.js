@@ -8,14 +8,14 @@ import userReducer from "./users/userReducer";
 import AssetReducer from "./assets/AssetReducer";
 import CategoryReducer from "./CategoryReducer";
 import editUserReducer from "./users/editUserReducer";
-
+import EditAsset from "./assets/EditAsset";
 export default combineReducers({
   getAllRoles: GetAllRolesReducer,
   createUser: CreateUserReducer,
   oidc: oidcReducer,
   userReducer,
   AssetReducer,
+  EditAsset,
   CategoryReducer,
   editUserReducer,
 });
-  

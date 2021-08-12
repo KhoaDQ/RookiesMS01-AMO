@@ -7,6 +7,7 @@ import AssetList from "../../components/Asset/AssetList";
 import AssetItem from "../../components/Asset/AssetItem";
 
 const stateList = [
+  
   {name: "Assigned",value: "Assigned"},
   {name: "Available", value: "Available"},
   {name: "Not available", value: "NotAvailable"},

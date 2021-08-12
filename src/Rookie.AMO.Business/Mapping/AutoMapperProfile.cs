@@ -18,7 +18,7 @@ namespace Rookie.AMO.Business
         {
             CreateMap<CategoryDto, Category>();
             CreateMap<AssetDto, Asset>().ForMember(u => u.State, options => options.MapFrom(input => EnumConverExtension.GetValueInt<StateList>(input.State)));
-
+            CreateMap<AssetUpdateRequest, Asset>().ForMember(u => u.State, options => options.MapFrom(input => EnumConverExtension.GetValueInt<StateList>(input.State)));
             CreateMap<CategoryRequest, Category>();
             CreateMap<AssetRequest, Asset>().ForMember(u => u.State, options => options.MapFrom(input => EnumConverExtension.GetValueInt<StateList>(input.State)));
         }
