@@ -1,6 +1,8 @@
 import React,{useState, useEffect} from "react";
 import { Table } from "reactstrap";
 import { AiOutlineSearch } from "@react-icons/all-files/ai/AiOutlineSearch";
+import {AiFillCaretDown} from "@react-icons/all-files/ai/AiFillCaretDown";
+import {AiFillCaretUp} from "@react-icons/all-files/ai/AiFillCaretUp";
 import { Link } from "react-router-dom";
 import {
   Col,
@@ -14,14 +16,28 @@ import {
 import "../style.css";
 import Pagination from "../../Pagination";
 import Filter from "../../Filter";
+
+const initSort = [
+  {propertyName: "Code", desc: false},
+  {propertyName: "Name", desc: true},
+  {propertyName: "Category", desc: true},
+  {propertyName: "State", desc: true},
+]
+
 function AssetList(props){
 
-  let {handleSort} = props
+  let {handleSort, handleSearch} = props
   const [searchText,setSearchText] = useState("")
+  const [optionSort,setOptionSort] = useState(initSort);
+
   const handleChange = (e) => {
     setSearchText(e.target.value)
   }
-  
+  const handleClickSort = (optionSort,e) =>{
+    let nameProp = e.target.id
+    optionSort.filter(o=>o.propertyName == nameProp)[0].desc = !optionSort.filter(o=>o.propertyName == nameProp)[0].desc
+    handleSort(e,optionSort.filter(o=>o.propertyName == nameProp)[0])
+  } 
   return(
     <div>
       <h5 className="right-title">Asset List</h5>
@@ -41,7 +57,7 @@ function AssetList(props){
         <Col md={3}>
           <InputGroup>
             <Input placeholder="Search" name = "searchText" value = {searchText} onChange={handleChange}/>
-            <InputGroupAddon addonType="append" onClick={()=>{props.resetPage(); props.setSearchText(searchText)}} >
+            <InputGroupAddon addonType="append" onClick={(e) =>{handleSearch(searchText,e)}} >
               <InputGroupText className="right__icon">
                 <AiOutlineSearch/>
               </InputGroupText>
@@ -59,10 +75,18 @@ function AssetList(props){
       <Table className="table_border_spacing">
         <thead>
           <tr>
-            <th onClick = {handleSort} id = "Code">Asset Code</th>
-            <th onClick = {handleSort} id = "Name" className = "header_name">Asset Name</th>
-            <th onClick = {handleSort} id = "Category">Category</th>
-            <th onClick = {handleSort} id = "State">State</th>
+            <th id = "Code" onClick={(e) =>{handleClickSort(optionSort,e)}}>Asset Code
+            {optionSort.filter(o=>o.propertyName == "Code")[0].desc?<AiFillCaretDown/>:<AiFillCaretUp/>}
+            </th>
+            <th id = "Name" onClick={(e) =>{handleClickSort(optionSort,e)}} className = "header_name">Asset Name
+            {optionSort.filter(o=>o.propertyName == "Name")[0].desc?<AiFillCaretDown/>:<AiFillCaretUp/>}
+            </th>
+            <th id = "Category" onClick={(e) =>{handleClickSort(optionSort,e)}}>Category
+            {optionSort.filter(o=>o.propertyName == "Category")[0].desc?<AiFillCaretDown/>:<AiFillCaretUp/>}  
+            </th>
+            <th id = "State" onClick={(e) =>{handleClickSort(optionSort,e)}}>State
+            {optionSort.filter(o=>o.propertyName == "State")[0].desc?<AiFillCaretDown/>:<AiFillCaretUp/>}
+            </th>
             <th className="header_tools"></th>
           </tr>
         </thead>
@@ -75,5 +99,6 @@ function AssetList(props){
 
   );
 }
+  
 
 export default AssetList;

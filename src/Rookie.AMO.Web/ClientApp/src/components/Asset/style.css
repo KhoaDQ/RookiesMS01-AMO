@@ -15,3 +15,6 @@ th:hover{
 .header_name{
     width: 40%;
 }
+th svg{
+    text-align:end;
+}
