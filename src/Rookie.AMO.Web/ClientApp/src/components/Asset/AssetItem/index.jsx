@@ -13,7 +13,7 @@ function AssetItem(props) {
             <td>{stateList.filter((e) => e.value == asset.state)[0].name}</td>
             <td>
             <span className="icon-nash icon-nash--black">
-                <Link to="/editassets">
+                <Link to={`/edit-assets/${asset.id}`} > 
                 <IoMdCreate />
                 </Link>
             </span>

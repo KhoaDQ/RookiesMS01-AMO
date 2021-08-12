@@ -44,14 +44,12 @@ const CreateAssets = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
     setState({ ...state, [name]: value });
     console.log(value);
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-
     setState({ ...state, [name]: value });
     console.log(value);
   };
