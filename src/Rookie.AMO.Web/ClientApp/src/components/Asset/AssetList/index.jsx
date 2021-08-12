@@ -17,41 +17,51 @@ import "../style.css";
 import Pagination from "../../Pagination";
 import Filter from "../../Filter";
 
-const initSort = [
-  {propertyName: "Code", desc: false},
-  {propertyName: "Name", desc: true},
-  {propertyName: "Category", desc: true},
-  {propertyName: "State", desc: true},
-]
 
 function AssetList(props){
 
-  let {handleSort, handleSearch} = props
+  const initSort = {
+    Code: {propertyName: "Code", desc: true},
+    Name: {propertyName: "Name", desc: true},
+    Category: {propertyName: "Category", desc: true},
+    State: {propertyName: "State", desc: true},
+  }
+  
+  let {handleSort, handleSearch, handleFilterState,handleFilterCat} = props
+
   const [searchText,setSearchText] = useState("")
   const [optionSort,setOptionSort] = useState(initSort);
 
   const handleChange = (e) => {
     setSearchText(e.target.value)
   }
-  const handleClickSort = (optionSort,e) =>{
-    let nameProp = e.target.id
-    optionSort.filter(o=>o.propertyName == nameProp)[0].desc = !optionSort.filter(o=>o.propertyName == nameProp)[0].desc
-    handleSort(e,optionSort.filter(o=>o.propertyName == nameProp)[0])
+  const handleClickSort = (nameProp,e) =>{
+    e.preventDefault()
+
+    if(nameProp in optionSort){
+      optionSort[nameProp].desc = !optionSort[nameProp].desc
+      handleSort(e,optionSort[nameProp])
+    }
   } 
   return(
     <div>
       <h5 className="right-title">Asset List</h5>
-      <Row from>
+      <Row>
         <Col md={3}>
-          <Filter options = {props.stateList} displayValue = "name" placeholder="State"/>
+          <Filter 
+            options = {props.stateList} 
+            displayValue = "name" 
+            placeholder="State" 
+            handleFilter = {handleFilterState}/>
         </Col>
         <Col md={3}>
           <Filter 
             options = {props.categories.map((category, index) => {
-                return({name:category.name,id:index})
+                return({name:category.name,id:category.id})
               })} 
             displayValue ="name" 
             placeholder="Category"
+            handleFilter = {handleFilterCat}
           />     
         </Col>
         <Col md={3}>
@@ -72,29 +82,29 @@ function AssetList(props){
           </Button>
         </Col>
       </Row>
-      <Table className="table_border_spacing">
+      <Table hover="true" className="table_border_spacing">
         <thead>
           <tr>
-            <th id = "Code" onClick={(e) =>{handleClickSort(optionSort,e)}}>Asset Code
-            {optionSort.filter(o=>o.propertyName == "Code")[0].desc?<AiFillCaretDown/>:<AiFillCaretUp/>}
+            <th onClick={(e) =>{handleClickSort("Code",e)}}>Asset Code
+            {optionSort.Code.desc?<AiFillCaretDown/>:<AiFillCaretUp/>}
             </th>
-            <th id = "Name" onClick={(e) =>{handleClickSort(optionSort,e)}} className = "header_name">Asset Name
-            {optionSort.filter(o=>o.propertyName == "Name")[0].desc?<AiFillCaretDown/>:<AiFillCaretUp/>}
+            <th onClick={(e) =>{handleClickSort("Name",e)}} className = "header_name">Asset Name
+            {optionSort.Name.desc?<AiFillCaretDown/>:<AiFillCaretUp/>}
             </th>
-            <th id = "Category" onClick={(e) =>{handleClickSort(optionSort,e)}}>Category
-            {optionSort.filter(o=>o.propertyName == "Category")[0].desc?<AiFillCaretDown/>:<AiFillCaretUp/>}  
+            <th onClick={(e) =>{handleClickSort("Category",e)}}>Category
+            {optionSort.Category.desc?<AiFillCaretDown/>:<AiFillCaretUp/>}  
             </th>
-            <th id = "State" onClick={(e) =>{handleClickSort(optionSort,e)}}>State
-            {optionSort.filter(o=>o.propertyName == "State")[0].desc?<AiFillCaretDown/>:<AiFillCaretUp/>}
+            <th onClick={(e) =>{handleClickSort("State",e)}}>State
+            {optionSort.State.desc?<AiFillCaretDown/>:<AiFillCaretUp/>}
             </th>
             <th className="header_tools"></th>
           </tr>
         </thead>
         <tbody>
-          {props.totalItems > 0 ? props.children : (searchText!="") ? <span>No assets are found!</span>:<span>...Loading</span>}
+          {props.isLoading ? <tr><td className="rowNotify">...Loading</td></tr> : props.totalItems > 0 ? props.children : <tr><td className="rowNotify"> No assets are found! </td></tr>}
         </tbody>
       </Table>
-      {props.totalPages > 1 ? <Pagination totalPages = {props.totalPages} pageNumber = {props.pageNumber} setPageNumber = {props.setPageNumber}/> : null}
+      { props.totalItems > 0 ? <Pagination totalPages = {props.totalPages} pageNumber = {props.pageNumber} setPageNumber = {props.setPageNumber}/>:null}
     </div>
 
   );

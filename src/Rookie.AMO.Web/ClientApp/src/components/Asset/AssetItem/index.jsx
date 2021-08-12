@@ -24,9 +24,8 @@ function AssetItem(props) {
             });
     }
     return (
-        <div>
-            <tr>
-                <td>{asset.code}</td>
+            <tr onClick = {(e)=>{props.handleDetail(asset,e)}}>
+                <td hover >{asset.code}</td>
                 <td>{asset.name}</td>
                 <td>{asset.categoryName}</td>
                 <td>{stateList.filter((e) => e.value == asset.state)[0].name}</td>
@@ -41,26 +40,7 @@ function AssetItem(props) {
                     </span>
                 </td>
             </tr>
-            <div className={"modal " + (isModalOpen ? "modal__open" : "modal__close")}>
-                <div className="modal__overlay"></div>
 
-                <div className="modal__body">
-                    <div className="auth-form">
-                        <div className="auth-form__header">
-                            <p className="auth-form__question">Are you sure?</p>
-                        </div>
-
-                        <div className="auth-form__body">
-                            <p className="auth-form__heading">Do you want to delete this asset?</p>
-                            <div className="auth-form__action">
-                                <button onClick={() => eventDelete(asset.code)} className="btn-accept">Delete</button>
-                                <button onClick={handleCancel} className="btn-cancel">Cancel</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     )
 }
 
