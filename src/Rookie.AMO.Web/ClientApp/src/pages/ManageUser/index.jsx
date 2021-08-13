@@ -1,4 +1,4 @@
-import queryString from 'query-string';
+import queryString from "query-string";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as action from "../../actions/ManageUser/ActionType";
@@ -7,13 +7,15 @@ import UserItem from "../../components/User/UserItem";
 import UserList from "../../components/User/UserList";
 import { GetAllRolesSuccess } from "../../constants/RoleConstants";
 
-
 function ManageUser() {
   // const [searchText, setSearchText] = useState("")
-  const [pageNumber, setPageNumber] = useState(1)
-  const [optionSort, setOptionSort] = useState({ propertyName: "", desc: false })
+  const [pageNumber, setPageNumber] = useState(1);
+  const [optionSort, setOptionSort] = useState({
+    propertyName: "",
+    desc: false,
+  });
   const [paging, setPaging] = useState({
-    name: '',
+    name: "",
     page: 1,
     limit: 1,
   });
@@ -35,11 +37,11 @@ function ManageUser() {
       //https://localhost:5011/api/User/find?name=%20&page=1&limit=3
       const paramsString = queryString.stringify(paging);
       let endpoint = `User/find?${paramsString}`;
-      const res = await apiCaller(endpoint, 'GET', null);
+      const res = await apiCaller(endpoint, "GET", null);
       dispatch({ type: action.FETCH_USERS, payload: res.data });
     }
-    fetch()
-  }, [paging])
+    fetch();
+  }, [paging]);
 
   const showUsers = () => {
     let result = null;
@@ -51,21 +53,25 @@ function ManageUser() {
     }
 
     if (createdUser.id != null) {
-      var createdUserRow = <UserItem key={"createdUser"} user={createdUser}/>;
+      var createdUserRow = <UserItem key={"createdUser"} user={createdUser} />;
       result.unshift(createdUserRow);
     }
 
     return result;
   };
 
-  return <UserList
-    stateList={roles}
-    totalPages={userPage.totalPages}
-    totalItems={userPage.totalItems}
-    pageNumber={pageNumber}
-    setPageNumber={setPageNumber}
-    setPaging={setPaging}
-  >{showUsers()}</UserList>;
+  return (
+    <UserList
+      stateList={roles}
+      totalPages={userPage.totalPages}
+      totalItems={userPage.totalItems}
+      pageNumber={pageNumber}
+      setPageNumber={setPageNumber}
+      setPaging={setPaging}
+    >
+      {showUsers()}
+    </UserList>
+  );
 }
 
 export default ManageUser;

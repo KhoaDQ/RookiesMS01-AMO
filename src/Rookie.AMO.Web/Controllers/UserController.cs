@@ -24,10 +24,15 @@ namespace Rookie.AMO.Web.Controllers
 
         [HttpGet]
         public Task<IEnumerable<UserDto>> GetAllUserAsync()
-            =>  _userService.GetAllUsersAsync();
-        [HttpGet("userId")]
-        public Task<UserDto> GetByIdAsync(Guid userId)
-            => _userService.GetByIdAsync(userId);
+            => _userService.GetAllUsersAsync();
+
+        [HttpGet("{userId}")]
+        public async Task<UserDto> GetByIdAsync(Guid userId)
+        {
+            var res = await _userService.GetByIdAsync(userId);
+            return res;
+        }
+
         [HttpGet("find")]
         public Task<PagedResponseModel<UserDto>> PagedQueryUserAsync(string name, int page, int limit)
             => _userService.PagedQueryAsync(name, page, limit);
@@ -37,8 +42,8 @@ namespace Rookie.AMO.Web.Controllers
         [HttpPost]
         public Task<UserDto> CreateUserAsync(UserRequest user)
             => _userService.CreateUserAsync(user);
-        [HttpPut]
-        public Task UpdateUserAsync(Guid id, UserUpdateRequest user)
-            => _userService.UpdateUserAsync(id, user);
+        [HttpPut("{userId}")]
+        public Task UpdateUserAsync(Guid userId, [FromBody] UserUpdateRequest user)
+            => _userService.UpdateUserAsync(userId, user);
     }
 }

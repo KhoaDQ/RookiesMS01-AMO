@@ -2,7 +2,7 @@ import * as types from "../../actions/ManageUser/ActionType";
 
 const initialState = [];
 
-function editUserReducer(state = initialState, action) {
+function EditUserReducer(state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
@@ -17,4 +17,4 @@ function editUserReducer(state = initialState, action) {
   }
 }
 
-export default editUserReducer;
+export default EditUserReducer;
