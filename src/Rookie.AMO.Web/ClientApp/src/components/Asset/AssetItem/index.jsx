@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React, {useState} from 'react'
 import { IoMdCreate } from "@react-icons/all-files/io/IoMdCreate";
 import { IoIosCloseCircleOutline } from "@react-icons/all-files/io/IoIosCloseCircleOutline";
-import * as Config from "../../../constants/config";
 import { Link } from "react-router-dom";
 import "../style.css";
-import axios from "axios";
+import axios from 'axios';
 function AssetItem(props) {
     let { asset, index, stateList } = props
 
@@ -28,4 +27,4 @@ function AssetItem(props) {
     )
 }
 
-export default AssetItem;
+export default AssetItem

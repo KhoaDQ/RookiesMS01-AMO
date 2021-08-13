@@ -1,20 +1,21 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import apiCaller from "../../apis/callApi";
-import * as action from "../../actions/ManagerAsset/ActionType";
-import * as actionCategory from "../../actions/ManagerCategory/ActionType";
+import React, { useEffect,useState } from "react";
+import { useDispatch, useSelector } from 'react-redux';
+import apiCaller from '../../apis/callApi'
+import *as action from '../../actions/ManagerAsset/ActionType'
+import *as actionCategory from '../../actions/ManagerCategory/ActionType'
 import AssetList from "../../components/Asset/AssetList";
 import AssetItem from "../../components/Asset/AssetItem";
 import PopupDetailAsset from "../../components/Popup/PopupDetailAsset";
 import PopupDelete from "../../components/Popup/PopupDelete";
 import { set } from "react-hook-form";
 const stateList = [
-  { name: "Assigned", value: "Assigned" },
-  { name: "Available", value: "Available" },
-  { name: "Not available", value: "NotAvailable" },
-  { name: "Waiting for recycling", value: "Waiting" },
-  { name: "Recycled", value: "Recycled" },
-];
+
+  {name: "Assigned",value: "Assigned"},
+  {name: "Available", value: "Available"},
+  {name: "Not available", value: "NotAvailable"},
+  {name: "Waiting for recycling",value:"Waiting"},
+  {name: "Recycled",value:"Recycled"}
+]
 
 function ManageAsset() {
   //Table assets
@@ -156,11 +157,12 @@ function ManageAsset() {
         handleFilterCat = {handleFilterCat}
         handleSearch = {handleSearch}
       >
-        {showAssets(assets, handleDeleteFunction)}
+      {showAssets(assets)}
       </AssetList>
       {detailAsset(assetDetail,isDetailOpen)}
       {deletePopup(handleDelete,handleDeleteShow)}
     </div>
+
   );
 }
 function deleteAsset(id,isDelete,setReLoad){
@@ -184,18 +186,10 @@ function fetchPageAsset(stateFilter,categoryFilter,searchText,pageNumber,optionS
 
   useEffect(() => {
     async function fetch() {
-      let enpoint =
-        "Asset/find?KeySearch=" +
-        searchText +
-        "&OrderProperty=" +
-        optionSort.propertyName +
-        "&Desc=" +
-        optionSort.desc +
-        "&Page=" +
-        pageNumber +
-        "&Limit=19";
-      console.log(optionSort);
-      const res = await apiCaller(enpoint, "GET", null);
+      let enpoint = 'Asset/find?State='+stateFilter+'&Category='+categoryFilter+'&KeySearch='+ searchText+'&OrderProperty='+optionSort.propertyName+'&Desc='+optionSort.desc+'&Page='+pageNumber+'&Limit=2';
+
+      console.log(enpoint)
+      const res = await apiCaller(enpoint, 'GET', null);
       dispatch({ type: action.FETCH_ASSETS, payload: res.data });
     }
     if(isReLoad){
@@ -206,7 +200,8 @@ function fetchPageAsset(stateFilter,categoryFilter,searchText,pageNumber,optionS
 
   const assetPage = useSelector(state => state.AssetReducer);
 
-  const assetPage = useSelector((state) => state.AssetReducer);
+  return assetPage
+}
 
 function checkLoading(setIsLoading,page){
   useEffect(()=>{
@@ -216,61 +211,20 @@ function checkLoading(setIsLoading,page){
   },[page])
 }
 
-function fetchCategories() {
-  const dispatch = useDispatch();
+function fetchCategories () {
+  const dispatch = useDispatch()
 
   useEffect(() => {
     async function fetch() {
-      const res = await apiCaller("Category", "GET", null);
+      const res = await apiCaller('Category', 'GET', null);
       dispatch({ type: actionCategory.FETCH_CATEGORY, payload: res.data });
     }
-    fetch();
-  }, []);
+    fetch()
+  }, [])
 
-  const categories = useSelector((state) => state.CategoryReducer);
+  const categories = useSelector(state => state.CategoryReducer);
 
-  return categories;
-}
-
-function filterAssets(assets, propertyName, arrayFilter) {
-  if (arrayFilter == [] || !(propertyName in assets)) return assets;
-  return assets.filter((asset) => arrayFilter.includes(asset[propertyName]));
-}
-
-function filterPageAsset(assetPage, stateFilter, categoryFilter) {
-  let assets = null;
-  useEffect(() => {
-    async function filter() {
-      console.log(assetPage);
-      if (assetPage != null && "items" in assetPage) {
-        assets = assetPage.items;
-        //assets = filterAssets(assets,"state",stateFilter)
-        //assets = filterAssets(assets,"category",categoryFilter)
-      }
-    }
-    filter();
-  }, [assetPage]);
-
-  return assets;
-}
-function showAssets(assets, handleDeleteFunction) {
-  let result = null;
-  if (assets != null) {
-    if (assets.length > 0) {
-      result = assets.map((asset, index) => {
-        return (
-          <AssetItem
-            key={index}
-            asset={asset}
-            index={index}
-            stateList={stateList}
-            handleDelete={handleDeleteFunction}
-          />
-        );
-      });
-    }
-  }
-  return result;
+  return categories
 }
 
 export default ManageAsset;
