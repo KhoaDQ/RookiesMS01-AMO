@@ -1,9 +1,14 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector, connect } from "react-redux";
-import apiCaller from "../../../apis/callApi";
-import * as action from "../../../actions/ManagerAsset/ActionType";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 import { useEffect } from "react";
 import { useHistory } from "react-router-dom";
+import { useForm } from "react-hook-form";
+
+import apiCaller from "../../../apis/callApi";
+import * as action from "../../../actions/ManagerAsset/ActionType";
+import PopupInfor from "../../../components/Popup/PopupInfor";
 
 import {
   Button,
@@ -21,12 +26,26 @@ const CreateAssets = () => {
   const AssetReducer = useSelector((state) => state.AssetReducer);
   const CategoryReducer = useSelector((state) => state.CategoryReducer);
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [state, setState] = useState({
     Name: "",
     CategoryId: "",
     Specification: "",
     InstalledDate: "",
     State: "",
+  });
+
+  const schema = yup.object().shape({
+    Name: yup
+      .string()
+      .required()
+      .max(100, "Maximum 100 characters")
+      .matches(
+        /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
+        "Allow only characters A-Z,a-z, 0-9, Space"
+      ),
+
+    Specification: yup.string().max(100, "Maximum 100 characters"),
   });
 
   useEffect(() => {
@@ -63,8 +82,21 @@ const CreateAssets = () => {
     console.log(value);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+
+  const handleModelShowFunction = (content) => {
+    setIsModalOpen(content);
+  };
+
+  const handleOnSubmit = (e) => {
+    // e.preventDefault();
+
     console.log(state);
 
     async function CreateAsset() {
@@ -75,6 +107,7 @@ const CreateAssets = () => {
 
     try {
       CreateAsset();
+      setIsModalOpen(true);
     } catch (error) {
       console.log(error);
     }
@@ -86,13 +119,14 @@ const CreateAssets = () => {
   return (
     <div>
       <h5 className="right-title">Create New Assets</h5>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit(handleOnSubmit)}>
         <div className="form-group row">
           <label htmlFor="nameAssets" className="col-sm-2 col-form-label">
             Name
           </label>
           <div className="col-sm-10" className="resize">
             <input
+              {...register("Name")}
               type="text"
               className="form-control"
               id="Name"
@@ -100,6 +134,7 @@ const CreateAssets = () => {
               value={state.Name}
               onChange={handleInputChange}
             />
+            {errors.Name && <p>{errors.Name.message}</p>}
           </div>
         </div>
         <br></br>
@@ -119,6 +154,7 @@ const CreateAssets = () => {
                 Select Category
               </option>
               {listCategory}
+              <option> </option>
             </select>
           </div>
         </div>
@@ -132,6 +168,7 @@ const CreateAssets = () => {
           </label>
           <div className="col-sm-10" className="resize">
             <input
+              {...register("Specification")}
               type="text"
               className="form-control height"
               id="Specification"
@@ -139,6 +176,7 @@ const CreateAssets = () => {
               value={state.Specification}
               onChange={handleInputChange}
             />
+            {errors.Specification && <p>{errors.Specification.message}</p>}
           </div>
         </div>
         <br></br>
@@ -208,6 +246,12 @@ const CreateAssets = () => {
           Cancel
         </button>
       </form>
+      <PopupInfor
+        title="Information"
+        content="Create assets successfully"
+        handleModelShow={handleModelShowFunction}
+        isModalOpen={isModalOpen}
+      ></PopupInfor>
     </div>
   );
 };
