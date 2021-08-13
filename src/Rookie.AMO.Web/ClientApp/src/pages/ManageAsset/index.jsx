@@ -5,8 +5,9 @@ import * as action from "../../actions/ManagerAsset/ActionType";
 import * as actionCategory from "../../actions/ManagerCategory/ActionType";
 import AssetList from "../../components/Asset/AssetList";
 import AssetItem from "../../components/Asset/AssetItem";
-import PopupInfor from "../../components/Popup/PopupInfor";
-
+import PopupDetailAsset from "../../components/Popup/PopupDetailAsset";
+import PopupDelete from "../../components/Popup/PopupDelete";
+import { set } from "react-hook-form";
 const stateList = [
   { name: "Assigned", value: "Assigned" },
   { name: "Available", value: "Available" },
@@ -16,95 +17,170 @@ const stateList = [
 ];
 
 function ManageAsset() {
-  const [stateFilter, setStateFilter] = useState([]);
-  const [categoryFilter, setCategoryFilter] = useState([]);
-  const [searchText, setSearchText] = useState("");
-  const [pageNumber, setPageNumber] = useState(1);
-  const [deleteIsSuccess, setDeleteIsSuccess] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  //Table assets
+  const [stateFilter,setStateFilter] = useState("")
+  const [categoryFilter,setCategoryFilter] = useState("")
+  const [searchText,setSearchText] = useState("")
+  const [pageNumber,setPageNumber] = useState(1)
+  const [optionSort,setOptionSort] = useState({propertyName: "", desc: 'false'})
 
-  const [optionSort, setOptionSort] = useState({
-    propertyName: "",
-    desc: "false",
-  });
+  const [isLoading,setIsLoading] = useState(true)
+  const [isReLoad,setIsReLoad] = useState(1)
 
-  let assetPage = fetchPageAsset(
-    searchText,
-    pageNumber,
-    setOptionSort,
-    optionSort,
-    deleteIsSuccess
-  );
+  //Popup detail asset
+  const [assetDetail,setAssetDetail] = useState()
+  const [isDetailOpen,setIsDetailOpen] = useState(true)
 
+  //Popup delete asset
+  const [idAssetDelete,setIdAssetDelete] = useState("");
+  const [isDeleteOpen,setIsDeleteOpen] = useState(false)
+  const [isDelete,setIsDelete] = useState(false)
+
+  //Table assets
+  let assetPage = fetchPageAsset(stateFilter,categoryFilter,searchText,pageNumber,optionSort,isReLoad,setIsReLoad);
+  checkLoading(setIsLoading,assetPage)
+  
+  let assets = assetPage.items;
+  
   var categories = fetchCategories();
 
-  let assets = assetPage.items;
-
+  deleteAsset(idAssetDelete,isDelete,setIsReLoad)
+  
   const resetPage = () => {
-    setPageNumber(1);
+      setPageNumber(1)
+      setIsReLoad(1)
+  }
+
+  const handleSort = (e,option) =>{
+      setOptionSort({propertyName:option.propertyName, desc: option.desc.toString()})
+      setIsReLoad(1)
+  }
+
+  const handleSearch = (text,e) =>{
+      resetPage()
+      setSearchText(text)
+      setIsReLoad(1)
+  }
+  const handleFilterState = (option,e) => {
+    if(option!=null)
+      setStateFilter(option.map((a,index)=>a.value).join(','))
+    else
+      setStateFilter("")
+    resetPage()
+    setIsReLoad(1)
+  }
+
+  const handleFilterCat = (option,e) => {
+    if(option!=null)
+      setCategoryFilter(option.map((a,index)=>a.id).join(','))
+    else
+      setCategoryFilter("")
+    resetPage()
+    setIsReLoad(1)
+  }
+
+  //Popup detail asset
+  const handleDetail = (asset,e) =>{
+    setAssetDetail(asset)
+    setIsDetailOpen(true)
+  }
+
+  const handleModelShow = (isDetailOpen) =>{
+    setIsDetailOpen(isDetailOpen)
+  }
+
+  //Popup delete asset
+  const handleDeleteOpen = (id,e) => {
+    console.log("delete open")
+    setIdAssetDelete(id)
+    handleDeleteShow(true)
   };
 
-  const handleSort = (e, option) => {
-    setOptionSort({
-      propertyName: option.propertyName,
-      desc: option.desc.toString(),
-    });
+  const handleDeleteShow = (isDeleteOpen)=>{
+    setIsDeleteOpen(isDeleteOpen)
+  }
+
+  const handleDelete = (e) =>{
+    setIsDelete(true)
+    handleDeleteShow(false)
   };
 
-  const handleSearch = (text, e) => {
-    setSearchText(text);
-  };
+  function deletePopup(handleDelete,handleDeleteShow){
+    if(1)
+      return(
+        <PopupDelete isModalOpen={isDeleteOpen} handleDelete ={handleDelete} handleModelShow = {handleDeleteShow}></PopupDelete>
+      )
+  }
 
-  const handleDeleteFunction = (content) => {
-    setDeleteIsSuccess(content);
-  };
-
-  useEffect(() => {
-    if (deleteIsSuccess != "" && deleteIsSuccess == true) {
-      console.log("Moi delete xong");
-      setIsModalOpen(true);
-      setDeleteIsSuccess(false);
+  function detailAsset(assetDetail,isDetailOpen){
+    if(assetDetail)
+      return (
+        <PopupDetailAsset asset = {assetDetail} isModalOpen={isDetailOpen} handleModelShow = {handleModelShow}/>
+      )
+  }
+  
+  function showAssets (assets){
+    let result = null
+    if(assets != null){
+      if(assets.length > 0){
+        result = assets.map((asset, index) => {
+          return (
+              <AssetItem
+                  key={index}
+                  asset={asset}
+                  index={index}
+                  stateList = {stateList}
+                  handleDetail = {handleDetail}
+                  handleDeleteOpen = {handleDeleteOpen}
+              />
+          )
+        })
+      }
     }
-  }, [deleteIsSuccess]);
-
-  const handleModelShowFunction = (content) => {
-    setIsModalOpen(content);
-  };
+    return result
+  }
 
   return (
     <div>
       <AssetList
-        categories={categories}
-        handleSearch={handleSearch}
-        stateList={stateList}
-        totalPages={assetPage.totalPages}
-        totalItems={assetPage.totalItems}
-        pageNumber={pageNumber}
-        setPageNumber={setPageNumber}
-        resetPage={resetPage}
-        handleSort={handleSort}
+        isLoading = {isLoading}
+        categories = {categories}
+        stateList = {stateList}
+        totalPages= {assetPage.totalPages}
+        totalItems= {assetPage.totalItems}
+        pageNumber = {pageNumber}
+        setPageNumber = {setPageNumber}
+        setIsReLoad = {setIsReLoad}
+        handleSort = {handleSort}
+        handleFilterState = {handleFilterState}
+        handleFilterCat = {handleFilterCat}
+        handleSearch = {handleSearch}
       >
         {showAssets(assets, handleDeleteFunction)}
       </AssetList>
-      <PopupInfor
-        title="Information"
-        content="Delete user successfully"
-        handleModelShow={handleModelShowFunction}
-        isModalOpen={isModalOpen}
-        pathReturn="/manage-asset"
-      ></PopupInfor>
+      {detailAsset(assetDetail,isDetailOpen)}
+      {deletePopup(handleDelete,handleDeleteShow)}
     </div>
   );
 }
+function deleteAsset(id,isDelete,setReLoad){
+  const dispatch = useDispatch()
+  
+  useEffect(()=>{
+    async function deleteAsset(id) {
+      const res = await apiCaller('Asset/'+id, 'Delete', null);
+      dispatch({ type: action.DELETE_ASSET, payload: id });
+      setReLoad(1)
+    }
+    if(id!=""){
+      deleteAsset(id)
+    }
+  },[isDelete])
 
-function fetchPageAsset(
-  searchText,
-  pageNumber,
-  setOptionSort,
-  optionSort = { propertyName: "", desc: "false" },
-  deleteIsSuccess
-) {
-  const dispatch = useDispatch();
+  
+};
+function fetchPageAsset(stateFilter,categoryFilter,searchText,pageNumber,optionSort = {propertyName: "", desc: "false"},isReLoad,setIsReLoad) {
+  const dispatch = useDispatch()
 
   useEffect(() => {
     async function fetch() {
@@ -122,18 +198,22 @@ function fetchPageAsset(
       const res = await apiCaller(enpoint, "GET", null);
       dispatch({ type: action.FETCH_ASSETS, payload: res.data });
     }
-    fetch();
-  }, [
-    searchText,
-    pageNumber,
-    optionSort.propertyName,
-    optionSort.desc,
-    deleteIsSuccess,
-  ]);
+    if(isReLoad){
+      fetch()
+      setIsReLoad(0)
+    }
+  }, [isReLoad])
+
+  const assetPage = useSelector(state => state.AssetReducer);
 
   const assetPage = useSelector((state) => state.AssetReducer);
 
-  return assetPage;
+function checkLoading(setIsLoading,page){
+  useEffect(()=>{
+    console.log(page)
+      if('items' in page)
+        setIsLoading(false)
+  },[page])
 }
 
 function fetchCategories() {
