@@ -266,7 +266,7 @@ function fetchUser() {
   //15a9f5fd-00b9-4a55-b463-0fb7acdc6f88
   useEffect(() => {
     async function fetch() {
-      let enpoint = "user/15a9f5fd-00b9-4a55-b463-0fb7acdc6f88";
+      let enpoint = "user/1ee34deb-87c9-4415-ad8e-012a0420801c";
       console.log(enpoint);
       const res = await apiCaller(enpoint, "GET", null);
       dispatch({ type: action.GETBYID_USER, payload: res.data });
@@ -275,6 +275,7 @@ function fetchUser() {
   }, []);
 
   const result = useSelector((state) => state.EditUserReducer);
+  console.log(result);
   return result;
 }
 
@@ -282,7 +283,7 @@ function fetchCurrentUser(user) {
   //htttps://localhost:5011/api/users/{id}
   //15a9f5fd-00b9-4a55-b463-0fb7acdc6f88
   async function fetch() {
-    let enpoint = "user/15a9f5fd-00b9-4a55-b463-0fb7acdc6f88";
+    let enpoint = "user/1ee34deb-87c9-4415-ad8e-012a0420801c";
     console.log(enpoint);
     const res = await apiCaller(enpoint, "PUT", user);
     return res;

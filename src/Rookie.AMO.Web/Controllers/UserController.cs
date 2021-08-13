@@ -28,7 +28,11 @@ namespace Rookie.AMO.Web.Controllers
 
         [HttpGet("{userId}")]
         public async Task<UserDto> GetByIdAsync(Guid userId)
-            => await _userService.GetByIdAsync(userId);
+        {
+            var res = await _userService.GetByIdAsync(userId);
+            return res;
+        }
+
         [HttpGet("find")]
         public Task<PagedResponseModel<UserDto>> PagedQueryUserAsync(string name, int page, int limit)
             => _userService.PagedQueryAsync(name, page, limit);
