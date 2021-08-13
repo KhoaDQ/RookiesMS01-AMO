@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Rookie.AMO.Contracts.Constants;
 using Rookie.AMO.Contracts.Dtos.User;
@@ -12,6 +13,7 @@ namespace Rookie.AMO.Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Policy = "ADMIN_ROLE_POLICY")]
     public class RoleController : ControllerBase
     {
         private readonly IRoleService _roleService;

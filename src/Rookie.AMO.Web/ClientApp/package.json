@@ -9,7 +9,7 @@
     "bootstrap": "^4.3.1",
     "jquery": "^3.6.0",
     "multiselect-react-dropdown": "^2.0.5",
-    "oidc-client": "^1.8.2",
+    "oidc-client": "^1.11.5",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-hook-form": "^7.12.2",
