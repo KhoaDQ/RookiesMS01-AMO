@@ -65,7 +65,7 @@ function fetchPageAsset(searchText,pageNumber,optionSort = {propertyName: "", de
 
   useEffect(() => {
     async function fetch() {
-      let enpoint = 'Asset/find?KeySearch='+ searchText+'&OrderProperty='+optionSort.propertyName+'&Desc='+optionSort.desc+'&Page='+pageNumber+'&Limit=19';
+      let enpoint = 'Asset/find?KeySearch='+ searchText+'&OrderProperty='+optionSort.propertyName+'&Desc='+optionSort.desc+'&Page='+pageNumber+'&Limit=3';
       console.log(enpoint)
       const res = await apiCaller(enpoint, 'GET', null);
       dispatch({ type: action.FETCH_ASSETS, payload: res });

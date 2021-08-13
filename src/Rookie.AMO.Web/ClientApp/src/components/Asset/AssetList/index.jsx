@@ -70,7 +70,7 @@ function AssetList(props){
           {props.totalItems > 0 ? props.children : (searchText!="") ? <span>No assets are found!</span>:<span>...Loading</span>}
         </tbody>
       </Table>
-      {props.totalPages > 1 ? <Pagination totalPages = {props.totalPages} pageNumber = {props.pageNumber} setPageNumber = {props.setPageNumber}/> : null}
+      {props.totalPages > 0 ? <Pagination totalPages = {props.totalPages} pageNumber = {props.pageNumber} setPageNumber = {props.setPageNumber}/> : null}
     </div>
 
   );

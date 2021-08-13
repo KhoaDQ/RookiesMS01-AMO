@@ -5,7 +5,7 @@ import { AiOutlineCloseSquare } from "react-icons/ai";
 
 const PopupDetail = (props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const { content } = props
   useEffect(() => {
     setIsModalOpen(props.isModalOpen);
   });
@@ -15,9 +15,19 @@ const PopupDetail = (props) => {
     props.handleModelShow(!isModalOpen);
   };
 
+  const elements = Object.keys(content).map(function (key) {
+    if (key !== 'id') {
+      return (
+        <div className="row mt-3" key={key}>
+          <div className="col-md-4">{key}: </div>
+          <div className="col-md-8">{content[key]}</div>
+        </div>
+      )
+    }
+  })
   return (
     <div className="popupdetail popup">
-      <div class={"modal " + (isModalOpen ? "modal__open" : "modal__close")}>
+      <div className={"modal " + (isModalOpen ? "modal__open" : "modal__close")}>
         <div className="modal__overlay"></div>
 
         <div className="modal__body">
@@ -38,30 +48,7 @@ const PopupDetail = (props) => {
 
             <div className="auth-form__body">
               <p className="auth-form__heading">
-                <div className="row mt-3">
-                  <div className="col-md-3">{props.title}: </div>
-                  <div className="col-md-9">{props.content}</div>
-                </div>
-                <div className="row mt-3">
-                  <div className="col-md-3">{props.title}: </div>
-                  <div className="col-md-9">{props.content}</div>
-                </div>
-                <div className="row mt-3">
-                  <div className="col-md-3">{props.title}: </div>
-                  <div className="col-md-9">{props.content}</div>
-                </div>
-                <div className="row">
-                  <div className="col-md-3">{props.title}: </div>
-                  <div className="col-md-9">{props.content}</div>
-                </div>
-                <div className="row">
-                  <div className="col-md-3">{props.title}: </div>
-                  <div className="col-md-9">{props.content}</div>
-                </div>
-                <div className="row">
-                  <div className="col-md-3">{props.title}: </div>
-                  <div className="col-md-9">{props.content}</div>
-                </div>
+                {elements}
               </p>
             </div>
           </div>
