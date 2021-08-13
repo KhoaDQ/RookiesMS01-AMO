@@ -180,7 +180,7 @@ namespace IdentityServerHost.Quickstart.UI
             return View(vm);
         }
 
-        
+
         /// <summary>
         /// Show logout page
         /// </summary>
@@ -213,6 +213,7 @@ namespace IdentityServerHost.Quickstart.UI
             if (User?.Identity.IsAuthenticated == true)
             {
                 // delete local authentication cookie
+                await _signInManager.SignOutAsync();
                 await HttpContext.SignOutAsync();
 
                 // raise the logout event

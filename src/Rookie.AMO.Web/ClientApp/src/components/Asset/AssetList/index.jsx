@@ -80,7 +80,7 @@ function AssetList(props){
           </Button>
         </Col>
       </Row>
-      <Table hover="true" className="table_border_spacing">
+      <Table className="table_border_spacing">
         <thead>
           <tr>
             <th onClick={(e) =>{handleClickSort("Code",e)}}>Asset Code
@@ -102,7 +102,7 @@ function AssetList(props){
           {props.isLoading ? <tr><td className="rowNotify">...Loading</td></tr> : props.totalItems > 0 ? props.children : <tr><td className="rowNotify"> No assets are found! </td></tr>}
         </tbody>
       </Table>
-      { props.totalItems > 0 ? <Pagination totalPages = {props.totalPages} pageNumber = {props.pageNumber} setPageNumber = {props.setPageNumber}/>:null}
+      { props.totalItems > 0 ? <Pagination totalPages = {props.totalPages} pageNumber = {props.pageNumber} setPageNumber = {props.setPageNumber} setIsReLoad={props.setIsReLoad}/>:null}
     </div>
 
   );

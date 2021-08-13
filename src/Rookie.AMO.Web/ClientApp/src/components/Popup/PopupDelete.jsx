@@ -3,6 +3,8 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import "./Popup.css";
 
 const PopupDelete = (props) => {
+  let {handleDelete} = props
+  
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
@@ -23,16 +25,14 @@ const PopupDelete = (props) => {
           <div className="auth-form">
             <div className="auth-form__header">
               <p className="auth-form__question">Are you sure?</p>
-              {/* <p className="auth-form__question">{props.header}</p> */}
             </div>
 
             <div className="auth-form__body">
               <p className="auth-form__heading">
                 Do you want to delete this asset?
-                {/* {props.heading} */}
               </p>
               <div className="auth-form__action">
-                <button className="btn-accept">Delete</button>
+                <button onClick={handleDelete} className="btn-accept">Delete</button>
                 <button onClick={handleCancel} className="btn-cancel">
                   Cancel
                 </button>
