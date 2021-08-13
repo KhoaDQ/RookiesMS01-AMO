@@ -10,4 +10,4 @@ export const Method = {
 }
 
 export const UserEndpoint = "/api/user";
-export const RoleEndpoint = "/api/user";
+export const RoleEndpoint = "/api/role";

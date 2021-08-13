@@ -1,13 +1,8 @@
 import callApi from "../../apis/callApi";
-import { BASE_URL, Method, UserEndpoint } from "../../constants/config";
-import { CreateUserFail, CreateUserRequest, CreateUserSuccess } from "../../constants/UserConstants";
+import { Method, UserEndpoint } from "../../constants/config";
+import { CREATE_USER } from "./ActionType";
 
 export const CreateUserAction = (user) => async (dispatch) => {
-    try {
-        dispatch({ type: CreateUserRequest, payload: user });
-        const data = await callApi(`${BASE_URL}${UserEndpoint}`, Method.Post, user);
-        dispatch({ type: CreateUserSuccess, payload: data });
-    } catch (error) {
-        dispatch({ type: CreateUserFail, payload: error.message });
-    }
+    const res = await callApi(`user`, Method.Post, user);
+    dispatch({ type: CREATE_USER, payload: res.data });
 };

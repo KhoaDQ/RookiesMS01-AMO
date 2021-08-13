@@ -108,17 +108,34 @@ namespace Rookie.AMO.Identity.Business.Services
         public async Task UpdateUserAsync(Guid id, UserUpdateRequest request)
         {
             var user = await _userManager.FindByIdAsync(id.ToString());
+            var claims = await _userManager.GetClaimsAsync(user);
 
-            await _userManager.RemoveFromRoleAsync(user, user.Type);
-            await _userManager.AddToRoleAsync(user, request.Type);
+            if (user.Type != request.Type)
+            {
+                await _userManager.RemoveFromRoleAsync(user, user.Type);
+                await _userManager.AddToRoleAsync(user, request.Type);
+                var newClaim = new Claim(IdentityModel.JwtClaimTypes.Role, request.Type);
+                await _userManager.ReplaceClaimAsync(user, claims.First(x => x.Type == IdentityModel.JwtClaimTypes.Role), newClaim);
+                user.Type = request.Type;
+            }
 
-            user.Type = request.Type;
-            user.DateOfBirth = request.DateOfBirth;
-            user.FirstName = request.FirstName;
-            user.LastName = request.LastName;
-            user.JoinedDate = request.JoinedDate;
+            if (user.FirstName != request.FirstName)
+            {
+                var newClaim = new Claim(IdentityModel.JwtClaimTypes.GivenName, user.FirstName);
+                await _userManager.ReplaceClaimAsync(user, claims.First(x => x.Type == IdentityModel.JwtClaimTypes.GivenName), newClaim);
+                user.FirstName = request.FirstName;
+            }
+
+            if (user.LastName != request.LastName)
+            {
+                var newClaim = new Claim(IdentityModel.JwtClaimTypes.FamilyName, user.LastName);
+                await _userManager.ReplaceClaimAsync(user, claims.First(x => x.Type == IdentityModel.JwtClaimTypes.FamilyName), newClaim);
+
+                user.LastName = request.LastName;
+            }
             user.Gender = request.Gender;
-
+            user.JoinedDate = request.JoinedDate;
+            user.DateOfBirth = request.DateOfBirth;
             user.UserName = AutoGenerateUserName(request.FirstName, request.LastName);
 
             var result = await _userManager.UpdateAsync(user);
