@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import apiCaller from "../../../apis/callApi";
+import { Link } from "react-router-dom";
 import * as action from "../../../actions/ManagerAsset/ActionType";
 import { useHistory } from "react-router-dom";
+import PopupInfor from "../../../components/Popup/PopupInfor";
 
 const EditAssets = (props) => {
   const history = useHistory();
   console.log(props.match.params.id);
   const dispatch = useDispatch();
   const EditAsset = useSelector((state) => state.EditAsset);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const CategoryReducer = useSelector((state) => state.CategoryReducer);
   const [state, setState] = useState({
     // Name: "",
@@ -23,6 +26,9 @@ const EditAssets = (props) => {
     setState(initAsset);
   }, [initAsset]);
 
+  const handleModelShowFunction = (content) => {
+    setIsModalOpen(content);
+  };
   useEffect(() => {
     async function fetchCategory() {
       const res = await apiCaller("Category", "GET", null);
@@ -66,6 +72,7 @@ const EditAssets = (props) => {
 
     try {
       EditAsset();
+      setIsModalOpen(true);
     } catch (Err) {
       console.log(Err);
     }
@@ -230,9 +237,16 @@ const EditAssets = (props) => {
           Save
         </button>
         <button type="button" class="btn btn-outline-danger color1">
-          Cancel
+          <Link to="/manage-asset">Cancel</Link>
         </button>
       </form>
+      <PopupInfor
+        title="Information"
+        content="Edit asset successfully"
+        handleModelShow={handleModelShowFunction}
+        isModalOpen={isModalOpen}
+        pathReturn="/manage-asset"
+      ></PopupInfor>
     </div>
   );
 };
