@@ -66,7 +66,7 @@ function UserList(props) {
         </Col>
         <Col md={6} className="text-right">
           <Button color="danger">
-            <Link to="/createuser" className="UserIcon">
+            <Link to="/create-user" className="UserIcon">
               Create New User
             </Link>
           </Button>
@@ -84,7 +84,7 @@ function UserList(props) {
           </tr>
         </thead>
         <tbody>
-          {props.totalItems > 0 ? props.children : (paging.name != "") ? <span>No assets are found!</span> : <span>...Loading</span>}
+          {props.totalItems > 0 ? props.children : (paging.name != "") ? <span>No users are found!</span> : <span>...Loading</span>}
         </tbody>
       </Table>
       {props.totalPages > 0 ? <Pagination totalPages={props.totalPages} pageNumber={props.pageNumber} setPageNumber={props.setPageNumber}  /> : null}

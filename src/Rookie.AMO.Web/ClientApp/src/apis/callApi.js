@@ -1,5 +1,5 @@
 import axios from 'axios';
-import * as Config from '../constants/config'
+import * as Config from '../constants/config';
 export default function callApi(endpoint, method, body) {
     let token = localStorage.getItem("access_token");
 

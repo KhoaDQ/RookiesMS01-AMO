@@ -19,11 +19,12 @@ function ManageUser() {
   });
   const roles = useSelector((state) => state.getAllRoles);
   const userPage = useSelector((state) => state.UserReducer);
+  const { createdUser } = useSelector((state) => state.createUser);
   const dispatch = useDispatch();
 
   useEffect(() => {
     async function fetchRoles() {
-      const res = await apiCaller("Roles", "GET", null);
+      const res = await apiCaller("Role", "GET", null);
       dispatch({ type: GetAllRolesSuccess, payload: res.data });
     }
     fetchRoles();
@@ -42,11 +43,18 @@ function ManageUser() {
 
   const showUsers = () => {
     let result = null;
+
     if (userPage.items) {
       result = userPage.items.map((user, index) => {
         return <UserItem key={index} user={user} index={index} />;
       });
     }
+
+    if (createdUser.id != null) {
+      var createdUserRow = <UserItem key={"createdUser"} user={createdUser}/>;
+      result.unshift(createdUserRow);
+    }
+
     return result;
   };
 
