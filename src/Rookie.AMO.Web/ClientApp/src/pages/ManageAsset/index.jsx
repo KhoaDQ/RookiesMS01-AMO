@@ -5,8 +5,10 @@ import *as action from '../../actions/ManagerAsset/ActionType'
 import *as actionCategory from '../../actions/ManagerCategory/ActionType'
 import AssetList from "../../components/Asset/AssetList";
 import AssetItem from "../../components/Asset/AssetItem";
+import PopupDetailAsset from "../../components/Popup/PopupDetailAsset";
 
 const stateList = [
+
   {name: "Assigned",value: "Assigned"},
   {name: "Available", value: "Available"},
   {name: "Not available", value: "NotAvailable"},
@@ -15,67 +17,135 @@ const stateList = [
 ]
 
 function ManageAsset() {
-
-  const [stateFilter,setStateFilter] = useState([])
-  const [categoryFilter,setCategoryFilter] = useState([])
+  const [stateFilter,setStateFilter] = useState("")
+  const [categoryFilter,setCategoryFilter] = useState("")
   const [searchText,setSearchText] = useState("")
   const [pageNumber,setPageNumber] = useState(1)
+  const [optionSort,setOptionSort] = useState({propertyName: "", desc: 'false'})
 
-  const [optionSort,setOptionSort] = useState({propertyName: "", desc: false})
+  const [isLoading,setIsLoading] = useState(true)
 
-  
-  let assetPage = fetchPageAsset(searchText,pageNumber,optionSort);
+  const [assetDetail,setAssetDetail] = useState()
+  const [isModalOpen,setIsModalOpen] = useState(true)
+
+  let assetPage = fetchPageAsset(stateFilter,categoryFilter,searchText,pageNumber,optionSort);
+
+  checkLoading(setIsLoading,assetPage)
 
   var categories = fetchCategories();
-  
+
   let assets = assetPage.items;
 
   const resetPage = () => {
       setPageNumber(1)
   }
 
-  const handleSort = (e) =>{
-      setOptionSort({propertyName: e.target.id, desc: false})
+  const handleSort = (e,option) =>{
+      setOptionSort({propertyName:option.propertyName, desc: option.desc.toString()})
+  }
+
+  const handleSearch = (text,e) =>{
+      resetPage()
+      setSearchText(text)
+  }
+  const handleFilterState = (option,e) => {
+    if(option!=null)
+      setStateFilter(option.map((a,index)=>a.value).join(','))
+    else
+      setStateFilter("")
+    resetPage()
+  }
+
+  const handleFilterCat = (option,e) => {
+    if(option!=null)
+      setCategoryFilter(option.map((a,index)=>a.id).join(','))
+    else
+      setCategoryFilter("")
+    resetPage()
+  }
+
+  const handleDetail = (asset,e) =>{
+    setAssetDetail(asset)
+    setIsModalOpen(true)
+  }
+
+  const handleModelShow = (isModalOpen) =>{
+    setIsModalOpen(isModalOpen)
+  }
+  function detailAsset(assetDetail,isModalOpen){
+    if(assetDetail)
+      return (
+        <PopupDetailAsset asset = {assetDetail} isModalOpen={isModalOpen} handleModelShow = {handleModelShow}/>
+      )
+  }
+
+  function showAssets (assets){
+    let result = null
+    if(assets != null){
+      if(assets.length > 0){
+        result = assets.map((asset, index) => {
+          return (
+              <AssetItem
+                  key={index}
+                  asset={asset}
+                  index={index}
+                  stateList = {stateList}
+                  handleDetail = {handleDetail}
+              />
+          )
+        })
+      }
+    }
+    return result
   }
 
   return (
     <div>
-      <AssetList 
-        categories = {categories} 
-        setSearchText = {setSearchText}
+      <AssetList
+        isLoading = {isLoading}
+        categories = {categories}
         stateList = {stateList}
         totalPages= {assetPage.totalPages}
         totalItems= {assetPage.totalItems}
         pageNumber = {pageNumber}
         setPageNumber = {setPageNumber}
-        resetPage = {resetPage}
         handleSort = {handleSort}
+        handleFilterState = {handleFilterState}
+        handleFilterCat = {handleFilterCat}
+        handleSearch = {handleSearch}
       >
-
       {showAssets(assets)}
-
       </AssetList>
+      {detailAsset(assetDetail,isModalOpen)}
     </div>
-    
+
   );
 }
 
-function fetchPageAsset(searchText,pageNumber,optionSort = {propertyName: "", desc: false}) {
+function fetchPageAsset(stateFilter,categoryFilter,searchText,pageNumber,optionSort = {propertyName: "", desc: "false"}) {
   const dispatch = useDispatch()
 
   useEffect(() => {
     async function fetch() {
-      let enpoint = 'Asset/find?KeySearch='+ searchText+'&OrderProperty='+optionSort.propertyName+'&Desc='+optionSort.desc+'&Page='+pageNumber+'&Limit=3';
+      let enpoint = 'Asset/find?State='+stateFilter+'&Category='+categoryFilter+'&KeySearch='+ searchText+'&OrderProperty='+optionSort.propertyName+'&Desc='+optionSort.desc+'&Page='+pageNumber+'&Limit=2';
+
       console.log(enpoint)
       const res = await apiCaller(enpoint, 'GET', null);
-      dispatch({ type: action.FETCH_ASSETS, payload: res });
+      dispatch({ type: action.FETCH_ASSETS, payload: res.data });
     }
   fetch()
-  }, [searchText,pageNumber,optionSort.propertyName,optionSort.desc])
+  }, [stateFilter,categoryFilter,searchText,pageNumber,optionSort.propertyName,optionSort.desc])
 
   const assetPage = useSelector(state => state.AssetReducer);
 
   return assetPage
+}
+
+function checkLoading(setIsLoading,page){
+  useEffect(()=>{
+    if('items' in page)
+      setIsLoading(false)
+  },[page])
 }
 
 function fetchCategories () {
@@ -84,7 +154,7 @@ function fetchCategories () {
   useEffect(() => {
     async function fetch() {
       const res = await apiCaller('Category', 'GET', null);
-      dispatch({ type: actionCategory.FETCH_CATEGORIES, payload: res });
+      dispatch({ type: actionCategory.FETCH_CATEGORY, payload: res.data });
     }
     fetch()
   }, [])
@@ -93,49 +163,5 @@ function fetchCategories () {
 
   return categories
 }
-
-function filterAssets(assets,propertyName,arrayFilter){
-  if(arrayFilter == [] || ! (propertyName in assets))
-    return assets
-  return assets.filter(asset => arrayFilter.includes(asset[propertyName]))
-}
-
-function filterPageAsset(assetPage,stateFilter,categoryFilter){
-
-    let assets = null
-    useEffect(() => {
-      async function filter() {
-        console.log(assetPage)
-        if (assetPage!=null && 'items' in assetPage){
-          assets = assetPage.items
-          //assets = filterAssets(assets,"state",stateFilter)
-          //assets = filterAssets(assets,"category",categoryFilter)
-        }
-      }
-      filter();
-    }, [assetPage])
-    
-    return assets
-
-}
-function showAssets (assets){
-  let result = null
-  if(assets != null){
-    if(assets.length > 0){
-      result = assets.map((asset, index) => {
-        return (
-            <AssetItem
-                key={index}
-                asset={asset}
-                index={index}
-                stateList = {stateList}
-            />
-        )
-      })
-    }
-  }
-  return result
-}
-
 
 export default ManageAsset;

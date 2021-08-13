@@ -8,6 +8,7 @@ using Rookie.AMO.Contracts.Dtos;
 using Rookie.AMO.Contracts.Dtos.Asset;
 using Rookie.AMO.DataAccessor.Data;
 using Rookie.AMO.DataAccessor.Entities;
+using Rookie.AMO.DataAccessor.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -116,9 +117,24 @@ namespace Rookie.AMO.Business.Services
 
         public async Task<PagedResponseModel<AssetDto>> PagedQueryAsync(FilterAssetsModel filter)
         {
+
             var query = _baseRepository.Entities;
 
             query = query.Where(x => string.IsNullOrEmpty(filter.KeySearch) || x.Name.Contains(filter.KeySearch) || x.Code.Contains(filter.KeySearch));
+
+
+            if (!string.IsNullOrEmpty(filter.State))
+            {
+                IEnumerable<int> stateFilter = filter.State.Trim().Split(',').Select(s => EnumConverExtension.GetValueInt<StateList>(s));
+
+                query = query.Where(x => stateFilter.Contains(((int)x.State)));
+            }
+            if (!string.IsNullOrEmpty(filter.Category))
+            {
+                string[] categoryFilter = filter.Category.Trim().Split(',');
+                query = query.Where(x => categoryFilter.Contains(x.CategoryId.ToString()));
+            }
+                       
 
             if (!string.IsNullOrEmpty(filter.OrderProperty))
                 query = query.OrderByPropertyName(filter.OrderProperty, filter.Desc);
