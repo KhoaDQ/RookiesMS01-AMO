@@ -5,27 +5,47 @@ import { useSelector } from "react-redux";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { CreateUserAction } from "../../../actions/ManageUser/CreateUserAction";
-import callApi from "../../../apis/callApi";
-import { Method, UserEndpoint } from "../../../constants/config";
-import { GetAllRolesRequest } from "../../../constants/RoleConstants";
+import { GetAllRolesAction } from "../../../actions/ManageUser/GetAllRolesAction";
+import * as yup from "yup";
+import {
+  JoinedDateIsNotLaterThanDOB,
+  JoinedDateIsNotSaturdayOrSunday,
+  TheCharacterIsInvalid,
+  UserUnder18,
+} from "../../../constants/UserConstants";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 const CreateUser = () => {
   const dispatch = useDispatch();
-  //const { user } = useSelector(state => state.oidc);
-  const { roles } = useSelector(state => state.GetAllRoles);
-  const roleOptions = roles.map((role) => (<option value={role.name}>{role.name}</option>));
+  const { user } = useSelector((state) => state.oidc);
+  const { roles } = useSelector((state) => state.getAllRoles);
+  const options = roles.map((role, index) => (
+    <option value={role.name} key={index}>
+      {role.name}
+    </option>
+  ));
+  const choseAType = (
+    <option value={0} key={-1}>
+      Choose a type
+    </option>
+  );
+  const roleOptions = [choseAType, ...options];
+
   const initUser = {
     firstName: "",
     lastName: "",
     dateOfBirth: "",
     joinedDate: "",
     gender: "Female",
-    type: "",
-    location: ""
+    type: 0,
+    location: user ? user.location : "",
   };
   const [newUser, setNewUser] = useState(initUser);
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const disableButton = newUser.firstName == initUser.firstName || newUser.lastName == initUser.lastName || 
+            initUser.dateOfBirth == newUser.dateOfBirth || initUser.joinedDate == newUser.joinedDate ||
+            initUser.type == newUser.type;
+  const onSubmit = (e) => {
     dispatch(CreateUserAction(newUser));
   };
   const handleInputChange = (event) => {
@@ -34,28 +54,56 @@ const CreateUser = () => {
   };
 
   useEffect(() => {
-    async function GetAllRoles(){
-      const res = await callApi(UserEndpoint, Method.Get, null);
-      dispatch({ type: GetAllRolesRequest, payload: res })
-    }
-    return () => {
-      
-    }
-  }, [])
+    dispatch(GetAllRolesAction());
+  }, []);
+
+  const theDateOf18YearsAgo = new Date();
+  const theYearOf18YearsAgo = theDateOf18YearsAgo.getFullYear() - 18;
+  theDateOf18YearsAgo.setFullYear(theYearOf18YearsAgo);
+
+  const theEarliestJoinedDate = newUser.dateOfBirth ? new Date(newUser.dateOfBirth) : new Date();
+  theEarliestJoinedDate.setFullYear(theEarliestJoinedDate.getFullYear() + 18);
+
+  yup.addMethod(yup.date, 'NotWeekendDay', function(date) {
+    return this.test()
+  });
+
+  const schema = yup.object().shape({
+    firstName: yup
+      .string()
+      .matches(/^[A-Za-z]+$/, TheCharacterIsInvalid),
+    lastName: yup
+      .string()
+      .matches(/^[A-Za-z\s]+$/, TheCharacterIsInvalid),
+
+    dateOfBirth: yup.date().max(theDateOf18YearsAgo, UserUnder18),
+
+    joinedDate: yup
+      .date()
+      .min(theEarliestJoinedDate, JoinedDateIsNotLaterThanDOB)
+      .test('NotWeekend', JoinedDateIsNotSaturdayOrSunday, (value) => value.getDay() !== 6 && value.getDay() !== 0)
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+    reValidateMode: "onChange",
+  });
 
   return (
     <div>
       <h5 className="right-title">Create User</h5>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div className="form-group row">
-          <label
-            htmlFor="FirstNameEditUser"
-            className="col-sm-2 col-form-label"
-          >
+          <label htmlFor="firstName" className="col-sm-2 col-form-label">
             First Name
           </label>
           <div className="col-sm-10 resize">
             <input
+              {...register("firstName")}
               type="text"
               className="form-control"
               id="firstName"
@@ -63,15 +111,17 @@ const CreateUser = () => {
               value={newUser.firstName}
               onChange={handleInputChange}
             />
+            {errors.firstName && <p>{errors.firstName.message}</p>}
           </div>
         </div>
         <br></br>
         <div className="form-group row">
-          <label htmlFor="LastNameEditUser" className="col-sm-2 col-form-label">
+          <label htmlFor="lastName" className="col-sm-2 col-form-label">
             Last Name
           </label>
           <div className="col-sm-10 resize">
             <input
+              {...register("lastName")}
               type="text"
               className="form-control"
               id="lastName"
@@ -79,18 +129,17 @@ const CreateUser = () => {
               value={newUser.lastName}
               onChange={handleInputChange}
             />
+            {errors.lastName && <p>{errors.lastName.message}</p>}
           </div>
         </div>
         <br></br>
         <div className="form-group row">
-          <label
-            htmlFor="DateOfBirthEditUser"
-            className="col-sm-2 col-form-label"
-          >
+          <label htmlFor="dateOfBirth" className="col-sm-2 col-form-label">
             Date of Birth
           </label>
           <div className="col-sm-10 resize">
             <input
+              {...register("dateOfBirth")}
               type="date"
               className="form-control "
               id="dateOfBirth"
@@ -98,6 +147,7 @@ const CreateUser = () => {
               value={newUser.dateOfBirth}
               onChange={handleInputChange}
             />
+            {errors.dateOfBirth && <p>{errors.dateOfBirth.message}</p>}
           </div>
         </div>
         <br></br>
@@ -111,12 +161,12 @@ const CreateUser = () => {
                     className="form-check-input"
                     type="radio"
                     name="gender"
-                    id="gridRadios1"
+                    id="female"
                     value="Female"
                     checked={newUser.gender === "Female"}
                     onChange={handleInputChange}
                   />
-                  <label className="form-check-label" htmlFor="gridRadios1">
+                  <label className="form-check-label" htmlFor="female">
                     Female
                   </label>
                 </div>
@@ -125,12 +175,12 @@ const CreateUser = () => {
                     className="form-check-input"
                     type="radio"
                     name="gender"
-                    id="gridRadios2"
+                    id="male"
                     value="Male"
                     checked={newUser.gender === "Male"}
                     onChange={handleInputChange}
                   />
-                  <label className="form-check-label" htmlFor="gridRadios2">
+                  <label className="form-check-label" htmlFor="male">
                     Male
                   </label>
                 </div>
@@ -140,43 +190,42 @@ const CreateUser = () => {
         </fieldset>
         <br></br>
         <div className="form-group row">
-          <label
-            htmlFor="JoinedDateEditUser"
-            className="col-sm-2 col-form-label"
-          >
+          <label htmlFor="joinedDate" className="col-sm-2 col-form-label">
             Joined Date
           </label>
           <div className="col-sm-10 resize">
             <input
+              {...register("joinedDate")}
               type="date"
-              className="form-control "
+              className="form-control"
               id="joinedDate"
               name="joinedDate"
               value={newUser.joinedDate}
               onChange={handleInputChange}
             />
+            {errors.joinedDate && <p>{errors.joinedDate.message}</p>}
           </div>
         </div>
         <br></br>
         <div className="form-group row">
-          <label htmlFor="TypeEditUser" className="col-sm-2 col-form-label">
+          <label htmlFor="type" className="col-sm-2 col-form-label">
             Type
           </label>
           <div className="col-sm-10 resize">
             <select
+              {...register("type")}
+              id="type"
               name="type"
               className="custom-select custom-select-lg mb-3 form-control"
-              defaultValue={"Staff"}
+              defaultValue={0}
               onChange={handleInputChange}
             >
-              <option value="Staff">Staff</option>
-              <option value="Admin">Admin</option>
+              {roleOptions}
             </select>
           </div>
         </div>
         <br></br>
-
-        <button type="submit" className="btn btn-outline-danger margin color">
+        <button type="submit" className="btn btn-outline-danger margin color" disabled={disableButton}>
           Save
         </button>
         <button type="button" className="btn btn-outline-danger color1">

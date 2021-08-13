@@ -1,13 +1,9 @@
-import { GetAllRolesFail, GetAllRolesRequest, GetAllRolesSuccess } from "../../constants/RoleConstants";
+import { FETCH_ROLES } from "../../actions/ManageUser/ActionType";
 
 export function GetAllRolesReducer(state = {roles: []}, action) {
     switch (action.type) {
-      case GetAllRolesRequest:
-        return { loading: true };
-      case GetAllRolesSuccess:
-        return { loading: false, roles: action.payload, success: true };
-      case GetAllRolesFail:
-        return { loading: false, roles: action.payload };
+      case FETCH_ROLES:
+        return { roles: action.payload, success: true };
       default:
         return state;
     }
