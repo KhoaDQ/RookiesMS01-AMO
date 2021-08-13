@@ -28,7 +28,7 @@ function UserItem(props) {
         <td>{user.type}</td>
         <td>
           <span className="icon-nash icon-nash--black">
-            <Link to="/edituser">
+            <Link to={`/edituser/${user.id}`}>
               <IoMdCreate />
             </Link>
           </span>

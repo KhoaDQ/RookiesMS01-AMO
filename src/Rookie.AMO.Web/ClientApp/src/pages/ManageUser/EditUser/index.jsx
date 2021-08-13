@@ -37,7 +37,7 @@ const schema = yup.object().shape({
 const EditUser = (props) => {
   const [currentUser, setCurrentUser] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const result = fetchUser();
+  const result = fetchUser(props.match.params.id);
   useEffect(() => {
     setCurrentUser(result);
   }, [result]);
@@ -53,7 +53,7 @@ const EditUser = (props) => {
   };
 
   const submitForm = (data) => {
-    fetchCurrentUser(currentUser);
+    fetchCurrentUser(props.match.params.id, currentUser);
     //console.log(response);
     setIsModalOpen(true);
   };
@@ -260,13 +260,13 @@ const EditUser = (props) => {
   );
 };
 
-function fetchUser() {
+function fetchUser(id) {
   const dispatch = useDispatch();
   //htttps://localhost:5011/api/users/{id}
   //15a9f5fd-00b9-4a55-b463-0fb7acdc6f88
   useEffect(() => {
     async function fetch() {
-      let enpoint = "user/1ee34deb-87c9-4415-ad8e-012a0420801c";
+      let enpoint = `user/${id}`;
       console.log(enpoint);
       const res = await apiCaller(enpoint, "GET", null);
       dispatch({ type: action.GETBYID_USER, payload: res.data });
@@ -275,16 +275,14 @@ function fetchUser() {
   }, []);
 
   const result = useSelector((state) => state.EditUserReducer);
-  console.log(result);
   return result;
 }
 
-function fetchCurrentUser(user) {
+function fetchCurrentUser(id, user) {
   //htttps://localhost:5011/api/users/{id}
   //15a9f5fd-00b9-4a55-b463-0fb7acdc6f88
   async function fetch() {
-    let enpoint = "user/1ee34deb-87c9-4415-ad8e-012a0420801c";
-    console.log(enpoint);
+    let enpoint = `user/${id}`;
     const res = await apiCaller(enpoint, "PUT", user);
     return res;
   }
