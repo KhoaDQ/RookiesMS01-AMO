@@ -3,7 +3,7 @@ import { CreateUserReducer } from "./users/CreateUserReducer";
 import { reducer as oidcReducer } from "redux-oidc";
 
 import { GetAllRolesReducer } from "./users/GetAllRolesReducer";
-import UserReducer from "./users/UserReducer";
+import UserReducer from "./users/userReducer";
 import AssetReducer from "./assets/AssetReducer";
 import CategoryReducer from "./categoryReducer";
 import editUserReducer from "./users/editUserReducer";

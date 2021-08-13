@@ -34,7 +34,7 @@ const Header = (props) => {
                 <DropdownToggle caret>{user.profile.userName}</DropdownToggle>
                 <DropdownMenu>
                   <DropdownItem header>{user.profile.userName}</DropdownItem>
-                  <DropdownItem>Logout</DropdownItem>
+                  <DropdownItem onClick={() => userManager.signoutRedirect()}>Logout</DropdownItem>
                 </DropdownMenu>
               </Dropdown>
             </Col>

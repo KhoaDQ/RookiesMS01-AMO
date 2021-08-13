@@ -15,9 +15,11 @@ import {
 } from "../../../constants/UserConstants";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useHistory } from "react-router";
 
 const CreateUser = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
   const { user } = useSelector((state) => state.oidc);
   const { roles } = useSelector((state) => state.getAllRoles);
   const options = roles.map((role, index) => (
@@ -39,14 +41,20 @@ const CreateUser = () => {
     joinedDate: "",
     gender: "Female",
     type: 0,
-    location: user ? user.location : "",
+    location: ""
   };
+
   const [newUser, setNewUser] = useState(initUser);
   const disableButton = newUser.firstName == initUser.firstName || newUser.lastName == initUser.lastName || 
             initUser.dateOfBirth == newUser.dateOfBirth || initUser.joinedDate == newUser.joinedDate ||
             initUser.type == newUser.type;
   const onSubmit = (e) => {
-    dispatch(CreateUserAction(newUser));
+    try {
+      dispatch(CreateUserAction(newUser));
+      history.push("/manage-user");
+    } catch (ex) {
+      
+    }
   };
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -55,7 +63,8 @@ const CreateUser = () => {
 
   useEffect(() => {
     dispatch(GetAllRolesAction());
-  }, []);
+    setNewUser({ ...newUser, location: user ? user.profile.location : ""});
+  }, [user]);
 
   const theDateOf18YearsAgo = new Date();
   const theYearOf18YearsAgo = theDateOf18YearsAgo.getFullYear() - 18;
@@ -63,10 +72,6 @@ const CreateUser = () => {
 
   const theEarliestJoinedDate = newUser.dateOfBirth ? new Date(newUser.dateOfBirth) : new Date();
   theEarliestJoinedDate.setFullYear(theEarliestJoinedDate.getFullYear() + 18);
-
-  yup.addMethod(yup.date, 'NotWeekendDay', function(date) {
-    return this.test()
-  });
 
   const schema = yup.object().shape({
     firstName: yup
