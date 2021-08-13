@@ -86,7 +86,7 @@ function AssetList(props) {
           </Button>
         </Col>
       </Row>
-      <Table hover="true" className="table_border_spacing">
+      <Table className="table_border_spacing">
         <thead>
           <tr>
             <th
@@ -156,13 +156,7 @@ function AssetList(props) {
           )}
         </tbody>
       </Table>
-      {props.totalPages > 1 ? (
-        <Pagination
-          totalPages={props.totalPages}
-          pageNumber={props.pageNumber}
-          setPageNumber={props.setPageNumber}
-        />
-      ) : null}
+      { props.totalItems > 0 ? <Pagination totalPages = {props.totalPages} pageNumber = {props.pageNumber} setPageNumber = {props.setPageNumber} setIsReLoad={props.setIsReLoad}/>:null}
     </div>
   );
 }
