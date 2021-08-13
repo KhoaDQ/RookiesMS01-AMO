@@ -1,13 +1,9 @@
-import { CreateUserFail, CreateUserRequest, CreateUserSuccess } from "../../constants/UserConstants";
+import { CREATE_USER } from "../../actions/ManageUser/ActionType";
 
-export function CreateUserReducer(state = {user: {}}, action) {
+export function CreateUserReducer(state = {createdUser: {}}, action) {
     switch (action.type) {
-      case CreateUserRequest:
-        return { loading: true };
-      case CreateUserSuccess:
-        return { loading: false, user: action.payload, success: true };
-      case CreateUserFail:
-        return { loading: false, user: action.payload };
+      case CREATE_USER:
+        return { createdUser: action.payload, success: true };
       default:
         return state;
     }

@@ -81,7 +81,8 @@ namespace Rookie.AMO.Identity.DataAccessor
                     UserName = "johnd",
                     CodeStaff = "SD0001",
                     Type = "Admin",
-                    Gender = "Male"
+                    Gender = "Male",
+                    Location = "HN"
                 };
                 var result = userMgr.CreateAsync(user1, "Pass123$").Result;
                 if (!result.Succeeded)

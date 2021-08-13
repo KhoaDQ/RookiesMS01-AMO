@@ -17,8 +17,7 @@ import userManager from "../../utils/userManager";
 const Header = (props) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const oidc = useSelector((state) => state.oidc);
-  const { user } = oidc;
-  const signin = () => userManager.signinRedirect();
+  const {user} = oidc;
   const toggle = () => setDropdownOpen((prevState) => !prevState);
   return (
     <div className="header">
@@ -32,16 +31,16 @@ const Header = (props) => {
           {user != null ? (
             <Col xs="6" className="header-right">
               <Dropdown isOpen={dropdownOpen} toggle={toggle}>
-                <DropdownToggle caret>{user.name}</DropdownToggle>
+                <DropdownToggle caret>{user.profile.userName}</DropdownToggle>
                 <DropdownMenu>
-                  <DropdownItem header>{user.name}</DropdownItem>
-                  <DropdownItem>Logout</DropdownItem>
+                  <DropdownItem header>{user.profile.userName}</DropdownItem>
+                  <DropdownItem onClick={() => userManager.signoutRedirect()}>Logout</DropdownItem>
                 </DropdownMenu>
               </Dropdown>
             </Col>
           ) : (
             <Col xs="6" className="header-right">
-              <Button onClick={this.signin}>Login</Button>
+              <Button onClick={() => userManager.signinRedirect()}>Login</Button>
             </Col>
           )}
         </Row>

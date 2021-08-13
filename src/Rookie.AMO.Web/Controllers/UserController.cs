@@ -13,6 +13,7 @@ namespace Rookie.AMO.Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Policy = "ADMIN_ROLE_POLICY")]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;

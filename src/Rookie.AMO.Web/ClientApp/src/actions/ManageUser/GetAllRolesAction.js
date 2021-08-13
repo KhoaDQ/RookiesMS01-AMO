@@ -1,13 +1,8 @@
 import callApi from "../../apis/callApi";
-import { BASE_URL, Method, RoleEndpoint} from "../../constants/config";
-import { GetAllRolesFail, GetAllRolesRequest, GetAllRolesSuccess } from "../../constants/RoleConstants";
+import { Method } from "../../constants/config";
+import { FETCH_ROLES } from "./ActionType";
 
-export const GetAllRoles = () => async (dispatch) => {
-    try {
-        dispatch({ type: GetAllRolesRequest });
-        const data = await callApi(`${BASE_URL}${RoleEndpoint}`, Method.Get);
-        dispatch({ type: GetAllRolesSuccess, payload: data });
-    } catch (error) {
-        dispatch({ type: GetAllRolesFail, payload: error.message });
-    }
+export const GetAllRolesAction = () => async (dispatch) => {
+    const res = await callApi(`role`, Method.Get);
+    dispatch({ type: FETCH_ROLES, payload: res ? res.data : []});
 };
