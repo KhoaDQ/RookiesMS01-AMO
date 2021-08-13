@@ -37,5 +37,13 @@ table {
 }
 
 input, select, button {
-    font-size: 15px!important;
+    font-size: 12px!important;
+}
+
+.detail-item:hover {
+    cursor: pointer;
+}
+
+select {
+    appearance: none;
 }

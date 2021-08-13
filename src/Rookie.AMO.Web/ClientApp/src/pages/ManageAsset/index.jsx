@@ -8,7 +8,7 @@ import AssetItem from "../../components/Asset/AssetItem";
 import PopupDetailAsset from "../../components/Popup/PopupDetailAsset";
 
 const stateList = [
-  
+
   {name: "Assigned",value: "Assigned"},
   {name: "Available", value: "Available"},
   {name: "Not available", value: "NotAvailable"},
@@ -17,7 +17,6 @@ const stateList = [
 ]
 
 function ManageAsset() {
-
   const [stateFilter,setStateFilter] = useState("")
   const [categoryFilter,setCategoryFilter] = useState("")
   const [searchText,setSearchText] = useState("")
@@ -32,9 +31,9 @@ function ManageAsset() {
   let assetPage = fetchPageAsset(stateFilter,categoryFilter,searchText,pageNumber,optionSort);
 
   checkLoading(setIsLoading,assetPage)
-  
+
   var categories = fetchCategories();
-  
+
   let assets = assetPage.items;
 
   const resetPage = () => {
@@ -69,7 +68,7 @@ function ManageAsset() {
     setAssetDetail(asset)
     setIsModalOpen(true)
   }
-  
+
   const handleModelShow = (isModalOpen) =>{
     setIsModalOpen(isModalOpen)
   }
@@ -102,9 +101,9 @@ function ManageAsset() {
 
   return (
     <div>
-      <AssetList 
+      <AssetList
         isLoading = {isLoading}
-        categories = {categories} 
+        categories = {categories}
         stateList = {stateList}
         totalPages= {assetPage.totalPages}
         totalItems= {assetPage.totalItems}
@@ -115,21 +114,21 @@ function ManageAsset() {
         handleFilterCat = {handleFilterCat}
         handleSearch = {handleSearch}
       >
-      {showAssets(assets)}  
+      {showAssets(assets)}
       </AssetList>
       {detailAsset(assetDetail,isModalOpen)}
     </div>
-    
+
   );
 }
 
 function fetchPageAsset(stateFilter,categoryFilter,searchText,pageNumber,optionSort = {propertyName: "", desc: "false"}) {
   const dispatch = useDispatch()
-  
+
   useEffect(() => {
     async function fetch() {
       let enpoint = 'Asset/find?State='+stateFilter+'&Category='+categoryFilter+'&KeySearch='+ searchText+'&OrderProperty='+optionSort.propertyName+'&Desc='+optionSort.desc+'&Page='+pageNumber+'&Limit=2';
-      
+
       console.log(enpoint)
       const res = await apiCaller(enpoint, 'GET', null);
       dispatch({ type: action.FETCH_ASSETS, payload: res.data });

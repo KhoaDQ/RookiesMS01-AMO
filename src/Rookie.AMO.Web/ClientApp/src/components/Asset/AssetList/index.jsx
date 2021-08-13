@@ -17,16 +17,14 @@ import "../style.css";
 import Pagination from "../../Pagination";
 import Filter from "../../Filter";
 
-
 function AssetList(props){
-
   const initSort = {
     Code: {propertyName: "Code", desc: true},
     Name: {propertyName: "Name", desc: true},
     Category: {propertyName: "Category", desc: true},
     State: {propertyName: "State", desc: true},
   }
-  
+
   let {handleSort, handleSearch, handleFilterState,handleFilterCat} = props
 
   const [searchText,setSearchText] = useState("")
@@ -42,27 +40,27 @@ function AssetList(props){
       optionSort[nameProp].desc = !optionSort[nameProp].desc
       handleSort(e,optionSort[nameProp])
     }
-  } 
+  }
   return(
     <div>
       <h5 className="right-title">Asset List</h5>
       <Row>
         <Col md={3}>
-          <Filter 
-            options = {props.stateList} 
-            displayValue = "name" 
-            placeholder="State" 
+          <Filter
+            options = {props.stateList}
+            displayValue = "name"
+            placeholder="State"
             handleFilter = {handleFilterState}/>
         </Col>
         <Col md={3}>
-          <Filter 
+          <Filter
             options = {props.categories.map((category, index) => {
                 return({name:category.name,id:category.id})
-              })} 
-            displayValue ="name" 
+              })}
+            displayValue ="name"
             placeholder="Category"
             handleFilter = {handleFilterCat}
-          />     
+          />
         </Col>
         <Col md={3}>
           <InputGroup>
@@ -92,7 +90,7 @@ function AssetList(props){
             {optionSort.Name.desc?<AiFillCaretDown/>:<AiFillCaretUp/>}
             </th>
             <th onClick={(e) =>{handleClickSort("Category",e)}}>Category
-            {optionSort.Category.desc?<AiFillCaretDown/>:<AiFillCaretUp/>}  
+            {optionSort.Category.desc?<AiFillCaretDown/>:<AiFillCaretUp/>}
             </th>
             <th onClick={(e) =>{handleClickSort("State",e)}}>State
             {optionSort.State.desc?<AiFillCaretDown/>:<AiFillCaretUp/>}
@@ -109,6 +107,5 @@ function AssetList(props){
 
   );
 }
-  
 
 export default AssetList;

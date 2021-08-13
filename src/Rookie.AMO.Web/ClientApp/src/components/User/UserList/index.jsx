@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { AiOutlineSearch } from "@react-icons/all-files/ai/AiOutlineSearch";
 import { AiFillFilter } from "@react-icons/all-files/ai/AiFillFilter";
 import { IoMdCreate } from "@react-icons/all-files/io/IoMdCreate";
 import { IoIosCloseCircleOutline } from "@react-icons/all-files/io/IoIosCloseCircleOutline";
 import { Link } from "react-router-dom";
+import Pagination from "../../Pagination";
 
 import {
   Col,
@@ -18,6 +19,22 @@ import {
 import { Table } from "reactstrap";
 import "./UserList.css";
 function UserList(props) {
+  const { stateList } = props
+  const { roles } = stateList
+  const [paging, setPaging] = useState({
+    name: '',
+    page: 1,
+    limit: 1,
+  });
+  const handleChange = (e) => {
+    let value = e.target.value;
+    setPaging({ ...paging, name: value })
+  }
+  const type = roles.map((role, index) => {
+    return (
+      <option value={role.name} >{role.name}</option>
+    )
+  })
   return (
     <div>
       <h5 className="right-title">User List</h5>
@@ -28,10 +45,8 @@ function UserList(props) {
               className="custom-select custom-select-lg mb-3"
               className="form-control"
             >
-              <option selected>Type</option>
-              <option value={0}></option>
-              <option value={1}>Staff</option>
-              <option value={2}>Customer</option>
+              <option defaultValue >Select Type</option>
+              {type}
             </select>
 
             <InputGroupText className="right__icon">
@@ -39,13 +54,10 @@ function UserList(props) {
             </InputGroupText>
           </InputGroup>
         </Col>
-        {/* <InputGroupText className="right__icon">
-                <AiFillFilter />
-              </InputGroupText> */}
         <Col md={3}>
           <InputGroup>
-            <Input placeholder="Search" />
-            <InputGroupAddon addonType="append">
+            <Input placeholder="Search Name" value={paging.name} onChange={handleChange} />
+            <InputGroupAddon addonType="append" onClick={() => { props.setPaging(paging) }} >
               <InputGroupText className="right__icon">
                 <AiOutlineSearch />
               </InputGroupText>
@@ -71,27 +83,11 @@ function UserList(props) {
             <th></th>
           </tr>
         </thead>
-        {/* <tbody>{props.children}</tbody> */}
         <tbody>
-          <tr>
-            <td>MO100005</td>
-            <td>Monitor Dell UltraSharp</td>
-            <td>yentth</td>
-            <td>15/03/2019</td>
-            <td>Accepted</td>
-            <td>
-              <span className="icon-nash icon-nash--black">
-                <Link to="/edituser">
-                  <IoMdCreate />
-                </Link>
-              </span>
-              <span className="icon-nash icon-nash--red">
-                <IoIosCloseCircleOutline />
-              </span>
-            </td>
-          </tr>
+          {props.totalItems > 0 ? props.children : (paging.name != "") ? <span>No assets are found!</span> : <span>...Loading</span>}
         </tbody>
       </Table>
+      {props.totalPages > 0 ? <Pagination totalPages={props.totalPages} pageNumber={props.pageNumber} setPageNumber={props.setPageNumber}  /> : null}
     </div>
   );
 }
