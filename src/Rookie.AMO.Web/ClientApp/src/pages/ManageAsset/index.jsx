@@ -6,7 +6,8 @@ import *as actionCategory from '../../actions/ManagerCategory/ActionType'
 import AssetList from "../../components/Asset/AssetList";
 import AssetItem from "../../components/Asset/AssetItem";
 import PopupDetailAsset from "../../components/Popup/PopupDetailAsset";
-
+import PopupDelete from "../../components/Popup/PopupDelete";
+import { set } from "react-hook-form";
 const stateList = [
 
   {name: "Assigned",value: "Assigned"},
@@ -17,6 +18,7 @@ const stateList = [
 ]
 
 function ManageAsset() {
+  //Table assets
   const [stateFilter,setStateFilter] = useState("")
   const [categoryFilter,setCategoryFilter] = useState("")
   const [searchText,setSearchText] = useState("")
@@ -24,29 +26,41 @@ function ManageAsset() {
   const [optionSort,setOptionSort] = useState({propertyName: "", desc: 'false'})
 
   const [isLoading,setIsLoading] = useState(true)
+  const [isReLoad,setIsReLoad] = useState(1)
 
+  //Popup detail asset
   const [assetDetail,setAssetDetail] = useState()
-  const [isModalOpen,setIsModalOpen] = useState(true)
+  const [isDetailOpen,setIsDetailOpen] = useState(true)
 
-  let assetPage = fetchPageAsset(stateFilter,categoryFilter,searchText,pageNumber,optionSort);
+  //Popup delete asset
+  const [idAssetDelete,setIdAssetDelete] = useState("");
+  const [isDeleteOpen,setIsDeleteOpen] = useState(false)
+  const [isDelete,setIsDelete] = useState(false)
 
+  //Table assets
+  let assetPage = fetchPageAsset(stateFilter,categoryFilter,searchText,pageNumber,optionSort,isReLoad,setIsReLoad);
   checkLoading(setIsLoading,assetPage)
-
+  
+  let assets = assetPage.items;
+  
   var categories = fetchCategories();
 
-  let assets = assetPage.items;
-
+  deleteAsset(idAssetDelete,isDelete,setIsReLoad)
+  
   const resetPage = () => {
       setPageNumber(1)
+      setIsReLoad(1)
   }
 
   const handleSort = (e,option) =>{
       setOptionSort({propertyName:option.propertyName, desc: option.desc.toString()})
+      setIsReLoad(1)
   }
 
   const handleSearch = (text,e) =>{
       resetPage()
       setSearchText(text)
+      setIsReLoad(1)
   }
   const handleFilterState = (option,e) => {
     if(option!=null)
@@ -54,6 +68,7 @@ function ManageAsset() {
     else
       setStateFilter("")
     resetPage()
+    setIsReLoad(1)
   }
 
   const handleFilterCat = (option,e) => {
@@ -62,23 +77,49 @@ function ManageAsset() {
     else
       setCategoryFilter("")
     resetPage()
+    setIsReLoad(1)
   }
 
+  //Popup detail asset
   const handleDetail = (asset,e) =>{
     setAssetDetail(asset)
-    setIsModalOpen(true)
+    setIsDetailOpen(true)
   }
 
-  const handleModelShow = (isModalOpen) =>{
-    setIsModalOpen(isModalOpen)
+  const handleModelShow = (isDetailOpen) =>{
+    setIsDetailOpen(isDetailOpen)
   }
-  function detailAsset(assetDetail,isModalOpen){
-    if(assetDetail)
-      return (
-        <PopupDetailAsset asset = {assetDetail} isModalOpen={isModalOpen} handleModelShow = {handleModelShow}/>
+
+  //Popup delete asset
+  const handleDeleteOpen = (id,e) => {
+    console.log("delete open")
+    setIdAssetDelete(id)
+    handleDeleteShow(true)
+  };
+
+  const handleDeleteShow = (isDeleteOpen)=>{
+    setIsDeleteOpen(isDeleteOpen)
+  }
+
+  const handleDelete = (e) =>{
+    setIsDelete(true)
+    handleDeleteShow(false)
+  };
+
+  function deletePopup(handleDelete,handleDeleteShow){
+    if(1)
+      return(
+        <PopupDelete isModalOpen={isDeleteOpen} handleDelete ={handleDelete} handleModelShow = {handleDeleteShow}></PopupDelete>
       )
   }
 
+  function detailAsset(assetDetail,isDetailOpen){
+    if(assetDetail)
+      return (
+        <PopupDetailAsset asset = {assetDetail} isModalOpen={isDetailOpen} handleModelShow = {handleModelShow}/>
+      )
+  }
+  
   function showAssets (assets){
     let result = null
     if(assets != null){
@@ -91,6 +132,7 @@ function ManageAsset() {
                   index={index}
                   stateList = {stateList}
                   handleDetail = {handleDetail}
+                  handleDeleteOpen = {handleDeleteOpen}
               />
           )
         })
@@ -109,6 +151,7 @@ function ManageAsset() {
         totalItems= {assetPage.totalItems}
         pageNumber = {pageNumber}
         setPageNumber = {setPageNumber}
+        setIsReLoad = {setIsReLoad}
         handleSort = {handleSort}
         handleFilterState = {handleFilterState}
         handleFilterCat = {handleFilterCat}
@@ -116,13 +159,29 @@ function ManageAsset() {
       >
       {showAssets(assets)}
       </AssetList>
-      {detailAsset(assetDetail,isModalOpen)}
+      {detailAsset(assetDetail,isDetailOpen)}
+      {deletePopup(handleDelete,handleDeleteShow)}
     </div>
 
   );
 }
+function deleteAsset(id,isDelete,setReLoad){
+  const dispatch = useDispatch()
+  
+  useEffect(()=>{
+    async function deleteAsset(id) {
+      const res = await apiCaller('Asset/'+id, 'Delete', null);
+      dispatch({ type: action.DELETE_ASSET, payload: id });
+      setReLoad(1)
+    }
+    if(id!=""){
+      deleteAsset(id)
+    }
+  },[isDelete])
 
-function fetchPageAsset(stateFilter,categoryFilter,searchText,pageNumber,optionSort = {propertyName: "", desc: "false"}) {
+  
+};
+function fetchPageAsset(stateFilter,categoryFilter,searchText,pageNumber,optionSort = {propertyName: "", desc: "false"},isReLoad,setIsReLoad) {
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -133,8 +192,11 @@ function fetchPageAsset(stateFilter,categoryFilter,searchText,pageNumber,optionS
       const res = await apiCaller(enpoint, 'GET', null);
       dispatch({ type: action.FETCH_ASSETS, payload: res.data });
     }
-  fetch()
-  }, [stateFilter,categoryFilter,searchText,pageNumber,optionSort.propertyName,optionSort.desc])
+    if(isReLoad){
+      fetch()
+      setIsReLoad(0)
+    }
+  }, [isReLoad])
 
   const assetPage = useSelector(state => state.AssetReducer);
 
@@ -143,8 +205,9 @@ function fetchPageAsset(stateFilter,categoryFilter,searchText,pageNumber,optionS
 
 function checkLoading(setIsLoading,page){
   useEffect(()=>{
-    if('items' in page)
-      setIsLoading(false)
+    console.log(page)
+      if('items' in page)
+        setIsLoading(false)
   },[page])
 }
 
