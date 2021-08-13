@@ -1,4 +1,5 @@
 import React from "react";
+import { Fragment } from "react";
 import { Table } from "reactstrap";
 import {
   Col,
@@ -12,9 +13,9 @@ import {
 } from "reactstrap";
 function Report() {
   return (
-    <div>
+    <Fragment>
       <h5 className="right-title">Report</h5>
-      <Row from className='text-right'>
+      <Row from className='text-right right-bar'>
         <Col md={12}>
           <Button color="danger">Export</Button>
         </Col>
@@ -43,7 +44,7 @@ function Report() {
           </tr>
         </tbody>
       </Table>
-    </div>
+    </Fragment>
   );
 }
 

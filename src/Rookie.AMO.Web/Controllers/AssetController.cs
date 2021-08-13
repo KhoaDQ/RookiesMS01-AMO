@@ -34,11 +34,11 @@ namespace Rookie.AMO.Web.Controllers
             return Created(Endpoints.Asset, asset);
         }
 
-        [HttpPut]
-        public async Task<ActionResult> UpdateAsync([FromBody] AssetDto assetDto)
+        [HttpPut("{id}")]
+        public async Task<ActionResult> UpdateAsync(Guid id, [FromBody] AssetUpdateRequest request)
         {
-            Ensure.Any.IsNotNull(assetDto, nameof(assetDto));
-            await _assetService.UpdateAsync(assetDto);
+            Ensure.Any.IsNotNull(request, nameof(request));
+            await _assetService.UpdateAsync(id,request);
             return NoContent();
         }
 
@@ -61,8 +61,9 @@ namespace Rookie.AMO.Web.Controllers
 
 
         [HttpGet("find")]
-        public async Task<PagedResponseModel<AssetDto>>
-            FindAsync(string key, int page = 1, int limit = 10)
-            => await _assetService.PagedQueryAsync(key, page, limit);
+        public async Task<PagedResponseModel<AssetDto>> FindAsync([FromQuery] FilterAssetsModel filterAssetsModel)
+        {
+            return await _assetService.PagedQueryAsync(filterAssetsModel);
+        }
     }
 }

@@ -12,7 +12,6 @@ namespace Rookie.AMO.Web.Security
                                                        AdminRoleRequirement requirement)
         {
             var claims = context.User.Claims.ToList();
-            
             var adminRole = claims.FirstOrDefault(c => c.Type.Contains("role") && c.Issuer == "https://localhost:5001" &&
                                                      c.Value.Equals("Admin", System.StringComparison.OrdinalIgnoreCase))?.Value;
 

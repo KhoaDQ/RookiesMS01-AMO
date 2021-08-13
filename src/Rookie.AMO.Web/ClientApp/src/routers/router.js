@@ -11,11 +11,17 @@ import CreateAssets from "../pages/ManageAsset/CreateAssets";
 import EditAssets from "../pages/ManageAsset/EditAssets";
 import CreateAssignment from "../pages/ManageAssignment/CreateAssignment";
 import EditAssignment from "../pages/ManageAssignment/EditAssignment";
+import Callback from "../components/Callback";
 const routes = [
   {
     path: "/",
     exact: true,
     main: () => <Home />,
+  },
+  {
+    path: "/callback",
+    exact: false,
+    main: () => <Callback />,
   },
   {
     path: "/manage-user",
@@ -44,14 +50,14 @@ const routes = [
     main: () => <Request />,
   },
   {
-    path: "/createuser",
+    path: "/create-user",
     exact: false,
     main: () => <CreateUser />,
   },
   {
-    path: "/edituser",
+    path: "/edituser/:id",
     exact: false,
-    main: () => <EditUser />,
+    main: ({ history, match }) => <EditUser history={history} match={match} />,
   },
   {
     path: "/createassets",
@@ -59,9 +65,11 @@ const routes = [
     main: () => <CreateAssets />,
   },
   {
-    path: "/editassets",
+    path: "/edit-assets/:id",
     exact: false,
-    main: () => <EditAssets />,
+    main: ({ history, match }) => (
+      <EditAssets history={history} match={match} />
+    ),
   },
   {
     path: "/createassignment",

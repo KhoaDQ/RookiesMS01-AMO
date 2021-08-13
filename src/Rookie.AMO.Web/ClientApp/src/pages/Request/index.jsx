@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { Table } from "reactstrap";
 import { BsCheck } from "@react-icons/all-files/bs/BsCheck";
 import { IoCloseSharp } from "@react-icons/all-files/io5/IoCloseSharp";
@@ -18,9 +18,9 @@ import {
 } from "reactstrap";
 function Request() {
   return (
-    <div>
+    <Fragment>
       <h5 className="right-title">Request List</h5>
-      <Row from>
+      <Row className="right-bar">
         <Col md={3}>
           <InputGroup>
             <select
@@ -56,7 +56,7 @@ function Request() {
             </InputGroupAddon>
           </InputGroup>
         </Col>
-        <Col md={4} className="margin-left">
+        <Col md={4}>
           <InputGroup>
             <Input placeholder="Search" />
             <InputGroupAddon addonType="append">
@@ -101,7 +101,7 @@ function Request() {
           </tr>
         </tbody>
       </Table>
-    </div>
+    </Fragment>
   );
 }
 

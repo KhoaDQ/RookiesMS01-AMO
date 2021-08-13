@@ -1,0 +1,23 @@
+.table_border_spacing {
+    table-layout: fixed;
+    border-spacing: 10px 0px;
+    border-collapse: separate;
+}
+.table_border_spacing td, .table_border_spacing th{
+    border-top: none;
+}
+th:hover{
+    background-color: #dee2e6;
+}
+.header_tools{
+    width: 13%;
+}
+.header_name{
+    width: 40%;
+}
+.rowNotify{
+    border-bottom: none;
+}
+.table_border_spacing tr:hover td:not(:last-child){
+    background-color: #dee2e6;
+}

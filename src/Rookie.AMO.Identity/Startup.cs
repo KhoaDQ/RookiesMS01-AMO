@@ -1,3 +1,4 @@
+using FluentValidation.AspNetCore;
 using IdentityServer4.Configuration;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -8,12 +9,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Rookie.AMO.Identity.Data;
-using Rookie.AMO.Identity.IdentityServer;
-using Rookie.AMO.Identity.Models;
-using Rookie.AMO.Identity.Security.Handler;
-using Rookie.AMO.Identity.Security.Requirement;
-using static IdentityServer4.IdentityServerConstants;
+using Rookie.AMO.Identity.Business;
+using Rookie.AMO.Identity.Filters;
+using System.Reflection;
 
 namespace Rookie.AMO.Identity
 {
@@ -39,39 +37,17 @@ namespace Rookie.AMO.Identity
                     });
             });
 
-            services.AddControllersWithViews();
-
-            services.AddDbContext<AppIdentityDbContext>(options =>
+            services.AddControllersWithViews(x =>
             {
-                options.UseSqlServer(Configuration.GetConnectionString("AppIdentityDbContext"));
+                x.Filters.Add(typeof(ValidatorActionFilter));
+            })
+            .AddFluentValidation(fv =>
+            {
+                fv.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly());
             });
 
-            services.AddIdentity<User, IdentityRole>()
-                .AddEntityFrameworkStores<AppIdentityDbContext>()
-                .AddDefaultTokenProviders();
-
-            services.AddIdentityServer(options =>
-            {
-                options.Events.RaiseErrorEvents = true;
-                options.Events.RaiseInformationEvents = true;
-                options.Events.RaiseFailureEvents = true;
-                options.Events.RaiseSuccessEvents = true;
-            })
-                .AddProfileService<CustomProfileService>()
-                .AddDeveloperSigningCredential()
-                .AddConfigurationStore(options =>
-                {
-                    options.ConfigureDbContext =
-                        builder => builder.UseSqlServer(
-                            Configuration.GetConnectionString("AppConfigurationDbContext"));
-                })
-                .AddOperationalStore(options =>
-                {
-                    options.ConfigureDbContext =
-                        builder => builder.UseSqlServer(
-                            Configuration.GetConnectionString("AppOperationDbContext"));
-                })
-                .AddAspNetIdentity<User>();
+            services.AddSwaggerGen();
+            services.AddBusinessLayer(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -81,13 +57,20 @@ namespace Rookie.AMO.Identity
             {
                 app.UseDeveloperExceptionPage();
             }
-            
+
+            app.UseSwagger();
+
             app.UseCors("AllowOrigins");
             
             app.UseIdentityServer();
             
             app.UseStaticFiles();
-            
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
+
             app.UseRouting();
             
             app.UseAuthentication();

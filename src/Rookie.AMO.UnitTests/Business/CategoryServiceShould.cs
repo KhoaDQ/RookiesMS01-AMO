@@ -6,6 +6,7 @@ using Rookie.AMO.Business;
 using Rookie.AMO.Business.Interfaces;
 using Rookie.AMO.Business.Services;
 using Rookie.AMO.Contracts.Dtos;
+using Rookie.AMO.Contracts.Dtos.Category;
 using Rookie.AMO.DataAccessor.Entities;
 using System;
 using System.Collections.Generic;
@@ -88,10 +89,8 @@ namespace Rookie.AMO.UnitTests.Business
                 Name = "name"
             };
 
-            var categoryDto = new CategoryDto()
+            var categoryDto = new CategoryRequest()
             {
-                Desc = "code",
-                Id = Guid.NewGuid(),
                 Name = "name"
             };
             _categoryRepository.Setup(x => x

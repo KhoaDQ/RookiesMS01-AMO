@@ -1,28 +1,49 @@
-h5.right-title{
-    color:#CF2338;
+h5.right-title {
+    color: #CF2338;
     font-weight: bold;
 }
-.icon-nash{
+
+.icon-nash {
     font-size: 20px;
     cursor: pointer;
     margin-right: 1rem;
 }
-.icon-nash--red{
+
+.icon-nash--red {
     color: red!important;
 }
-.icon-nash--blue{
+
+.icon-nash--blue {
     color: blue!important;
 }
-.icon-nash--black{
+
+.icon-nash--black {
     color: black!important;
 }
 
-.icon-nash--disabled{
+.icon-nash--disabled {
     cursor: not-allowed;
     color: rgb(194, 194, 194)!important;
 }
 
 span.right__icon.input-group-text {
-    padding: 10px;
+    padding: 7px;
     cursor: pointer;
+}
+
+table {
+    font-size: 15px;
+    margin-top: 1rem;
+}
+
+input, select, button {
+    font-size: 12px!important;
+}
+
+.detail-item:hover {
+    cursor: pointer;
+}
+
+select {
+    appearance: none;
 }

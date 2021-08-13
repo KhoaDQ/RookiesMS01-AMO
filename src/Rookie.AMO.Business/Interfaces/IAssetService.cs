@@ -13,7 +13,7 @@ namespace Rookie.AMO.Business.Interfaces
     {
         Task<IEnumerable<AssetDto>> GetAllAsync();
 
-        Task<PagedResponseModel<AssetDto>> PagedQueryAsync(string key, int page, int limit);
+        Task<PagedResponseModel<AssetDto>> PagedQueryAsync(FilterAssetsModel filter);
 
         Task<AssetDto> GetByIdAsync(Guid id);
 
@@ -22,6 +22,6 @@ namespace Rookie.AMO.Business.Interfaces
 
         Task DeleteAsync(Guid id);
 
-        Task UpdateAsync(AssetDto categoryDto);
+        Task<AssetDto> UpdateAsync(Guid id,AssetUpdateRequest request);
     }
 }

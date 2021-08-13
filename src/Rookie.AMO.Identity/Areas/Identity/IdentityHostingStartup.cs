@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Rookie.AMO.Identity.Data;
+using Rookie.AMO.Identity.DataAccessor.Data;
 
 [assembly: HostingStartup(typeof(Rookie.AMO.Identity.Areas.Identity.IdentityHostingStartup))]
 namespace Rookie.AMO.Identity.Areas.Identity

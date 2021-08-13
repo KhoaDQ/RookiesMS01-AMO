@@ -1,4 +1,5 @@
-import { createUserManager } from 'redux-oidc';
+import { createUserManager, loadingUser, loadUser } from 'redux-oidc';
+import store from '../store';
 
 const localhost = 'https://localhost:5011/';
 const identity = 'https://localhost:5001/';
@@ -19,5 +20,6 @@ const userManagerConfig = {
 };
 
 const userManager = createUserManager(userManagerConfig);
+loadUser(store, userManager);
 
 export default userManager;

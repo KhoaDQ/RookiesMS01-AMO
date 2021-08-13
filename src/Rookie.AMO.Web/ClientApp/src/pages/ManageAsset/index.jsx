@@ -1,111 +1,230 @@
-import React from "react";
-import { Table } from "reactstrap";
-import { IoMdCreate } from "@react-icons/all-files/io/IoMdCreate";
-import { IoIosCloseCircleOutline } from "@react-icons/all-files/io/IoIosCloseCircleOutline";
-import { AiOutlineSearch } from "@react-icons/all-files/ai/AiOutlineSearch";
-import { AiFillFilter } from "@react-icons/all-files/ai/AiFillFilter";
-import { Link } from "react-router-dom";
-import {
-  Col,
-  Row,
-  Button,
-  InputGroupText,
-  InputGroupAddon,
-  Input,
-  InputGroup,
-} from "reactstrap";
+import React, { useEffect,useState } from "react";
+import { useDispatch, useSelector } from 'react-redux';
+import apiCaller from '../../apis/callApi'
+import *as action from '../../actions/ManagerAsset/ActionType'
+import *as actionCategory from '../../actions/ManagerCategory/ActionType'
+import AssetList from "../../components/Asset/AssetList";
+import AssetItem from "../../components/Asset/AssetItem";
+import PopupDetailAsset from "../../components/Popup/PopupDetailAsset";
+import PopupDelete from "../../components/Popup/PopupDelete";
+import { set } from "react-hook-form";
+const stateList = [
+
+  {name: "Assigned",value: "Assigned"},
+  {name: "Available", value: "Available"},
+  {name: "Not available", value: "NotAvailable"},
+  {name: "Waiting for recycling",value:"Waiting"},
+  {name: "Recycled",value:"Recycled"}
+]
+
 function ManageAsset() {
+  //Table assets
+  const [stateFilter,setStateFilter] = useState("")
+  const [categoryFilter,setCategoryFilter] = useState("")
+  const [searchText,setSearchText] = useState("")
+  const [pageNumber,setPageNumber] = useState(1)
+  const [optionSort,setOptionSort] = useState({propertyName: "", desc: 'false'})
+
+  const [isLoading,setIsLoading] = useState(true)
+  const [isReLoad,setIsReLoad] = useState(1)
+
+  //Popup detail asset
+  const [assetDetail,setAssetDetail] = useState()
+  const [isDetailOpen,setIsDetailOpen] = useState(true)
+
+  //Popup delete asset
+  const [idAssetDelete,setIdAssetDelete] = useState("");
+  const [isDeleteOpen,setIsDeleteOpen] = useState(false)
+  const [isDelete,setIsDelete] = useState(false)
+
+  //Table assets
+  let assetPage = fetchPageAsset(stateFilter,categoryFilter,searchText,pageNumber,optionSort,isReLoad,setIsReLoad);
+  checkLoading(setIsLoading,assetPage)
+  
+  let assets = assetPage.items;
+  
+  var categories = fetchCategories();
+
+  deleteAsset(idAssetDelete,isDelete,setIsReLoad)
+  
+  const resetPage = () => {
+      setPageNumber(1)
+      setIsReLoad(1)
+  }
+
+  const handleSort = (e,option) =>{
+      setOptionSort({propertyName:option.propertyName, desc: option.desc.toString()})
+      setIsReLoad(1)
+  }
+
+  const handleSearch = (text,e) =>{
+      resetPage()
+      setSearchText(text)
+      setIsReLoad(1)
+  }
+  const handleFilterState = (option,e) => {
+    if(option!=null)
+      setStateFilter(option.map((a,index)=>a.value).join(','))
+    else
+      setStateFilter("")
+    resetPage()
+    setIsReLoad(1)
+  }
+
+  const handleFilterCat = (option,e) => {
+    if(option!=null)
+      setCategoryFilter(option.map((a,index)=>a.id).join(','))
+    else
+      setCategoryFilter("")
+    resetPage()
+    setIsReLoad(1)
+  }
+
+  //Popup detail asset
+  const handleDetail = (asset,e) =>{
+    setAssetDetail(asset)
+    setIsDetailOpen(true)
+  }
+
+  const handleModelShow = (isDetailOpen) =>{
+    setIsDetailOpen(isDetailOpen)
+  }
+
+  //Popup delete asset
+  const handleDeleteOpen = (id,e) => {
+    console.log("delete open")
+    setIdAssetDelete(id)
+    handleDeleteShow(true)
+  };
+
+  const handleDeleteShow = (isDeleteOpen)=>{
+    setIsDeleteOpen(isDeleteOpen)
+  }
+
+  const handleDelete = (e) =>{
+    setIsDelete(true)
+    handleDeleteShow(false)
+  };
+
+  function deletePopup(handleDelete,handleDeleteShow){
+    if(1)
+      return(
+        <PopupDelete isModalOpen={isDeleteOpen} handleDelete ={handleDelete} handleModelShow = {handleDeleteShow}></PopupDelete>
+      )
+  }
+
+  function detailAsset(assetDetail,isDetailOpen){
+    if(assetDetail)
+      return (
+        <PopupDetailAsset asset = {assetDetail} isModalOpen={isDetailOpen} handleModelShow = {handleModelShow}/>
+      )
+  }
+  
+  function showAssets (assets){
+    let result = null
+    if(assets != null){
+      if(assets.length > 0){
+        result = assets.map((asset, index) => {
+          return (
+              <AssetItem
+                  key={index}
+                  asset={asset}
+                  index={index}
+                  stateList = {stateList}
+                  handleDetail = {handleDetail}
+                  handleDeleteOpen = {handleDeleteOpen}
+              />
+          )
+        })
+      }
+    }
+    return result
+  }
+
   return (
     <div>
-      <h5 className="right-title">Asset List</h5>
-      <Row from>
-        <Col md={3}>
-          <InputGroup>
-            <select
-              className="custom-select custom-select-lg mb-3"
-              className="form-control"
-            >
-              <option selected>State</option>
-              <option value={0}></option>
-              <option value={1}>Available</option>
-              <option value={2}>Not Available</option>
-            </select>
-
-            <InputGroupAddon addonType="append">
-              <InputGroupText className="right__icon">
-                <AiFillFilter />
-              </InputGroupText>
-            </InputGroupAddon>
-          </InputGroup>
-        </Col>
-        <Col md={3}>
-          <InputGroup>
-            <select
-              className="custom-select custom-select-lg mb-3"
-              className="form-control"
-            >
-              <option selected>Category</option>
-              <option value={0}></option>
-              <option value={1}>Laptop</option>
-              <option value={2}>Monitor</option>
-            </select>
-
-            <InputGroupAddon addonType="append">
-              <InputGroupText className="right__icon">
-                <AiFillFilter />
-              </InputGroupText>
-            </InputGroupAddon>
-          </InputGroup>
-        </Col>
-        <Col md={3}>
-          <InputGroup>
-            <Input placeholder="Search" />
-            <InputGroupAddon addonType="append">
-              <InputGroupText className="right__icon">
-                <AiOutlineSearch />
-              </InputGroupText>
-            </InputGroupAddon>
-          </InputGroup>
-        </Col>
-        <Col md={3} className="text-right">
-          <Button color="danger">
-            <Link to="/createassets" className="UserIcon">
-              Create New Assets
-            </Link>
-          </Button>
-        </Col>
-      </Row>
-      <Table>
-        <thead>
-          <tr>
-            <th>Asset Code</th>
-            <th>Asset Name</th>
-            <th>Category</th>
-            <th>State</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>MO100005</td>
-            <td>Monitor Dell UltraSharp</td>
-            <td>Monitor</td>
-            <td>Available</td>
-            <td>
-              <span className="icon-nash icon-nash--black">
-                <Link to="/editassets">
-                  <IoMdCreate />
-                </Link>
-              </span>
-              <span className="icon-nash icon-nash--red">
-                <IoIosCloseCircleOutline />
-              </span>
-            </td>
-          </tr>
-        </tbody>
-      </Table>
+      <AssetList
+        isLoading = {isLoading}
+        categories = {categories}
+        stateList = {stateList}
+        totalPages= {assetPage.totalPages}
+        totalItems= {assetPage.totalItems}
+        pageNumber = {pageNumber}
+        setPageNumber = {setPageNumber}
+        setIsReLoad = {setIsReLoad}
+        handleSort = {handleSort}
+        handleFilterState = {handleFilterState}
+        handleFilterCat = {handleFilterCat}
+        handleSearch = {handleSearch}
+      >
+      {showAssets(assets)}
+      </AssetList>
+      {detailAsset(assetDetail,isDetailOpen)}
+      {deletePopup(handleDelete,handleDeleteShow)}
     </div>
+
   );
+}
+function deleteAsset(id,isDelete,setReLoad){
+  const dispatch = useDispatch()
+  
+  useEffect(()=>{
+    async function deleteAsset(id) {
+      const res = await apiCaller('Asset/'+id, 'Delete', null);
+      dispatch({ type: action.DELETE_ASSET, payload: id });
+      setReLoad(1)
+    }
+    if(id!=""){
+      deleteAsset(id)
+    }
+  },[isDelete])
+
+  
+};
+function fetchPageAsset(stateFilter,categoryFilter,searchText,pageNumber,optionSort = {propertyName: "", desc: "false"},isReLoad,setIsReLoad) {
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    async function fetch() {
+      let enpoint = 'Asset/find?State='+stateFilter+'&Category='+categoryFilter+'&KeySearch='+ searchText+'&OrderProperty='+optionSort.propertyName+'&Desc='+optionSort.desc+'&Page='+pageNumber+'&Limit=2';
+
+      console.log(enpoint)
+      const res = await apiCaller(enpoint, 'GET', null);
+      dispatch({ type: action.FETCH_ASSETS, payload: res.data });
+    }
+    if(isReLoad){
+      fetch()
+      setIsReLoad(0)
+    }
+  }, [isReLoad])
+
+  const assetPage = useSelector(state => state.AssetReducer);
+
+  return assetPage
+}
+
+function checkLoading(setIsLoading,page){
+  useEffect(()=>{
+    console.log(page)
+      if('items' in page)
+        setIsLoading(false)
+  },[page])
+}
+
+function fetchCategories () {
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    async function fetch() {
+      const res = await apiCaller('Category', 'GET', null);
+      dispatch({ type: actionCategory.FETCH_CATEGORY, payload: res.data });
+    }
+    fetch()
+  }, [])
+
+  const categories = useSelector(state => state.CategoryReducer);
+
+  return categories
 }
 
 export default ManageAsset;

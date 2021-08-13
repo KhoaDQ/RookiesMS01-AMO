@@ -15,8 +15,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Rookie.AMO.Identity.Data;
-using Rookie.AMO.Identity.Models;
+using Rookie.AMO.Identity.DataAccessor.Data;
+using Rookie.AMO.Identity.DataAccessor.Entities;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -180,7 +180,7 @@ namespace IdentityServerHost.Quickstart.UI
             return View(vm);
         }
 
-        
+
         /// <summary>
         /// Show logout page
         /// </summary>
@@ -213,7 +213,7 @@ namespace IdentityServerHost.Quickstart.UI
             if (User?.Identity.IsAuthenticated == true)
             {
                 // delete local authentication cookie
-                await HttpContext.SignOutAsync(IdentityServerConstants.DefaultCookieAuthenticationScheme);
+                await _signInManager.SignOutAsync();
 
                 // raise the logout event
                 await _events.RaiseAsync(new UserLogoutSuccessEvent(User.GetSubjectId(), User.GetDisplayName()));
