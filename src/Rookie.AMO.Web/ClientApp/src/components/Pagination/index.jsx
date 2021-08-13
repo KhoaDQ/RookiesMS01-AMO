@@ -3,10 +3,11 @@ import ReactPaginate from 'react-paginate';
 import "./style.css";
 
 export default function Pagination(props) {
-  let { totalPages, pageNumber, setPageNumber } = props
+  let { totalPages, pageNumber, setPageNumber, setIsReLoad} = props
 
   function changePage(event) {
     setPageNumber(event.selected + 1)
+    setIsReLoad(1)
   }
 
   return (
