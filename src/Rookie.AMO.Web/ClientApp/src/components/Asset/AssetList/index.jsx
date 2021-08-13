@@ -86,7 +86,7 @@ function AssetList(props) {
           </Button>
         </Col>
       </Row>
-      <Table className="table_border_spacing">
+      <Table hover="true" className="table_border_spacing">
         <thead>
           <tr>
             <th

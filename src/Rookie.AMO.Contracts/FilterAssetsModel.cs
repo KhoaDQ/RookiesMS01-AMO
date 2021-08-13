@@ -8,6 +8,8 @@ namespace Rookie.AMO.Contracts
 {
     public class FilterAssetsModel
     {
+        public string State { get; set; } = "";
+        public string Category { get; set; } = "";
         public string KeySearch { get; set; } = "";
         public string OrderProperty { get; set; } = "";
         public bool Desc { get; set; } = true;

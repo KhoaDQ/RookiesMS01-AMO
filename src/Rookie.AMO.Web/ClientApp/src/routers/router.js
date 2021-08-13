@@ -65,9 +65,9 @@ const routes = [
     main: () => <CreateAssets />,
   },
   {
-    path: "/editassets",
+    path: "/edit-assets/:id",
     exact: false,
-    main: () => <EditAssets />,
+    main: ({history ,match}) => <EditAssets history={history} match={match}/>,
   },
   {
     path: "/createassignment",

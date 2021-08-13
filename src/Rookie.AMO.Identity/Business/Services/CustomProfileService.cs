@@ -26,7 +26,7 @@ namespace Rookie.AMO.Identity.Business.Services
         }
         public async Task GetProfileDataAsync(ProfileDataRequestContext context)
         {
-            var sub = context.Subject.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var sub = context.Subject.FindFirst(JwtClaimTypes.Subject)?.Value;
             if (sub == null)
             {
                 throw new Exception("No sub claim present");
@@ -39,27 +39,26 @@ namespace Rookie.AMO.Identity.Business.Services
             }
             else
             {
-                var claims = new List<Claim>
+                var userClaims = await _userManager.GetClaimsAsync(user);
+                var customClaims = new List<Claim>
                 {
-                    new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString(CultureInfo.InvariantCulture)),
-                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString(CultureInfo.InvariantCulture)),
-                    new Claim(JwtClaimTypes.Name, user.Email),
-                    new Claim(JwtClaimTypes.Email, user.Email)
+                    new Claim(JwtClaimTypes.Subject, user.Id.ToString(CultureInfo.InvariantCulture)),
+                    new Claim("userName", user.UserName),
                 };
 
                 var userRoles = await _userManager.GetRolesAsync(user);
                 foreach (var userRole in userRoles)
                 {
-                    claims.Add(new Claim(JwtClaimTypes.Role, userRole));
+                    customClaims.Add(new Claim(JwtClaimTypes.Role, userRole));
                 }
-
-                context.IssuedClaims.AddRange(claims);
+                context.IssuedClaims.AddRange(userClaims);
+                context.IssuedClaims.AddRange(customClaims);
             }
         }
 
         public async Task IsActiveAsync(IsActiveContext context)
         {
-            var sub = context.Subject.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var sub = context.Subject.FindFirst(IdentityModel.JwtClaimTypes.Subject)?.Value;
             if (sub == null)
             {
                 throw new Exception("No subject Id claim present");

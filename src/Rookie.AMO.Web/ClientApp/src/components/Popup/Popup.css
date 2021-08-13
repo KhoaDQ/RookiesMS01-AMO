@@ -1,24 +1,28 @@
 /* PopupDetail */
+
 .popupdetail .auth-form {
   width: auto;
   min-width: 400px;
 }
 
 /* PopupInfor */
+
 .popup .close {
   top: 20px;
   right: 30px;
   transition: all 200ms;
-  font-size: 24px;
+  font-size: 24px!important;
   font-weight: bold;
   text-decoration: none;
   color: #cf2338;
 }
+
 .popup .close:hover {
   color: rgb(180, 31, 31);
 }
 
 /* Common */
+
 .modal {
   position: fixed;
   top: 0;
@@ -61,7 +65,7 @@
 }
 
 .auth-form__header {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: bold;
   background-color: rgb(239, 241, 245);
   color: rgb(207, 35, 56);
@@ -84,7 +88,7 @@
 
 .auth-form__heading {
   margin: 0;
-  font-size: 16px;
+  font-size: 13px;
   font-weight: 400;
   text-align: justify;
 }
@@ -121,4 +125,6 @@
 .btn-cancel:hover {
   background-color: #d4d4d4;
   cursor: pointer;
+}
+.popupdetail_asset{
 }
