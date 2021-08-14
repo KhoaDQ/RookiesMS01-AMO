@@ -214,6 +214,7 @@ namespace IdentityServerHost.Quickstart.UI
             {
                 // delete local authentication cookie
                 await _signInManager.SignOutAsync();
+                await HttpContext.SignOutAsync();
 
                 // raise the logout event
                 await _events.RaiseAsync(new UserLogoutSuccessEvent(User.GetSubjectId(), User.GetDisplayName()));

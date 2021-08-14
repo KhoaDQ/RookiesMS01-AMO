@@ -11,6 +11,6 @@ namespace Rookie.AMO.Web.DataProviders
     public interface IRoleService
     {
         [Get(Endpoints.Role)]
-        Task<IEnumerable<RoleDto>> GetAllRolesAsync();
+        Task<IEnumerable<RoleDto>> GetAllRolesAsync([Header("Authorization")] string auth);
     }
 }

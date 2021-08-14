@@ -1,5 +1,6 @@
 using FluentValidation.AspNetCore;
 using IdentityServer4.Configuration;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -11,6 +12,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Rookie.AMO.Identity.Business;
 using Rookie.AMO.Identity.Filters;
+using Rookie.AMO.Identity.Security.Handler;
+using Rookie.AMO.Identity.Security.Requirement;
 using System.Reflection;
 
 namespace Rookie.AMO.Identity
@@ -44,6 +47,32 @@ namespace Rookie.AMO.Identity
             .AddFluentValidation(fv =>
             {
                 fv.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+            });
+
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+                 {
+                     options.Authority = Configuration["IdentityServerHost"];
+                     options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+                     {
+                         NameClaimType = IdentityModel.JwtClaimTypes.Name,
+                         RoleClaimType = IdentityModel.JwtClaimTypes.Role,
+                         ValidateAudience = false
+                     };
+                 });
+
+            services.AddSingleton<IAuthorizationHandler, IdentityScopeHandler>();
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("IDENTITY_SCOPE_POLICY", policy =>
+                {
+                    policy.Requirements.Add(new IdentityScopeRequirement());
+                });
             });
 
             services.AddSwaggerGen();

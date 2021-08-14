@@ -23,7 +23,7 @@ namespace Rookie.AMO.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<RoleDto>> GetAllRolesAsync() 
-            => await _roleService.GetAllRolesAsync();
+        public async Task<IEnumerable<RoleDto>> GetAllRolesAsync()
+            => await _roleService.GetAllRolesAsync(HttpContext.Request.Headers["Authorization"]);
     }
 }

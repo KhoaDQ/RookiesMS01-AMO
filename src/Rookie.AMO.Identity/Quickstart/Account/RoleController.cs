@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Rookie.AMO.Contracts.Dtos.User;
 using Rookie.AMO.Identity.Business.Interfaces;
@@ -11,6 +12,7 @@ namespace Rookie.AMO.Identity.Quickstart.Account
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Policy = "IDENTITY_SCOPE_POLICY")]
     public class RoleController : ControllerBase
     {
         private readonly IRoleService _roleService;
