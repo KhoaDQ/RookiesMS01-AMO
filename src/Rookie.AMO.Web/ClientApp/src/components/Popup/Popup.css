@@ -1,7 +1,7 @@
 /* PopupDetail */
 
 .popupdetail .auth-form {
-  width: auto;
+  width: inherit;
   min-width: 400px;
 }
 
@@ -125,6 +125,4 @@
 .btn-cancel:hover {
   background-color: #d4d4d4;
   cursor: pointer;
-}
-.popupdetail_asset{
 }
