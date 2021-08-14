@@ -18,7 +18,9 @@ const PopupInfor = (props) => {
 
   return (
     <div className="popup">
-      <div class={"modal " + (isModalOpen ? "modal__open" : "modal__close")}>
+      <div
+        className={"modal " + (isModalOpen ? "modal__open" : "modal__close")}
+      >
         <div className="modal__overlay"></div>
 
         <div className="modal__body">

@@ -5,8 +5,8 @@ import { reducer as oidcReducer } from "redux-oidc";
 import { GetAllRolesReducer } from "./users/GetAllRolesReducer";
 import UserReducer from "./users/userReducer";
 import AssetReducer from "./assets/AssetReducer";
-import CategoryReducer from "./CategoryReducer";
-import editUserReducer from "./users/editUserReducer";
+import CategoryReducer from "./categoryReducer";
+import EditUserReducer from "./users/EditUserReducer";
 import EditAsset from "./assets/EditAsset";
 export default combineReducers({
   getAllRoles: GetAllRolesReducer,
@@ -16,5 +16,5 @@ export default combineReducers({
   AssetReducer,
   EditAsset,
   CategoryReducer,
-  editUserReducer,
+  EditUserReducer,
 });

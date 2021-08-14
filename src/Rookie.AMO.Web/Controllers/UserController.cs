@@ -37,8 +37,8 @@ namespace Rookie.AMO.Web.Controllers
         [HttpPost]
         public Task<UserDto> CreateUserAsync(UserRequest user)
             => _userService.CreateUserAsync(user);
-        [HttpPut]
-        public Task UpdateUserAsync(Guid id, UserUpdateRequest user)
-            => _userService.UpdateUserAsync(id, user);
+        [HttpPut("{userId}")]
+        public Task UpdateUserAsync(Guid userId, [FromBody] UserUpdateRequest user)
+            => _userService.UpdateUserAsync(userId, user);
     }
 }
