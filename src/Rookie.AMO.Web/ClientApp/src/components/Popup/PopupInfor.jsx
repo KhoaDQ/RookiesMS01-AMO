@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import "./Popup.css";
 import { AiOutlineCloseSquare } from "react-icons/ai";
+import { Link } from "react-router-dom";
 
 const PopupInfor = (props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -29,9 +30,11 @@ const PopupInfor = (props) => {
                 </div>
 
                 <div className="col-md-3">
-                  <button className="close" onClick={handleCancel}>
-                    <AiOutlineCloseSquare />
-                  </button>
+                  <Link to={props.pathReturn}>
+                    <button className="close" onClick={handleCancel}>
+                      <AiOutlineCloseSquare />
+                    </button>
+                  </Link>
                 </div>
               </div>
             </div>
