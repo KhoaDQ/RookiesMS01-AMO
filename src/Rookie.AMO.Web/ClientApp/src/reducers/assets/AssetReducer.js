@@ -7,13 +7,13 @@ function AssetReducer(state = initialState, action) {
 
     switch (type) {
         case types.CREATE_ASSET:
-            return [...state, payload];
+            return {...state, payload};
 
         case types.FETCH_ASSETS:
             return payload;
 
         case types.DELETE_ASSET:
-            return [...state];
+            return {...state};
         default:
             return state;
     }

@@ -3,7 +3,8 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import "./Popup.css";
 import { AiOutlineCloseSquare } from "react-icons/ai";
 import AssetList from "../Asset/AssetList";
-import { Table } from "reactstrap";
+import { Container, Row, Col, Table } from 'reactstrap';
+
 const PopupDetailAsset = (props) => {
 
   let {asset} = props;
@@ -41,39 +42,39 @@ const PopupDetailAsset = (props) => {
             </div>
 
             <div className="auth-form__body">
-              <p className="auth-form__heading">
-                <div className="row mt-3">
-                  <div className="col-md-3">Asset Code</div>
-                  <div className="col-md-9">{asset.code}</div>
-                </div>
-                <div className="row mt-3">
-                  <div className="col-md-3">Asset Name</div>
-                  <div className="col-md-9">{asset.name}</div>
-                </div>
-                <div className="row mt-3">
-                  <div className="col-md-3">Category</div>
-                  <div className="col-md-9">{asset.categoryName}</div>
-                </div>
-                <div className="row">
-                  <div className="col-md-3">Installed Date</div>
-                  <div className="col-md-9">{asset.installedDate}</div>
-                </div>
-                <div className="row">
-                  <div className="col-md-3">State</div>
-                  <div className="col-md-9">{asset.state}</div>
-                </div>
-                <div className="row">
-                  <div className="col-md-3">Location</div>
-                  <div className="col-md-9">{asset.location}</div>
-                </div>
-                <div className="row">
-                  <div className="col-md-3">Specification</div>
-                  <div className="col-md-9">{props.specification}</div>
-                </div>
-                <div className="row">
-                  <div className="col-md-3">History</div>
-                  <div className="col-md-9">
-                    <Table hover="true">
+              <Container>
+                <Row>
+                  <Col xs="3">Asset Code</Col>
+                  <Col xs="9">{asset.code}</Col>
+                </Row>
+                <Row>
+                <Col xs="3">Asset Name</Col>
+                <Col xs="9">{asset.name}</Col>
+                </Row>
+                <Row>
+                <Col xs="3">Category</Col>
+                <Col xs="9">{asset.categoryName}</Col>
+                </Row>
+                <Row>
+                <Col xs="3">Installed Date</Col>
+                <Col xs="9">{asset.installedDate}</Col>
+                </Row>
+                <Row>
+                <Col xs="3">State</Col>
+                <Col xs="9">{asset.state}</Col>
+                </Row>
+                <Row>
+                <Col xs="3">Location</Col>
+                <Col xs="9">{asset.location}</Col>
+                </Row>
+                <Row>
+                <Col xs="3">Specification</Col>
+                <Col xs="9">{asset.specification}</Col>
+                </Row>
+                <Row>
+                <Col xs="3">History</Col>
+                <Col xs="9" className="table_history_container">
+                    <Table className="table_history_assigned table_border_spacing">
                         <thead>
                             <th>Date</th>
                             <th>Assigned By</th>
@@ -82,9 +83,9 @@ const PopupDetailAsset = (props) => {
                         </thead>
                         <tbody></tbody>
                     </Table>
-                </div>
-                </div>
-              </p>
+                    </Col>
+                </Row>
+              </Container>
             </div>
           </div>
         </div>

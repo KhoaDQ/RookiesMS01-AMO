@@ -38,14 +38,14 @@ function ManageAsset() {
   const [isDelete,setIsDelete] = useState(false)
 
   //Table assets
-  let assetPage = fetchPageAsset(stateFilter,categoryFilter,searchText,pageNumber,optionSort,isReLoad,setIsReLoad);
-  checkLoading(setIsLoading,assetPage)
+  let assetPage = FetchPageAsset(stateFilter,categoryFilter,searchText,pageNumber,optionSort,isReLoad,setIsReLoad);
+  CheckLoading(setIsLoading,assetPage)
   
   let assets = assetPage.items;
   
-  var categories = fetchCategories();
+  var categories = FetchCategories();
 
-  deleteAsset(idAssetDelete,isDelete,setIsReLoad)
+  DeleteAsset(idAssetDelete,isDelete,setIsReLoad)
   
   const resetPage = () => {
       setPageNumber(1)
@@ -165,7 +165,7 @@ function ManageAsset() {
 
   );
 }
-function deleteAsset(id,isDelete,setReLoad){
+function DeleteAsset(id,isDelete,setReLoad){
   const dispatch = useDispatch()
   
   useEffect(()=>{
@@ -181,7 +181,7 @@ function deleteAsset(id,isDelete,setReLoad){
 
   
 };
-function fetchPageAsset(stateFilter,categoryFilter,searchText,pageNumber,optionSort = {propertyName: "", desc: "false"},isReLoad,setIsReLoad) {
+function FetchPageAsset(stateFilter,categoryFilter,searchText,pageNumber,optionSort = {propertyName: "", desc: "false"},isReLoad,setIsReLoad) {
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -203,7 +203,7 @@ function fetchPageAsset(stateFilter,categoryFilter,searchText,pageNumber,optionS
   return assetPage
 }
 
-function checkLoading(setIsLoading,page){
+function CheckLoading(setIsLoading,page){
   useEffect(()=>{
     console.log(page)
       if('items' in page)
@@ -211,7 +211,7 @@ function checkLoading(setIsLoading,page){
   },[page])
 }
 
-function fetchCategories () {
+function FetchCategories () {
   const dispatch = useDispatch()
 
   useEffect(() => {
