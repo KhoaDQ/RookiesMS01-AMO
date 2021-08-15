@@ -109,10 +109,10 @@ namespace Rookie.AMO.Web
                 .ConfigureHttpClient(c => c.BaseAddress = new Uri(Configuration["IdentityServer:Authority"]));
 
             // In production, the React files will be served from this directory
-            services.AddSpaStaticFiles(configuration =>
+            /*services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/build";
-            });
+            });*/
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -164,7 +164,7 @@ namespace Rookie.AMO.Web
 
                 if (env.IsDevelopment())
                 {
-                    spa.UseReactDevelopmentServer(npmScript: "start");
+                    //spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
         }
