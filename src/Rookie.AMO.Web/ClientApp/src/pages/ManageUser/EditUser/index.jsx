@@ -37,7 +37,7 @@ const schema = yup.object().shape({
 const EditUser = (props) => {
   const [currentUser, setCurrentUser] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const result = fetchUser(props.match.params.id);
+  const result = FetchUser(props.match.params.id);
   useEffect(() => {
     setCurrentUser(result);
   }, [result]);
@@ -53,7 +53,7 @@ const EditUser = (props) => {
   };
 
   const submitForm = (data) => {
-    fetchCurrentUser(props.match.params.id, currentUser);
+    FetchCurrentUser(props.match.params.id, currentUser);
     //console.log(response);
     setIsModalOpen(true);
   };
@@ -260,7 +260,7 @@ const EditUser = (props) => {
   );
 };
 
-function fetchUser(id) {
+function FetchUser(id) {
   const dispatch = useDispatch();
   //htttps://localhost:5011/api/users/{id}
   //15a9f5fd-00b9-4a55-b463-0fb7acdc6f88
@@ -278,7 +278,7 @@ function fetchUser(id) {
   return result;
 }
 
-function fetchCurrentUser(id, user) {
+function FetchCurrentUser(id, user) {
   //htttps://localhost:5011/api/users/{id}
   //15a9f5fd-00b9-4a55-b463-0fb7acdc6f88
   async function fetch() {

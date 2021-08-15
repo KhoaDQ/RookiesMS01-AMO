@@ -16,12 +16,15 @@ import {
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useHistory } from "react-router";
+import PopupInfor from "../../../components/Popup/PopupInfor";
 
 const CreateUser = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const { user } = useSelector((state) => state.oidc);
   const { roles } = useSelector((state) => state.getAllRoles);
+  const [modalOpen, setModalOpen] = useState(false);
+
   const options = roles.map((role, index) => (
     <option value={role.name} key={index}>
       {role.name}
@@ -45,17 +48,19 @@ const CreateUser = () => {
   };
 
   const [newUser, setNewUser] = useState(initUser);
-  const disableButton = newUser.firstName == initUser.firstName || newUser.lastName == initUser.lastName || 
-            initUser.dateOfBirth == newUser.dateOfBirth || initUser.joinedDate == newUser.joinedDate ||
-            initUser.type == newUser.type;
+  const disableButton = newUser.firstName === initUser.firstName || newUser.lastName === initUser.lastName || 
+            initUser.dateOfBirth === newUser.dateOfBirth || initUser.joinedDate === newUser.joinedDate ||
+            initUser.type === newUser.type;
+
   const onSubmit = (e) => {
     try {
       dispatch(CreateUserAction(newUser));
-      history.push("/manage-user");
+      setModalOpen(true);
     } catch (ex) {
       
     }
   };
+
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setNewUser({ ...newUser, [name]: value });
@@ -86,7 +91,8 @@ const CreateUser = () => {
     joinedDate: yup
       .date()
       .min(theEarliestJoinedDate, JoinedDateIsNotLaterThanDOB)
-      .test('NotWeekend', JoinedDateIsNotSaturdayOrSunday, (value) => value.getDay() !== 6 && value.getDay() !== 0)
+      .test('NotWeekend', JoinedDateIsNotSaturdayOrSunday, 
+        (value) => value.getDay() !== 6 && value.getDay() !== 0)
   });
 
   const {
@@ -95,7 +101,7 @@ const CreateUser = () => {
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
-    reValidateMode: "onChange",
+    mode: "onChange"
   });
 
   return (
@@ -237,6 +243,13 @@ const CreateUser = () => {
           <Link to="/manage-user">Cancel</Link>
         </button>
       </form>
+      <PopupInfor
+        title="Information"
+        content="Create user successfully"
+        handleModelShow={(content) => setModalOpen(content)}
+        isModalOpen={modalOpen}
+        pathReturn="/manage-user"
+      ></PopupInfor>
     </div>
   );
 };

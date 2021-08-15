@@ -21,3 +21,15 @@ th:hover{
 .table_border_spacing tr:hover td:not(:last-child){
     background-color: #dee2e6;
 }
+.table_history_assigned{
+    font-size: 13px;
+    margin-top: 0;
+    width: max-content;
+}
+.table_history_assigned th{
+    padding: 0;
+}
+.table_history_container{
+    margin-left: -10px;
+    margin-right: 10px;
+}

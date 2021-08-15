@@ -18,7 +18,7 @@ const EditAssets = (props) => {
     // State: "",
   });
 
-  const initAsset = fetchAsset(props.match.params.id);
+  const initAsset = FetchAsset(props.match.params.id);
   useEffect(() => {
     setState(initAsset);
   }, [initAsset]);
@@ -237,7 +237,7 @@ const EditAssets = (props) => {
   );
 };
 
-function fetchAsset(id) {
+function FetchAsset(id) {
   const dispatch = useDispatch();
   //htttps://localhost:5011/api/users/{id}
   //15a9f5fd-00b9-4a55-b463-0fb7acdc6f88

@@ -33,7 +33,7 @@ namespace Rookie.AMO.Identity.DataAccessor
             using var serviceProvider = services.BuildServiceProvider();
             using var scope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope();
             var context = scope.ServiceProvider.GetService<AppIdentityDbContext>();
-            context.Database.EnsureDeleted();
+            //context.Database.EnsureDeleted();
             context.Database.Migrate();
 
             var userMgr = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
@@ -104,7 +104,7 @@ namespace Rookie.AMO.Identity.DataAccessor
                 }
             }
 
-            var user2 = userMgr.FindByNameAsync("johnd1").Result;
+            /*var user2 = userMgr.FindByNameAsync("johnd1").Result;
             if (user2 == null)
             {
                 userMgr.FindByNameAsync("John Doe");
@@ -134,18 +134,18 @@ namespace Rookie.AMO.Identity.DataAccessor
                 if (!result.Succeeded)
                 {
                     throw new Exception(result.Errors.First().Description);
-                }   
+                }
             }
-            var result1 = userMgr.AddToRoleAsync(user1, "Admin").Result;
+            */var result1 = userMgr.AddToRoleAsync(user1, "Admin").Result;
             if (!result1.Succeeded)
             {
                 throw new Exception(result1.Errors.First().Description);
             }
-            result1 = userMgr.AddToRoleAsync(user2, "Staff").Result;
+            /*result1 = userMgr.AddToRoleAsync(user2, "Staff").Result;
             if (!result1.Succeeded)
             {
                 throw new Exception(result1.Errors.First().Description);
-            }
+            }*/
         }
     }
 }

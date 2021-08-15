@@ -20,7 +20,6 @@ namespace Rookie.AMO.Contracts.Dtos.User
         public string Gender { get; set; }
         public string Type { get; set; }
         public string CodeStaff { get; set; }
-        public string Username { get; set; }
         public string Location { get; set; }
     }
 }
