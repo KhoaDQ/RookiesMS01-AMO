@@ -19,22 +19,21 @@ import {
 import { Table } from "reactstrap";
 import "./UserList.css";
 function UserList(props) {
-  const { stateList } = props
-  const { roles } = stateList
-  const [paging, setPaging] = useState({
-    name: '',
-    page: 1,
-    limit: 1,
-  });
+  const { stateList } = props;
+  const { roles } = stateList;
+  const { paging, setPaging } = props;
+  const [tempPaging, setTempPaging] = useState(paging);
   const handleChange = (e) => {
-    let value = e.target.value;
-    setPaging({ ...paging, name: value })
+    const { name, value } = e.target;
+    setTempPaging({ ...tempPaging, [name]: value });
   }
+  
   const type = roles.map((role, index) => {
     return (
       <option value={role.name} >{role.name}</option>
     )
   })
+
   return (
     <div>
       <h5 className="right-title">User List</h5>
@@ -42,22 +41,23 @@ function UserList(props) {
         <Col md={3}>
           <InputGroup>
             <select
-              className="custom-select custom-select-lg mb-3"
               className="form-control"
+              name = "type"
+              value={tempPaging.type}
+              onChange={handleChange}
             >
-              <option defaultValue >Select Type</option>
+              <option value={""}>Select Type</option>
               {type}
             </select>
-
-            <InputGroupText className="right__icon">
+            <InputGroupText className="right__icon" onClick={() => { setPaging(tempPaging) }}>
               <AiFillFilter />
             </InputGroupText>
           </InputGroup>
         </Col>
         <Col md={3}>
           <InputGroup>
-            <Input placeholder="Search Name" value={paging.name} onChange={handleChange} />
-            <InputGroupAddon addonType="append" onClick={() => { props.setPaging(paging) }} >
+            <Input placeholder="Search Name" name="name" value={tempPaging.name} onChange={handleChange} />
+            <InputGroupAddon addonType="append" onClick={() => { setPaging(tempPaging) }} >
               <InputGroupText className="right__icon">
                 <AiOutlineSearch />
               </InputGroupText>
@@ -87,7 +87,7 @@ function UserList(props) {
           {props.totalItems > 0 ? props.children : (paging.name != "") ? <span>No users are found!</span> : <span>...Loading</span>}
         </tbody>
       </Table>
-      {props.totalPages > 0 ? <Pagination totalPages={props.totalPages} pageNumber={props.pageNumber} setPageNumber={props.setPageNumber}  /> : null}
+      {props.totalPages > 0 ? <Pagination setPageReload={props.setPageReload} paging={paging} setPaging={props.setPaging} totalPages={props.totalPages} pageNumber={props.pageNumber} setPageNumber={props.setPageNumber}  /> : null}
     </div>
   );
 }

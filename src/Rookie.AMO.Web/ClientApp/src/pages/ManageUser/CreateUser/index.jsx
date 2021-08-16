@@ -20,7 +20,6 @@ import PopupInfor from "../../../components/Popup/PopupInfor";
 
 const CreateUser = () => {
   const dispatch = useDispatch();
-  const history = useHistory();
   const { user } = useSelector((state) => state.oidc);
   const { roles } = useSelector((state) => state.getAllRoles);
   const [modalOpen, setModalOpen] = useState(false);
@@ -54,6 +53,7 @@ const CreateUser = () => {
 
   const onSubmit = (e) => {
     try {
+      setNewUser({ ...newUser, location: user ? user.profile.location : ""});
       dispatch(CreateUserAction(newUser));
       setModalOpen(true);
     } catch (ex) {
@@ -69,7 +69,7 @@ const CreateUser = () => {
   useEffect(() => {
     dispatch(GetAllRolesAction());
     setNewUser({ ...newUser, location: user ? user.profile.location : ""});
-  }, [user]);
+  }, [user, roles]);
 
   const theDateOf18YearsAgo = new Date();
   const theYearOf18YearsAgo = theDateOf18YearsAgo.getFullYear() - 18;

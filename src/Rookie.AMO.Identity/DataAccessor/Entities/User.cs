@@ -10,6 +10,7 @@ namespace Rookie.AMO.Identity.DataAccessor.Entities
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string FullName { get; set; }
         public DateTime DateOfBirth { get; set; }
         public DateTime JoinedDate { get; set; }
         public string Gender { get; set; }

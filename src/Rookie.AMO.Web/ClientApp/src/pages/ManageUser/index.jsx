@@ -5,20 +5,22 @@ import * as action from "../../actions/ManageUser/ActionType";
 import apiCaller from "../../apis/callApi";
 import UserItem from "../../components/User/UserItem";
 import UserList from "../../components/User/UserList";
-import { GetAllRolesSuccess } from "../../constants/RoleConstants";
+import { FETCH_ROLES } from "../../actions/ManageUser/ActionType";
 
 function ManageUser() {
-  // const [searchText, setSearchText] = useState("")
   const [pageNumber, setPageNumber] = useState(1);
   const [optionSort, setOptionSort] = useState({
     propertyName: "",
     desc: false,
   });
+
   const [paging, setPaging] = useState({
     name: "",
+    type: "",
     page: 1,
-    limit: 1,
+    limit: 3
   });
+
   const roles = useSelector((state) => state.getAllRoles);
   const userPage = useSelector((state) => state.UserReducer);
   const { createdUser } = useSelector((state) => state.createUser);
@@ -27,15 +29,15 @@ function ManageUser() {
   useEffect(() => {
     async function fetchRoles() {
       const res = await apiCaller("Role", "GET", null);
-      dispatch({ type: GetAllRolesSuccess, payload: res.data });
+      dispatch({ type: FETCH_ROLES, payload: res.data });
     }
     fetchRoles();
   }, []);
 
   useEffect(() => {
     async function fetch() {
-      //https://localhost:5011/api/User/find?name=%20&page=1&limit=3
       const paramsString = queryString.stringify(paging);
+      console.log(paramsString);
       let endpoint = `User/find?${paramsString}`;
       const res = await apiCaller(endpoint, "GET", null);
       dispatch({ type: action.FETCH_USERS, payload: res.data });
@@ -47,14 +49,20 @@ function ManageUser() {
     let result = null;
 
     if (userPage.items) {
+      if (createdUser.id != null) {
+        var index = userPage.items.findIndex(x => x.id === createdUser.id);
+        if (index === -1) {
+          userPage.items.pop();
+        } 
+        else {
+          userPage.items.splice(index, 1);
+        }
+        userPage.items.unshift(createdUser);
+      }
+
       result = userPage.items.map((user, index) => {
         return <UserItem key={index} user={user} index={index} />;
       });
-    }
-
-    if (createdUser.id != null) {
-      var createdUserRow = <UserItem key={"createdUser"} user={createdUser} />;
-      result.unshift(createdUserRow);
     }
 
     return result;
@@ -68,6 +76,7 @@ function ManageUser() {
       pageNumber={pageNumber}
       setPageNumber={setPageNumber}
       setPaging={setPaging}
+      paging={paging}
     >
       {showUsers()}
     </UserList>

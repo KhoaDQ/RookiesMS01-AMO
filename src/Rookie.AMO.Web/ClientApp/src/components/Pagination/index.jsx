@@ -3,11 +3,14 @@ import ReactPaginate from 'react-paginate';
 import "./style.css";
 
 export default function Pagination(props) {
-  let { totalPages, pageNumber, setPageNumber, setIsReLoad} = props
+  let { totalPages, pageNumber, setPageNumber, setPaging, paging } = props;
 
   function changePage(event) {
-    setPageNumber(event.selected + 1)
-    setIsReLoad(1)
+    const currentPage = event.selected + 1;
+    if (currentPage !== paging.page) {
+      setPageNumber(currentPage);
+      setPaging({...paging, page: currentPage});
+    }
   }
 
   return (
@@ -19,7 +22,7 @@ export default function Pagination(props) {
       pageRangeDisplayed={2}
       containerClassName="pagination"
       pageLinkClassName="numberPage"
-      onPageChange={changePage}
+      onPageChange={(e) => changePage(e)}
       forcePage={pageNumber - 1}
     />
   )
