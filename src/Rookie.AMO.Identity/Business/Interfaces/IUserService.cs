@@ -14,6 +14,6 @@ namespace Rookie.AMO.Identity.Business.Interfaces
         Task<UserDto> CreateUserAsync(UserRequest userRequest);
         Task UpdateUserAsync(Guid id, UserUpdateRequest request);
         Task DeleteUserAsync(Guid userId);
-        Task<PagedResponseModel<UserDto>> PagedQueryAsync(string name, int page, int limit);
+        Task<PagedResponseModel<UserDto>> PagedQueryAsync(string name, string type, int page, int limit);
     }
 }

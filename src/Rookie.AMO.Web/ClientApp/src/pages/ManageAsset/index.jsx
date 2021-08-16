@@ -9,7 +9,6 @@ import PopupDetailAsset from "../../components/Popup/PopupDetailAsset";
 import PopupDelete from "../../components/Popup/PopupDelete";
 import { set } from "react-hook-form";
 const stateList = [
-
   {name: "Assigned",value: "Assigned"},
   {name: "Available", value: "Available"},
   {name: "Not available", value: "NotAvailable"},

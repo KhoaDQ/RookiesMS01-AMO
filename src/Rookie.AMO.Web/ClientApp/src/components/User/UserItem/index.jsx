@@ -11,24 +11,24 @@ function UserItem(props) {
   function handleShowInfoUser() {
     setIsModalOpen(true);
   }
+
   const handleModelShowFunction = (content) => {
     setIsModalOpen(content);
   };
+
   return (
     <Fragment>
-      <tr>
-        <th className="detail-item" onClick={handleShowInfoUser}>
-          {user.codeStaff}
-        </th>
+      <tr key={user.codeStaff} onClick={handleShowInfoUser} className="detail-item">
+        <td>{user.codeStaff}</td>
         <td>
           {user.firstName} {user.lastName}
         </td>
-        <td>{user.username}</td>
+        <td>{user.userName}</td>
         <td>{user.joinedDate}</td>
-        <td>{user.type}</td>
+        <td >{user.type}</td>
         <td>
           <span className="icon-nash icon-nash--black">
-            <Link to={`/edituser/${user.id}`}>
+            <Link to={`/edit-user/${user.id}`}>
               <IoMdCreate />
             </Link>
           </span>
@@ -38,11 +38,11 @@ function UserItem(props) {
         </td>
       </tr>
       <PopupDetail
-        title="Detailed User Information"
-        content={user}
-        handleModelShow={handleModelShowFunction}
-        isModalOpen={isModalOpen}
-      ></PopupDetail>
+            title="Detailed User Information"
+            content={user}
+            handleModelShow={handleModelShowFunction}
+            isModalOpen={isModalOpen}
+          ></PopupDetail>
     </Fragment>
   );
 }

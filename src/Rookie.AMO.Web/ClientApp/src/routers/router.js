@@ -55,7 +55,7 @@ const routes = [
     main: () => <CreateUser />,
   },
   {
-    path: "/edituser/:id",
+    path: "/edit-user/:id",
     exact: false,
     main: ({ history, match }) => <EditUser history={history} match={match} />,
   },

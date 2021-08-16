@@ -39,6 +39,7 @@ namespace Rookie.AMO.Identity.Business.Services
             {
                 new Claim(IdentityModel.JwtClaimTypes.GivenName, user.FirstName),
                 new Claim(IdentityModel.JwtClaimTypes.FamilyName, user.LastName),
+                new Claim(IdentityModel.JwtClaimTypes.Name, user.FullName),
                 new Claim(IdentityModel.JwtClaimTypes.Role, user.Type),
                 new Claim("location", user.Location)
             };
@@ -49,12 +50,7 @@ namespace Rookie.AMO.Identity.Business.Services
             {
                 throw new Exception("Unexpected errors!");
             }
-
-            /*var role = await _roleManager.FindByNameAsync(userRequest.Type);
-            if (role == null)
-            {
-
-            }*/
+            
             var addRoleResult = await _userManager.AddToRoleAsync(user, userRequest.Type);
 
             if (!addRoleResult.Succeeded)
@@ -86,10 +82,13 @@ namespace Rookie.AMO.Identity.Business.Services
             return _mapper.Map<UserDto>(await _userManager.FindByIdAsync(userId.ToString()));
         }
 
-        public async Task<PagedResponseModel<UserDto>> PagedQueryAsync(string name, int page, int limit)
+        public async Task<PagedResponseModel<UserDto>> PagedQueryAsync(string name, string type, int page, int limit)
         {
             var query = _userManager.Users
-                                .Where(x => String.IsNullOrEmpty(name) || x.UserName.Contains(name))
+                                .Where(x => String.IsNullOrEmpty(type)
+                                || x.Type.ToLower().Contains(type.ToLower()))
+                                .Where(x => String.IsNullOrEmpty(name)
+                                || x.FullName.ToLower().Contains(name.ToLower()))
                                 .OrderBy(x => x.CodeStaff);
 
             var assets = await query
@@ -133,12 +132,21 @@ namespace Rookie.AMO.Identity.Business.Services
 
                 user.LastName = request.LastName;
             }
+
+            if ((user.LastName != request.LastName) || (user.FirstName != request.FirstName))
+            {
+                var newClaim = new Claim(IdentityModel.JwtClaimTypes.Name, user.FullName);
+                await _userManager.ReplaceClaimAsync(user, claims.First(x => x.Type == IdentityModel.JwtClaimTypes.Name), newClaim);
+
+                user.FullName = user.FirstName + user.LastName;
+            }
+
             user.Gender = request.Gender;
             user.JoinedDate = request.JoinedDate;
             user.DateOfBirth = request.DateOfBirth;
             user.UserName = AutoGenerateUserName(request.FirstName, request.LastName);
 
-            var result = await _userManager.UpdateAsync(user);
+            await _userManager.UpdateAsync(user);
         }
 
         private string AutoGenerateStaffCode()
