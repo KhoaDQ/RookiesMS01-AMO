@@ -15,7 +15,7 @@ namespace Rookie.AMO.Contracts.Dtos.Assignment
 
         public string Note { get; set; }
 
-        public Guid Asset_ID { get; set; }
+        public Guid AssetID { get; set; }
 
         public Guid User_ID { get; set; }
 

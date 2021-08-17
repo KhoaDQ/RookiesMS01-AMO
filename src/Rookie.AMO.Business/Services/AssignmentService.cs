@@ -79,8 +79,8 @@ namespace Rookie.AMO.Business.Services
 
             var query = _baseRepository.Entities;
 
-            query = query.Where(x => string.IsNullOrEmpty(filter.KeySearch)|| x.Asset.Name == filter.KeySearch
-                                || x.Asset.Code == filter.KeySearch);
+            query = query.Where(x => string.IsNullOrEmpty(filter.KeySearch)|| x.Asset.Name.Contains(filter.KeySearch)
+                                || x.Asset.Code.Contains(filter.KeySearch));
 
 
             if (!string.IsNullOrEmpty(filter.State))

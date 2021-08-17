@@ -9,7 +9,7 @@ namespace Rookie.AMO.Contracts.Dtos.Assignment
     public class AssignmentRequest
     {
         public Guid User_ID { get; set; }
-        public Guid Asset_ID { get; set; }
+        public Guid AssetID { get; set; }
         public DateTime AssignedDate { get; set; }
         public string Note { get; set; }
         
