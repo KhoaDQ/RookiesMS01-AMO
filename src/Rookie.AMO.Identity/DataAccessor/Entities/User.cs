@@ -17,5 +17,6 @@ namespace Rookie.AMO.Identity.DataAccessor.Entities
         public string Type { get; set; }
         public string CodeStaff { get; set; }
         public string Location { get; set; }
+        public bool Disable { get; set; }
     }
 }

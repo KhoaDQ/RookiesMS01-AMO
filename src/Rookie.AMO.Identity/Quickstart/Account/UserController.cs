@@ -46,12 +46,11 @@ namespace Rookie.AMO.Identity.Quickstart.Account
         }
 
         [HttpDelete]
-        public async Task<ActionResult> DeleteUserAsync(Guid userId)
+        public async Task<ActionResult> DisableUserAsync(Guid userId)
         {
-            await _userService.DeleteUserAsync(userId);
+            await _userService.DisableUserAsync(userId);
             return Ok();
         }
-
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(Guid id, [FromBody] UserUpdateRequest request)

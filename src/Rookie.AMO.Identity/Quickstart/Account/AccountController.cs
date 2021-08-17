@@ -241,7 +241,6 @@ namespace IdentityServerHost.Quickstart.UI
             return View();
         }
 
-
         /*****************************************/
         /* helper APIs for the AccountController */
         /*****************************************/

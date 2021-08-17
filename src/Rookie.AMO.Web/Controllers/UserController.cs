@@ -33,7 +33,7 @@ namespace Rookie.AMO.Web.Controllers
             => _userService.PagedQueryAsync(name, type, page, limit, HttpContext.Request.Headers["Authorization"]);
         [HttpDelete("{userId}")]
         public Task<ActionResult> DeleteUserAsync(Guid userId)
-            => _userService.DeleteUserAsync(userId);
+            => _userService.DisableUserAsync(userId);
         [HttpPost]
         public Task<UserDto> CreateUserAsync(UserRequest user)
             => _userService.CreateUserAsync(user);
