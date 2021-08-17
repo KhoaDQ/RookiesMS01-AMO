@@ -77,25 +77,11 @@ namespace Rookie.AMO.DataAccessor.Migrations
                     b.Property<Guid>("Admin_ID")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("AssetId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("Asset_ID")
+                    b.Property<Guid>("AssetID")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("AssignedDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatorId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Note")
                         .IsRequired()
@@ -105,15 +91,12 @@ namespace Rookie.AMO.DataAccessor.Migrations
                     b.Property<int>("State")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<Guid>("User_ID")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AssetId");
+                    b.HasIndex("AssetID");
 
                     b.ToTable("Assignment");
                 });
@@ -159,25 +142,11 @@ namespace Rookie.AMO.DataAccessor.Migrations
                     b.Property<Guid>("Admin_ID")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("AssetId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("Asset_ID")
+                    b.Property<Guid>("AssetID")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("AssignedDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatorId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Note")
                         .IsRequired()
@@ -190,15 +159,12 @@ namespace Rookie.AMO.DataAccessor.Migrations
                     b.Property<int>("State")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<Guid>("User_ID")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AssetId");
+                    b.HasIndex("AssetID");
 
                     b.ToTable("Request");
                 });
@@ -218,7 +184,9 @@ namespace Rookie.AMO.DataAccessor.Migrations
                 {
                     b.HasOne("Rookie.AMO.DataAccessor.Entities.Asset", "Asset")
                         .WithMany()
-                        .HasForeignKey("AssetId");
+                        .HasForeignKey("AssetID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Asset");
                 });
@@ -227,7 +195,9 @@ namespace Rookie.AMO.DataAccessor.Migrations
                 {
                     b.HasOne("Rookie.AMO.DataAccessor.Entities.Asset", "Asset")
                         .WithMany()
-                        .HasForeignKey("AssetId");
+                        .HasForeignKey("AssetID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Asset");
                 });
