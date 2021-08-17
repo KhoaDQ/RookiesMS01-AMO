@@ -4,6 +4,7 @@ using IdentityServer4.EntityFramework.Options;
 using IdentityServer4.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Rookie.AMO.Identity.DataAccessor.Data;
 using System;
@@ -17,7 +18,7 @@ namespace Rookie.AMO.Identity.DataAccessor
 {
     public class SeedConfigurationData
     {
-        public static void EnsureSeedData(string configurationConnectionString, string operationConnectionString)
+        public static void EnsureSeedData(IConfiguration configuration, string configurationConnectionString, string operationConnectionString)
         {
             var services = new ServiceCollection();
 
@@ -133,14 +134,16 @@ namespace Rookie.AMO.Identity.DataAccessor
                     {
                         new ClientRedirectUri()
                         {
-                            RedirectUri = "https://localhost:5011/callback"
+                            //RedirectUri = "https://localhost:5011/callback"
+                            RedirectUri = configuration["Client:RedirectUri"]
                         }
                     },
                     PostLogoutRedirectUris = new List<ClientPostLogoutRedirectUri>()
                     {
                         new ClientPostLogoutRedirectUri()
                         {
-                            PostLogoutRedirectUri = "https://localhost:5011/"
+                            //PostLogoutRedirectUri = "https://localhost:5011/"
+                            PostLogoutRedirectUri = configuration["Client:PostLogoutRedirectUri"]
                         }
                     },
                     AllowedScopes = new List<ClientScope>
@@ -169,10 +172,6 @@ namespace Rookie.AMO.Identity.DataAccessor
                             Value = "rookieamosecret".Sha256()
                         }
                     },
-                    //AllowedCorsOrigins = new List<string>
-                    //{
-                    //    "https://localhost:5001/"
-                    //},
                     AllowAccessTokensViaBrowser = true
                 },
             };

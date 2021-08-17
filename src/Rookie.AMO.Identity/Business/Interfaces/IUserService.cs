@@ -13,7 +13,8 @@ namespace Rookie.AMO.Identity.Business.Interfaces
         Task<IEnumerable<UserDto>> GetAllAsync();
         Task<UserDto> CreateUserAsync(UserRequest userRequest);
         Task UpdateUserAsync(Guid id, UserUpdateRequest request);
-        Task DeleteUserAsync(Guid userId);
+        Task DisableUserAsync(Guid userId);
+        Task EnableUserAsync(Guid userId);
         Task<PagedResponseModel<UserDto>> PagedQueryAsync(string name, string type, int page, int limit);
     }
 }

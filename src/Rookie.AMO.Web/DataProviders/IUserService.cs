@@ -18,7 +18,7 @@ namespace Rookie.AMO.Web.DataProviders
         [Post(Endpoints.User)]
         Task<UserDto> CreateUserAsync(UserRequest user);
         [Delete(Endpoints.User)]
-        Task<ActionResult> DeleteUserAsync(Guid userId);
+        Task<ActionResult> DisableUserAsync(Guid userId);
         [Put(Endpoints.User + "/{id}")]
         Task UpdateUserAsync(Guid id, UserUpdateRequest user);
         [Get(Endpoints.User + "/find")]
