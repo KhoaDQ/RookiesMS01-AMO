@@ -44,7 +44,7 @@ function AssetList(props){
   return(
     <div>
       <h5 className="right-title">Asset List</h5>
-      <Row className="right-bar">
+      <Row>
         <Col md={3}>
           <Filter
             options = {props.stateList}

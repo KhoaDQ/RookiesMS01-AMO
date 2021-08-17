@@ -3,7 +3,9 @@
     border-spacing: 10px 0px;
     border-collapse: separate;
 }
-
+.table_border_spacing td, .table_border_spacing th{
+    border-top: none;
+}
 th:hover{
     background-color: #dee2e6;
 }
@@ -30,5 +32,4 @@ th:hover{
 .table_history_container{
     margin-left: -10px;
     margin-right: 10px;
-
 }

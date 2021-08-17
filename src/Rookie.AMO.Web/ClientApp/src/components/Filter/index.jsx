@@ -5,8 +5,6 @@ import {
     InputGroupText,
     InputGroupAddon,
     InputGroup,
-    Col,
-    Row
   } from "reactstrap";
 import "./style.css";
 import { useState } from "react";
@@ -23,8 +21,7 @@ export default function Filter(props) {
         setOptionSelect(e)
     }
     return(
-        <InputGroup className="filter_container">
-        <Row>
+        <InputGroup >
             <Multiselect
             options={options}
             displayValue={displayValue}
@@ -35,11 +32,10 @@ export default function Filter(props) {
             onRemove={handleUnSelect}
             />      
             <InputGroupAddon addonType="append" onClick = {(e)=>handleFilter(optionSelect,e)}>
-              <InputGroupText className="right__icon filter_button">
+              <InputGroupText className="right__icon">
                 <AiFillFilter />
               </InputGroupText>
             </InputGroupAddon>
-            </Row>
         </InputGroup>     
     )
 }
