@@ -1,8 +1,8 @@
 import { createUserManager, loadingUser, loadUser } from 'redux-oidc';
 import store from '../store';
 
-const localhost = 'https://batch2group1.azurewebsites.net/';
-const identity = 'https://batch2group1-idp.azurewebsites.net';
+const localhost = 'https://localhost:5011/';
+const identity = 'https://localhost:5001/';
 
 const userManagerConfig = {
     client_id: 'rookieamo',
