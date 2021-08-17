@@ -4,7 +4,6 @@ import { AiFillFilter } from "@react-icons/all-files/ai/AiFillFilter";
 import { IoMdCreate } from "@react-icons/all-files/io/IoMdCreate";
 import { IoIosCloseCircleOutline } from "@react-icons/all-files/io/IoIosCloseCircleOutline";
 import { Link } from "react-router-dom";
-import Pagination from "../../Pagination";
 
 import {
   Col,
@@ -18,6 +17,7 @@ import {
 } from "reactstrap";
 import { Table } from "reactstrap";
 import "./UserList.css";
+import UserPagination from "../../Pagination/UserPagination";
 function UserList(props) {
   const { stateList } = props;
   const { roles } = stateList;
@@ -87,7 +87,7 @@ function UserList(props) {
           {props.totalItems > 0 ? props.children : (paging.name != "") ? <span>No users are found!</span> : <span>...Loading</span>}
         </tbody>
       </Table>
-      {props.totalPages > 0 ? <Pagination setPageReload={props.setPageReload} paging={paging} setPaging={props.setPaging} totalPages={props.totalPages} pageNumber={props.pageNumber} setPageNumber={props.setPageNumber}  /> : null}
+      {props.totalPages > 0 ? <UserPagination setPageReload={props.setPageReload} paging={paging} setPaging={props.setPaging} totalPages={props.totalPages} pageNumber={props.pageNumber} setPageNumber={props.setPageNumber}  /> : null}
     </div>
   );
 }
