@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector, connect } from "react-redux";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -21,19 +22,27 @@ import {
   FormText,
 } from "reactstrap";
 const CreateAssets = () => {
-  const history = useHistory();
+
   const dispatch = useDispatch();
   const AssetReducer = useSelector((state) => state.AssetReducer);
   const CategoryReducer = useSelector((state) => state.CategoryReducer);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [state, setState] = useState({
-    Name: "",
-    CategoryId: "",
-    Specification: "",
-    InstalledDate: "",
-    State: "",
-  });
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const initAsset = {
+        Name: "",
+        CategoryId: 0,
+        Specification: "",
+        InstalledDate: "",
+        State: "",
+    };
+    const [newAsset, setNewAsset] = useState(initAsset);
+
+    const disableButton = newAsset.Name === initAsset.Name
+        || newAsset.Specification === initAsset.Specification
+        || initAsset.InstalledDate === newAsset.InstalledDate
+        || initAsset.CategoryId === newAsset.CategoryId
+        || initAsset.State === newAsset.State;
 
   const schema = yup.object().shape({
     Name: yup
@@ -63,21 +72,23 @@ const CreateAssets = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setState({ ...state, [name]: value });
-    console.log(value);
+    setNewAsset({ ...newAsset, [name]: value });
+      console.log(value);
+      console.log(disableButton);
   };
-
+    
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setState({ ...state, [name]: value });
+    setNewAsset({ ...newAsset, [name]: value });
     console.log(value);
   };
 
   const handleRadioChange = (e) => {
     const { name, value } = e.target;
 
-    setState({ ...state, [name]: value });
-    console.log(value);
+    setNewAsset({ ...newAsset, [name]: value });
+      console.log(value);
+      console.log(disableButton); 
   };
 
   const {
@@ -95,12 +106,11 @@ const CreateAssets = () => {
   const handleOnSubmit = (e) => {
     // e.preventDefault();
 
-    console.log(state);
+   
 
     async function CreateAsset() {
-      const res = await apiCaller("Asset", "POST", state);
+      const res = await apiCaller("Asset", "POST", newAsset);
       dispatch({ type: action.CREATE_ASSET, payload: res });
-      history.push("/manage-asset");
     }
 
     try {
@@ -129,7 +139,7 @@ const CreateAssets = () => {
               className="form-control"
               id="Name"
               name="Name"
-              value={state.Name}
+              value={newAsset.Name}
               onChange={handleInputChange}
             />
             {errors.Name && <p>{errors.Name.message}</p>}
@@ -144,7 +154,7 @@ const CreateAssets = () => {
             <select
               className="custom-select custom-select-lg mb-3"
               className="form-control"
-              value={state.CategoryId}
+              value={newAsset.CategoryId}
               name="CategoryId"
               onChange={handleChange}
             >
@@ -171,7 +181,7 @@ const CreateAssets = () => {
               className="form-control height"
               id="Specification"
               name="Specification"
-              value={state.Specification}
+              value={newAsset.Specification}
               onChange={handleInputChange}
             />
             {errors.Specification && <p>{errors.Specification.message}</p>}
@@ -188,7 +198,7 @@ const CreateAssets = () => {
               className="form-control "
               id="InstalledDate"
               name="InstalledDate"
-              value={state.InstalledDate}
+              value={newAsset.InstalledDate}
               onChange={handleInputChange}
             />
           </div>
@@ -206,7 +216,7 @@ const CreateAssets = () => {
                   id="gridRadios1"
                   value="Available"
                   defaultValue="option1"
-                  defaultChecked={state.State === "Available"}
+                  defaultChecked={newAsset.State === "Available"}
                   onChange={(e) => {
                     handleRadioChange(e);
                   }}
@@ -223,7 +233,7 @@ const CreateAssets = () => {
                   id="gridRadios2"
                   value="NotAvailable"
                   defaultValue="option2"
-                  defaultChecked={state.State === "NotAvailable"}
+                  defaultChecked={newAsset.State === "NotAvailable"}
                   onChange={(e) => {
                     handleRadioChange(e);
                   }}
@@ -237,19 +247,20 @@ const CreateAssets = () => {
         </fieldset>
 
         <br></br>
-        <button type="submit" class="btn btn-outline-danger margin color">
-          Save
+              <button type="submit" className="btn btn-outline-danger margin color" disabled={disableButton}>
+                  Save
         </button>
         <button type="button" class="btn btn-outline-danger color1">
-          Cancel
+                  <Link to="/manage-user">Cancel</Link>
         </button>
       </form>
-      <PopupInfor
-        title="Information"
-        content="Create assets successfully"
-        handleModelShow={handleModelShowFunction}
-        isModalOpen={isModalOpen}
-      ></PopupInfor>
+          <PopupInfor
+              title="Information"
+              content="Create Asset successfully"
+              handleModelShow={(content) => setIsModalOpen(content)}
+              isModalOpen={isModalOpen}
+              pathReturn="/manage-asset"
+          ></PopupInfor>
     </div>
   );
 };
