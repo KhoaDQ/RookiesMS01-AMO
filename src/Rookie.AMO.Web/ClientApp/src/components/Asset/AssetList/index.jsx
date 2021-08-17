@@ -14,8 +14,8 @@ import {
   InputGroup,
 } from "reactstrap";
 import "../style.css";
-import Pagination from "../../Pagination";
 import Filter from "../../Filter";
+import AssetPagination from "../../Pagination/AssetPagination";
 
 function AssetList(props){
   const initSort = {
@@ -44,7 +44,7 @@ function AssetList(props){
   return(
     <div>
       <h5 className="right-title">Asset List</h5>
-      <Row>
+      <Row className="right-bar">
         <Col md={3}>
           <Filter
             options = {props.stateList}
@@ -102,7 +102,7 @@ function AssetList(props){
           {props.isLoading ? <tr><td className="rowNotify">...Loading</td></tr> : props.totalItems > 0 ? props.children : <tr><td className="rowNotify"> No assets are found! </td></tr>}
         </tbody>
       </Table>
-      { props.totalItems > 0 ? <Pagination totalPages = {props.totalPages} pageNumber = {props.pageNumber} setPageNumber = {props.setPageNumber} setIsReLoad={props.setIsReLoad}/>:null}
+      { props.totalItems > 0 ? <AssetPagination totalPages = {props.totalPages} pageNumber = {props.pageNumber} setPageNumber = {props.setPageNumber} setIsReLoad={props.setIsReLoad}/>:null}
     </div>
 
   );

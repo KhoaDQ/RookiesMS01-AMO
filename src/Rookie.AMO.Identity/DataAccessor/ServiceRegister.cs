@@ -55,7 +55,7 @@ namespace Rookie.AMO.Identity.DataAccessor
                 var configurationConnection = configuration.GetConnectionString("AppConfigurationDbContext");
                 var operationConnection = configuration.GetConnectionString("AppOperationDbContext");
                 SeedIdentityData.EnsureSeedData(identityConnection);
-                SeedConfigurationData.EnsureSeedData(configurationConnection, operationConnection);
+                SeedConfigurationData.EnsureSeedData(configuration, configurationConnection, operationConnection);
             }
         }
     }
