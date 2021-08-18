@@ -43,5 +43,9 @@ namespace Rookie.AMO.DataAccessor.Entities
         public Guid Admin_ID { get; set; }
 
         public virtual Asset Asset { get; set; }
+
+        public string RequestedBy { get; set; }
+
+        public string AcceptedBy { get; set; }
     }
 }
