@@ -15,5 +15,8 @@ namespace Rookie.AMO.Contracts.Constants
         public const string UserIsUnder18 = "User is under 18. Please select a different date";
         public const string JoinedDataIsNotLaterThanDateOfBirth = "Joined date is not later than Date of Birth. Please select a different date";
         public const string JoinedDateIsSaturdayOrSunday = "Joined date is Saturday or Sunday. Please select a different date";
+        public const string PasswordIsNotEmptyUnlessTheFirstTimeLogin = "Password is not empty unless the first time login";
+        public const string NewPasswordAndConfirmNewPasswordIsNotTheSame = "New password and confirm new password is not the same";
+        public const string TheCharacterIsInvalidNotAllowSpaceCharacter = "The character is invalid. Not Allow space character in {0}";
     }
 }

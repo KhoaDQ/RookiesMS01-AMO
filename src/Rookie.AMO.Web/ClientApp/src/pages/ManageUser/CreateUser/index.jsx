@@ -15,7 +15,6 @@ import {
 } from "../../../constants/UserConstants";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useHistory } from "react-router";
 import PopupInfor from "../../../components/Popup/PopupInfor";
 
 const CreateUser = () => {
@@ -121,6 +120,7 @@ const CreateUser = () => {
               name="firstName"
               value={newUser.firstName}
               onChange={handleInputChange}
+              maxlength="100"
             />
             {errors.firstName && <p>{errors.firstName.message}</p>}
           </div>
@@ -139,6 +139,7 @@ const CreateUser = () => {
               name="lastName"
               value={newUser.lastName}
               onChange={handleInputChange}
+              maxlength="100"
             />
             {errors.lastName && <p>{errors.lastName.message}</p>}
           </div>

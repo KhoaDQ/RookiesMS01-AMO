@@ -126,3 +126,12 @@
   background-color: #d4d4d4;
   cursor: pointer;
 }
+
+.width-cp {
+  width: 488px;
+}
+
+.error-message {
+  font-size: 10px;
+  margin-bottom: 0px;
+}

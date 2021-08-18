@@ -40,5 +40,8 @@ namespace Rookie.AMO.Web.Controllers
         [HttpPut("{userId}")]
         public Task UpdateUserAsync(Guid userId, [FromBody] UserUpdateRequest user)
             => _userService.UpdateUserAsync(userId, user);
+        [HttpPut("changePassword")]
+        public Task ChangePasswordAsync(ChangePasswordModel model)
+            => _userService.ChangePasswordAsync(model, HttpContext.Request.Headers["Authorization"]);
     }
 }

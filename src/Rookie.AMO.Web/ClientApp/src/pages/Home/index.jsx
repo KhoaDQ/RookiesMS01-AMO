@@ -3,7 +3,8 @@ import { Table } from 'reactstrap';
 import { BsCheck } from "@react-icons/all-files/bs/BsCheck";
 import { IoCloseSharp } from "@react-icons/all-files/io5/IoCloseSharp";
 import { MdSettingsBackupRestore } from "@react-icons/all-files/md/MdSettingsBackupRestore"
-// import './Home.css'
+import PopupChangePassword from '../../components/Popup/PopupChangePassword';
+
 function Home() {
   return (
     <div className="home">
@@ -42,6 +43,8 @@ function Home() {
           </tr>
         </tbody>
       </Table>
+      <PopupChangePassword isModalOpen={true}>
+      </PopupChangePassword>
     </div>
   )
 }
