@@ -4,8 +4,8 @@ import * as action from '../../actions/ManagerAssignment/ActionType';
 import apiCaller from '../../apis/callApi';
 import AssignmentItem from "../../components/Assignment/AssignmentItem/";
 import AssignmentList from "../../components/Assignment/AssignmentList";
-import PopupDelete from "../../components/Popup/PopupDelete";
-import PopupDetailAssignment from "../../components/Popup/PopupDetailAssignment";
+// import PopupDelete from "../../components/Popup/PopupDelete";
+// import PopupDetailAssignment from "../../components/Popup/PopupDetailAssignment";
 function ManageAssignment() {
   const [stateFilter, setStateFilter] = useState("")
   const [categoryFilter, setCategoryFilter] = useState("")
@@ -93,19 +93,19 @@ function ManageAssignment() {
     handleDeleteShow(false)
   };
 
-  function deletePopup(handleDelete, handleDeleteShow) {
-    if (1)
-      return (
-        <PopupDelete isModalOpen={isDeleteOpen} handleDelete={handleDelete} handleModelShow={handleDeleteShow}></PopupDelete>
-      )
-  }
+  // function deletePopup(handleDelete, handleDeleteShow) {
+  //   if (1)
+  //     return (
+  //       <PopupDelete isModalOpen={isDeleteOpen} handleDelete={handleDelete} handleModelShow={handleDeleteShow}></PopupDelete>
+  //     )
+  // }
 
-  function detailAssignment(assignmentDetail, isDetailOpen) {
-    if (assignmentDetail)
-      return (
-        <PopupDetailAssignment assignment={assignmentDetail} isModalOpen={isDetailOpen} handleModelShow={handleModelShow} />
-      )
-  }
+  // function detailAssignment(assignmentDetail, isDetailOpen) {
+  //   if (assignmentDetail)
+  //     return (
+  //       <PopupDetailAssignment assignment={assignmentDetail} isModalOpen={isDetailOpen} handleModelShow={handleModelShow} />
+  //     )
+  // }
   function showAssignments(assignments) {
     let result = null
     if (assignments != null) {
@@ -155,7 +155,7 @@ function ManageAssignment() {
     useEffect(() => {
       async function deleteAssignment(id) {
         const res = await apiCaller('Assignment/' + id, 'Delete', null);
-        dispatch({ type: action.DELETE_ASSignment, payload: id });
+        dispatch({ type: action.DELETE_ASSIGNMENT, payload: id });
         setReLoad(1)
         setIsDelete(0)
       }
@@ -175,7 +175,7 @@ function ManageAssignment() {
 
         console.log(enpoint)
         const res = await apiCaller(enpoint, 'GET', null);
-        dispatch({ type: action.FETCH_ASSignmentS, payload: res.data });
+        dispatch({ type: action.FETCH_ASSIGNMENTS, payload: res.data });
       }
       if (isReLoad) {
         fetch()
