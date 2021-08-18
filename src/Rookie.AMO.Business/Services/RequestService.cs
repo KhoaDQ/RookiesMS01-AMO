@@ -29,23 +29,28 @@ namespace Rookie.AMO.Business.Services
 
         public async Task<PagedResponseModel<RequestDto>> PagedQueryAsync(FilterRequestsModel filter)
         {
-            // 1. Select Join
-            var query = from r in _context.Requests
-                        join a in _context.Assets on r.AssetID equals a.Id
-                        select new { r, a };
-            // 2. Filter
+            var query = _baseRepository.Entities;
+
+            query = query.Where(x => string.IsNullOrEmpty(filter.KeySearch) || x.Asset.Name.Contains(filter.KeySearch)
+                                || x.Asset.Code.Contains(filter.KeySearch));
+
+
             if (!string.IsNullOrEmpty(filter.State))
             {
                 IEnumerable<int> stateFilter = filter.State.Trim().Split(',').Select(s => EnumConverExtension.GetValueInt<StateList>(s));
 
-                query = query.Where(x => stateFilter.Contains(((int)x.r.State)));
+                query = query.Where(x => stateFilter.Contains(((int)x.State)));
+            }
+            if (filter.ReturnedDate != default(DateTime))
+            {
+                query = query.Where(x => x.ReturnedDate == filter.ReturnedDate);
             }
 
 
             if (!string.IsNullOrEmpty(filter.OrderProperty))
                 query = query.OrderByPropertyName(filter.OrderProperty, filter.Desc);
 
-            // 3. Paging
+
             var requests = await query
                 .PaginateAsync(filter.Page, filter.Limit);
 

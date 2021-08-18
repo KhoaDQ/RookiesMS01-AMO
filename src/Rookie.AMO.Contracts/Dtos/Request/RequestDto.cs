@@ -10,13 +10,14 @@ namespace Rookie.AMO.Contracts.Dtos.Request
     public class RequestDto
     {
         public Guid Id { get; set; }
+        public string AssetCode { get; set; }
+        public string AssetName { get; set; }
         public DateTime AssignedDate { get; set; }
         public DateTime AcceptedDate { get; set; }
         public DateTime ReturnedDate { get; set; }
-        public StateList State { get; set; }
+        public string State { get; set; }
         public string Note { get; set; }
-        public Guid AssetID { get; set; }
-        public Guid User_ID { get; set; }
-        public Guid Admin_ID { get; set; }
+        public string RequestedBy { get; set; }
+        public string AcceptedBy { get; set; }
     }
 }
