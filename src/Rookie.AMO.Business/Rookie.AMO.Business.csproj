@@ -7,7 +7,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Rookie.AMO.Contracts\Rookie.AMO.Contracts.csproj" />
     <ProjectReference Include="..\Rookie.AMO.DataAccessor\Rookie.AMO.DataAccessor.csproj" />
-    <ProjectReference Include="..\Rookie.AMO.Identity\Rookie.AMO.Identity.csproj" />
   </ItemGroup>
 
 </Project>
