@@ -17,11 +17,11 @@ import userManager from "../../utils/userManager";
 const Header = (props) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const oidc = useSelector((state) => state.oidc);
-  const {user} = oidc;
+  const { user } = oidc;
   const toggle = () => setDropdownOpen((prevState) => !prevState);
   return (
     <div className="header">
-      <Container>
+      <Container className='container-fluid'>
         <Row>
           <Col xs="6">
             <Link to="/" className="header-logo">

@@ -10,8 +10,7 @@ function App() {
     <Router>
       <Fragment>
         <Header />
-        <Container className="App">
-
+        <Container className="App container-fluid">
           <Row>
             <Col xs="6" sm="3">
               <LeftBar />
