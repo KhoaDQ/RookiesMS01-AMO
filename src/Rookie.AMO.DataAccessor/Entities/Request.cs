@@ -2,14 +2,17 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Rookie.AMO.DataAccessor.Entities
 {
-    public class Request : BaseEntity
+    public class Request 
     {
+        [Key]
+        public Guid Id { get; set; }
 
         [Required]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
@@ -33,7 +36,8 @@ namespace Rookie.AMO.DataAccessor.Entities
 
 
         [Required]
-        public Guid Asset_ID { get; set; }
+        [ForeignKey("Asset")]
+        public Guid AssetID { get; set; }
 
         [Required]
         public Guid User_ID { get; set; }

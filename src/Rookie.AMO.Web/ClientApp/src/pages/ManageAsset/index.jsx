@@ -34,7 +34,7 @@ function ManageAsset() {
   //Popup delete asset
   const [idAssetDelete,setIdAssetDelete] = useState("");
   const [isDeleteOpen,setIsDeleteOpen] = useState(false)
-  const [isDelete,setIsDelete] = useState(false)
+  const [isDelete,setIsDelete] = useState(0)
 
   //Table assets
   let assetPage = FetchPageAsset(stateFilter,categoryFilter,searchText,pageNumber,optionSort,isReLoad,setIsReLoad);
@@ -44,7 +44,7 @@ function ManageAsset() {
   
   var categories = FetchCategories();
 
-  DeleteAsset(idAssetDelete,isDelete,setIsReLoad)
+  DeleteAsset(idAssetDelete,isDelete,setIsReLoad, setIsDelete)
   
   const resetPage = () => {
       setPageNumber(1)
@@ -101,7 +101,7 @@ function ManageAsset() {
   }
 
   const handleDelete = (e) =>{
-    setIsDelete(true)
+    setIsDelete(1)
     handleDeleteShow(false)
   };
 
@@ -164,7 +164,7 @@ function ManageAsset() {
 
   );
 }
-function DeleteAsset(id,isDelete,setReLoad){
+function DeleteAsset(id,isDelete,setReLoad, setIsDelete){
   const dispatch = useDispatch()
   
   useEffect(()=>{
@@ -172,6 +172,7 @@ function DeleteAsset(id,isDelete,setReLoad){
       const res = await apiCaller('Asset/'+id, 'Delete', null);
       dispatch({ type: action.DELETE_ASSET, payload: id });
       setReLoad(1)
+      setIsDelete(0)
     }
     if(id!=""){
       deleteAsset(id)

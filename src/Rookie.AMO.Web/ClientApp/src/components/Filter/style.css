@@ -1,7 +1,7 @@
 .multiSelectContainer {
     position: relative;
     text-align: left;
-    width: 79%;
+    width: 70%;
 }
 .input-group .searchWrapper {
     line-height: 1.3;
@@ -16,4 +16,12 @@
 }
 #search_input{
     width: 100%;
+}
+.filter_container .row{
+    flex-wrap: nowrap;
+    
+}
+.filter_container .row .input-group-append .filter_button{
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
 }
