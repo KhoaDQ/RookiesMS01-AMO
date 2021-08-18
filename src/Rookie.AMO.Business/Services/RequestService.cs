@@ -41,7 +41,7 @@ namespace Rookie.AMO.Business.Services
 
                 query = query.Where(x => stateFilter.Contains(((int)x.State)));
             }
-            if (filter.ReturnedDate != default(DateTime))
+            if (filter.ReturnedDate != default(DateTime) && filter.ReturnedDate != null)
             {
                 query = query.Where(x => x.ReturnedDate == filter.ReturnedDate);
             }

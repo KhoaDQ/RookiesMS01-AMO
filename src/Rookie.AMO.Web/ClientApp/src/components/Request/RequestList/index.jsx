@@ -47,7 +47,7 @@ function RequestList(props) {
     }
   };
   return (
-    <div>
+    <div className="request_list">
       <h5 className="right-title">Request List</h5>
       <Row className="right-bar">
         <Col md={3}>
@@ -105,8 +105,8 @@ function RequestList(props) {
       </Row>
       <Table className="table_border_spacing">
         <thead>
-          <tr>
-            <th>No.</th>
+          <tr className="smallText">
+            <th className="header_no">No.</th>
             <th
               onClick={(e) => {
                 handleClickSort('Code', e);
@@ -119,7 +119,6 @@ function RequestList(props) {
               onClick={(e) => {
                 handleClickSort('Name', e);
               }}
-              className="header_name"
             >
               Asset Name
               {optionSort.Name.desc ? <AiFillCaretDown /> : <AiFillCaretUp />}
