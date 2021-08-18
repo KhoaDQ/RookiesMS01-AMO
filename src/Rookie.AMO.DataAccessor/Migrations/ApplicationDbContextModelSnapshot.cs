@@ -142,7 +142,7 @@ namespace Rookie.AMO.DataAccessor.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("AcceptedDate")
+                    b.Property<DateTime?>("AcceptedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid>("Admin_ID")
@@ -155,11 +155,10 @@ namespace Rookie.AMO.DataAccessor.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Note")
-                        .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
-                    b.Property<DateTime>("ReturnedDate")
+                    b.Property<DateTime?>("ReturnedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("State")

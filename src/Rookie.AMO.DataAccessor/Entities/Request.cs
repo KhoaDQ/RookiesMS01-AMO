@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Rookie.AMO.DataAccessor.Entities
 {
-    public class Request 
+    public class Request
     {
         [Key]
         public Guid Id { get; set; }
@@ -18,19 +18,16 @@ namespace Rookie.AMO.DataAccessor.Entities
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime AssignedDate { get; set; }
 
-        [Required]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
-        public DateTime AcceptedDate { get; set; }
+        public DateTime? AcceptedDate { get; set; }
 
-        [Required]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
-        public DateTime ReturnedDate { get; set; }
+        public DateTime? ReturnedDate { get; set; }
 
 
         [Required]
         public StateList State { get; set; }
 
-        [Required]
         [StringLength(maximumLength: 1000)]
         public string Note { get; set; }
 
