@@ -23,7 +23,7 @@ function RequestList(props) {
   //     Code: { propertyName: 'Code', desc: true },
   //   };
 
-  //  let { handleSort, handleSearch, handleFilterState, handleFilterCat } = props;
+  let { handleSort, handleSearch, handleFilterState, handleFilterCat } = props;
 
   //   const [searchText, setSearchText] = useState('');
   //   const [optionSort, setOptionSort] = useState(initSort);
@@ -48,7 +48,7 @@ function RequestList(props) {
             options={props.stateList}
             displayValue="name"
             placeholder="State"
-            //handleFilter={handleFilterState}
+            handleFilter={handleFilterState}
           />
         </Col>
         <Col md={3}>
@@ -112,7 +112,7 @@ function RequestList(props) {
             props.children
           ) : (
             <tr>
-              <td className="rowNotify"> No assets are found! </td>
+              <td className="rowNotify">No Request for Returning are found!</td>
             </tr>
           )}
         </tbody>

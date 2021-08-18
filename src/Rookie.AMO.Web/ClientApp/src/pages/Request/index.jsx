@@ -6,8 +6,9 @@ import RequestList from '../../components/Request/RequestList';
 import RequestItem from '../../components/Request/RequestItem';
 
 const stateList = [
-  { name: 'Accepted', value: 'Accepted' },
-  { name: 'Waiting', value: 'Waiting for accepted' },
+  { name: 'Completed', value: 'Completed' },
+  { name: 'Waiting for returing', value: 'WaitingReturn' },
+  { name: 'Not available', value: 'NotAvailable' },
 ];
 
 function Request() {
@@ -36,6 +37,19 @@ function Request() {
   CheckLoading(setIsLoading, requestPage);
 
   let requests = requestPage.items;
+
+  const resetPage = () => {
+    setPageNumber(1);
+    setIsReLoad(1);
+  };
+
+  const handleFilterState = (option, e) => {
+    if (option != null)
+      setStateFilter(option.map((a, index) => a.value).join(','));
+    else setStateFilter('');
+    resetPage();
+    setIsReLoad(1);
+  };
 
   function showRequests(requests) {
     let result = null;
@@ -66,6 +80,7 @@ function Request() {
         pageNumber={pageNumber}
         setPageNumber={setPageNumber}
         setIsReLoad={setIsReLoad}
+        handleFilterState={handleFilterState}
       >
         {showRequests(requests)}
       </RequestList>

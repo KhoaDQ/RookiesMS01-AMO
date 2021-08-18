@@ -14,8 +14,7 @@ function RequestItem(props) {
       <td>{request.assignedDate}</td>
       <td>{request.acceptedBy}</td>
       <td>{request.returnedDate}</td>
-      <td>{request.state}</td>{' '}
-      {/* {stateList.filter((e) => e.value == asset.state)[0].name} */}
+      <td>{stateList.filter((e) => e.value == request.state)[0].name}</td>{' '}
       <td onClick={(e) => e.stopPropagation()}>
         <span className="icon-nash icon-nash--red">
           <IoCloseSharp />
