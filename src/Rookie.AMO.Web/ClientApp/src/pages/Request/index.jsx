@@ -65,6 +65,14 @@ function Request() {
     setIsReLoad(1);
   };
 
+  const handleFilterDate = (date, e) => {
+    resetPage();
+    if (date == dateFilter) {
+      setDateFilter('');
+    } else setDateFilter(date);
+    setIsReLoad(1);
+  };
+
   function showRequests(requests) {
     let result = null;
     if (requests != null) {
@@ -96,6 +104,7 @@ function Request() {
         setIsReLoad={setIsReLoad}
         handleSort={handleSort}
         handleFilterState={handleFilterState}
+        handleFilterDate={handleFilterDate}
         handleSearch={handleSearch}
       >
         {showRequests(requests)}
@@ -120,7 +129,7 @@ function FetchPageRequest(
       let enpoint =
         'Request/find?State=' +
         stateFilter +
-        '&Date=' +
+        '&ReturnedDate=' +
         dateFilter +
         '&KeySearch=' +
         searchText +

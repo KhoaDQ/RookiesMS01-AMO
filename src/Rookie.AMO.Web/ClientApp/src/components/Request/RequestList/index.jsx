@@ -24,13 +24,18 @@ function RequestList(props) {
     Name: { propertyName: 'Name', desc: true },
   };
 
-  let { handleSort, handleSearch, handleFilterState, handleFilterCat } = props;
+  let { handleSort, handleSearch, handleFilterState, handleFilterDate } = props;
 
   const [searchText, setSearchText] = useState('');
+  const [pickedDate, setPickedDate] = useState('');
   const [optionSort, setOptionSort] = useState(initSort);
 
   const handleChange = (e) => {
     setSearchText(e.target.value);
+  };
+
+  const handlePickDate = (e) => {
+    setPickedDate(e.target.value);
   };
 
   const handleClickSort = (nameProp, e) => {
@@ -60,9 +65,16 @@ function RequestList(props) {
               className="form-control "
               id="AssignedDate"
               name="AssignedDate"
+              value={pickedDate}
+              onChange={handlePickDate}
             />
 
-            <InputGroupAddon addonType="append">
+            <InputGroupAddon
+              addonType="append"
+              onClick={(e) => {
+                handleFilterDate(pickedDate, e);
+              }}
+            >
               <InputGroupText className="right__icon">
                 <AiFillCalendar />
               </InputGroupText>
