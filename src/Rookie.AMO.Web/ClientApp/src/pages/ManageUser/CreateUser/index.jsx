@@ -67,8 +67,11 @@ const CreateUser = () => {
 
   useEffect(() => {
     dispatch(GetAllRolesAction());
+  }, []);
+
+  useEffect(() => {
     setNewUser({ ...newUser, location: user ? user.profile.location : ""});
-  }, [user, roles]);
+  }, [user]);
 
   const theDateOf18YearsAgo = new Date();
   const theYearOf18YearsAgo = theDateOf18YearsAgo.getFullYear() - 18;

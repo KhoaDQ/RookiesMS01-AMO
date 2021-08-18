@@ -127,15 +127,10 @@
   cursor: pointer;
 }
 
-.width-cp {
-  width: 488px;
-}
-
-.error-message {
-  font-size: 10px;
-  margin-bottom: 0px;
-}
 .header_detail{
   white-space: nowrap;
   padding: 10px;
+}
+.ml-auto {
+  margin-left: auto;
 }

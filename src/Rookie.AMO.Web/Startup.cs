@@ -19,6 +19,8 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Rookie.AMO.Web.DataProviders;
 using Refit;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace Rookie.AMO.Web
 {
@@ -97,7 +99,7 @@ namespace Rookie.AMO.Web
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "EcomWeb.API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "AMOWeb.API", Version = "v1" });
             });
             services.AddBusinessLayer(Configuration);
 

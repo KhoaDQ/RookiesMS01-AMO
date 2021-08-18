@@ -59,24 +59,5 @@ namespace Rookie.AMO.Identity.Quickstart.Account
 
             return Ok("Update successfully");
         }
-
-        [HttpPut("ChangePassword")]
-        public async Task<IActionResult> ChangePassword(ChangePasswordModel model)
-        {
-            try
-            {
-                await _userService.ChangePassword(model);
-                return Ok();
-            }
-            catch (NotFoundException notFound)
-            {
-                return NotFound(notFound.Message);
-            }
-            catch (Exception ex)
-            {
-                //when password is wrong
-                return BadRequest(ex.Message);
-            }
-        }
     }
 }

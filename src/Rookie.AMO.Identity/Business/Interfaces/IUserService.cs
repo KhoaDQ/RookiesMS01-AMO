@@ -16,6 +16,5 @@ namespace Rookie.AMO.Identity.Business.Interfaces
         Task DisableUserAsync(Guid userId);
         Task EnableUserAsync(Guid userId);
         Task<PagedResponseModel<UserDto>> PagedQueryAsync(string name, string type, int page, int limit);
-        Task ChangePassword(ChangePasswordModel model);
     }
 }

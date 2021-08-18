@@ -36,6 +36,11 @@ namespace Rookie.AMO.Identity.Business.Services
             var password = $"{user.UserName}@{user.DateOfBirth:ddmmyyyy}";
             var createUserResult = await _userManager.CreateAsync(user, password);
 
+            if (!createUserResult.Succeeded)
+            {
+                throw new Exception(createUserResult.Errors.First().Description);
+            }
+
             var claims = new List<Claim>()
             {
                 new Claim(IdentityModel.JwtClaimTypes.GivenName, user.FirstName),
@@ -47,11 +52,6 @@ namespace Rookie.AMO.Identity.Business.Services
 
             await _userManager.AddClaimsAsync(user, claims);
 
-            if (!createUserResult.Succeeded)
-            {
-                throw new Exception("Unexpected errors! Add claims operation is not success.");
-            }
-            
             var addRoleResult = await _userManager.AddToRoleAsync(user, userRequest.Type);
 
             if (!addRoleResult.Succeeded)
@@ -157,32 +157,6 @@ namespace Rookie.AMO.Identity.Business.Services
             user.JoinedDate = request.JoinedDate;
             user.DateOfBirth = request.DateOfBirth;
 
-            await _userManager.UpdateAsync(user);
-        }
-
-        public async Task ChangePassword(ChangePasswordModel model)
-        {
-            var user = await _userManager.FindByIdAsync(model.Id);
-
-            if (user == null)
-            {
-                throw new NotFoundException("User is not found!");
-            } 
-
-            if (model.ChangePasswordTimes > 0)
-            {
-                var passwordHash = new PasswordHasher<User>();
-                var verificationResult = passwordHash.VerifyHashedPassword(user, user.PasswordHash, model.CurrentPassword);
-                
-                if (verificationResult == PasswordVerificationResult.Failed)
-                {
-                    throw new Exception("Current password is wrong.");
-                }
-            }
-
-            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-            await _userManager.ResetPasswordAsync(user, token, model.NewPassword);
-            user.ChangePasswordTimes++;
             await _userManager.UpdateAsync(user);
         }
 
