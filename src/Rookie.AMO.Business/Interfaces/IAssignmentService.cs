@@ -17,10 +17,10 @@ namespace Rookie.AMO.Business.Interfaces
         Task<AssignmentDto> GetByIdAsync(Guid id);
 
 
-        Task<AssignmentDto> AddAsync(AssignmentRequest assetRequest);
+        Task<AssignmentDto> AddAsync(AssignmentRequest assignmentRequest, string assignedTo,string assignedBy);
 
         Task DeleteAsync(Guid id);
 
-        Task<AssignmentDto> UpdateAsync(Guid id, AssignmentUpdateRequest request);
+        Task<AssignmentDto> UpdateAsync(Guid id, AssignmentUpdateRequest request, string assignedTo);
     }
 }

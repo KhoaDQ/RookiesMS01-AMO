@@ -8,6 +8,7 @@ namespace Rookie.AMO.Contracts.Dtos.Assignment
 {
     public class AssignmentRequest
     {
+        public Guid Admin_ID { get; set; }
         public Guid User_ID { get; set; }
         public Guid AssetID { get; set; }
         public DateTime AssignedDate { get; set; }
