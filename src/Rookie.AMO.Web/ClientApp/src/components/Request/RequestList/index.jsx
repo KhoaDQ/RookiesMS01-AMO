@@ -19,26 +19,28 @@ import Filter from '../../Filter';
 import RequestPagination from '../../Pagination/RequestPagination';
 
 function RequestList(props) {
-  //   const initSort = {
-  //     Code: { propertyName: 'Code', desc: true },
-  //   };
+  const initSort = {
+    Code: { propertyName: 'Code', desc: true },
+    Name: { propertyName: 'Name', desc: true },
+  };
 
   let { handleSort, handleSearch, handleFilterState, handleFilterCat } = props;
 
   const [searchText, setSearchText] = useState('');
-  //   const [optionSort, setOptionSort] = useState(initSort);
+  const [optionSort, setOptionSort] = useState(initSort);
 
   const handleChange = (e) => {
     setSearchText(e.target.value);
   };
-  //   const handleClickSort = (nameProp, e) => {
-  //     e.preventDefault();
 
-  //     if (nameProp in optionSort) {
-  //       optionSort[nameProp].desc = !optionSort[nameProp].desc;
-  //       handleSort(e, optionSort[nameProp]);
-  //     }
-  //   };
+  const handleClickSort = (nameProp, e) => {
+    e.preventDefault();
+
+    if (nameProp in optionSort) {
+      optionSort[nameProp].desc = !optionSort[nameProp].desc;
+      handleSort(e, optionSort[nameProp]);
+    }
+  };
   return (
     <div>
       <h5 className="right-title">Request List</h5>
@@ -93,8 +95,23 @@ function RequestList(props) {
         <thead>
           <tr>
             <th>No.</th>
-            <th>Asset Code</th>
-            <th>Asset Name</th>
+            <th
+              onClick={(e) => {
+                handleClickSort('Code', e);
+              }}
+            >
+              Asset Code
+              {optionSort.Code.desc ? <AiFillCaretDown /> : <AiFillCaretUp />}
+            </th>
+            <th
+              onClick={(e) => {
+                handleClickSort('Name', e);
+              }}
+              className="header_name"
+            >
+              Asset Name
+              {optionSort.Name.desc ? <AiFillCaretDown /> : <AiFillCaretUp />}
+            </th>
             <th>Requested by</th>
             <th>Assigned Date</th>
             <th>Accepted by</th>

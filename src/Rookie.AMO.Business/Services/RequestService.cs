@@ -32,7 +32,7 @@ namespace Rookie.AMO.Business.Services
             var query = _baseRepository.Entities;
 
             query = query.Where(x => string.IsNullOrEmpty(filter.KeySearch) || x.Asset.Name.Contains(filter.KeySearch)
-                                || x.Asset.Code.Contains(filter.KeySearch));
+                                || x.Asset.Code.Contains(filter.KeySearch) || x.RequestedBy.Contains(filter.KeySearch));
 
 
             if (!string.IsNullOrEmpty(filter.State))
@@ -46,9 +46,27 @@ namespace Rookie.AMO.Business.Services
                 query = query.Where(x => x.ReturnedDate == filter.ReturnedDate);
             }
 
-
             if (!string.IsNullOrEmpty(filter.OrderProperty))
-                query = query.OrderByPropertyName(filter.OrderProperty, filter.Desc);
+                switch (filter.OrderProperty)
+                {
+                    case "Code":
+                        if (filter.Desc)
+                            query = query.OrderByDescending(a => a.Asset.Code);
+                        else
+                            query = query.OrderBy(a => a.Asset.Code);
+                        break;
+                    case "Name":
+                        if (filter.Desc)
+                            query = query.OrderByDescending(a => a.Asset.Name);
+                        else
+                            query = query.OrderBy(a => a.Asset.Name);
+                        break;
+                    case "":
+                        break;
+                    default:
+                        query = query.OrderByPropertyName(filter.OrderProperty, filter.Desc);
+                        break;
+                }
 
 
             var requests = await query

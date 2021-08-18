@@ -43,6 +43,14 @@ function Request() {
     setIsReLoad(1);
   };
 
+  const handleSort = (e, option) => {
+    setOptionSort({
+      propertyName: option.propertyName,
+      desc: option.desc.toString(),
+    });
+    setIsReLoad(1);
+  };
+
   const handleSearch = (text, e) => {
     resetPage();
     setSearchText(text);
@@ -86,6 +94,7 @@ function Request() {
         pageNumber={pageNumber}
         setPageNumber={setPageNumber}
         setIsReLoad={setIsReLoad}
+        handleSort={handleSort}
         handleFilterState={handleFilterState}
         handleSearch={handleSearch}
       >
