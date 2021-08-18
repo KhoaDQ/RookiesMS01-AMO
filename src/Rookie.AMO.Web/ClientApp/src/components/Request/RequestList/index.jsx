@@ -25,12 +25,12 @@ function RequestList(props) {
 
   let { handleSort, handleSearch, handleFilterState, handleFilterCat } = props;
 
-  //   const [searchText, setSearchText] = useState('');
+  const [searchText, setSearchText] = useState('');
   //   const [optionSort, setOptionSort] = useState(initSort);
 
-  //   const handleChange = (e) => {
-  //     setSearchText(e.target.value);
-  //   };
+  const handleChange = (e) => {
+    setSearchText(e.target.value);
+  };
   //   const handleClickSort = (nameProp, e) => {
   //     e.preventDefault();
 
@@ -73,13 +73,13 @@ function RequestList(props) {
             <Input
               placeholder="Search"
               name="searchText"
-              //value={searchText}
-              //onChange={handleChange}
+              value={searchText}
+              onChange={handleChange}
             />
             <InputGroupAddon
               addonType="append"
               onClick={(e) => {
-                //handleSearch(searchText, e);
+                handleSearch(searchText, e);
               }}
             >
               <InputGroupText className="right__icon">

@@ -14,7 +14,7 @@ const stateList = [
 function Request() {
   //Table requests
   const [stateFilter, setStateFilter] = useState('');
-  const [dateFilter, setdateFilter] = useState('');
+  const [dateFilter, setDateFilter] = useState('');
   const [searchText, setSearchText] = useState('');
   const [pageNumber, setPageNumber] = useState(1);
   const [optionSort, setOptionSort] = useState({
@@ -40,6 +40,12 @@ function Request() {
 
   const resetPage = () => {
     setPageNumber(1);
+    setIsReLoad(1);
+  };
+
+  const handleSearch = (text, e) => {
+    resetPage();
+    setSearchText(text);
     setIsReLoad(1);
   };
 
@@ -81,6 +87,7 @@ function Request() {
         setPageNumber={setPageNumber}
         setIsReLoad={setIsReLoad}
         handleFilterState={handleFilterState}
+        handleSearch={handleSearch}
       >
         {showRequests(requests)}
       </RequestList>
