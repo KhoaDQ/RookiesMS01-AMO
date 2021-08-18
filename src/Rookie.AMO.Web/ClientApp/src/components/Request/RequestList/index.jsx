@@ -48,7 +48,7 @@ function RequestList(props) {
             options={props.stateList}
             displayValue="name"
             placeholder="State"
-            handleFilter={handleFilterState}
+            //handleFilter={handleFilterState}
           />
         </Col>
         <Col md={3}>
@@ -73,13 +73,13 @@ function RequestList(props) {
             <Input
               placeholder="Search"
               name="searchText"
-              value={searchText}
-              onChange={handleChange}
+              //value={searchText}
+              //onChange={handleChange}
             />
             <InputGroupAddon
               addonType="append"
               onClick={(e) => {
-                handleSearch(searchText, e);
+                //handleSearch(searchText, e);
               }}
             >
               <InputGroupText className="right__icon">

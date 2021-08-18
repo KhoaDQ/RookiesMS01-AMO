@@ -7,7 +7,7 @@ import RequestItem from '../../components/Request/RequestItem';
 
 const stateList = [
   { name: 'Accepted', value: 'Accepted' },
-  { name: 'Waiting for accepted', value: 'Waiting for accepted' },
+  { name: 'Waiting', value: 'Waiting for accepted' },
 ];
 
 function Request() {
@@ -43,7 +43,7 @@ function Request() {
       if (requests.length > 0) {
         result = requests.map((request, index) => {
           return (
-            <RequestItem //
+            <RequestItem
               key={index}
               request={request}
               index={index}
@@ -61,8 +61,8 @@ function Request() {
       <RequestList
         isLoading={isLoading}
         stateList={stateList}
-        totalPages={assetPage.totalPages}
-        totalItems={assetPage.totalItems}
+        totalPages={requestPage.totalPages}
+        totalItems={requestPage.totalItems}
         pageNumber={pageNumber}
         setPageNumber={setPageNumber}
         setIsReLoad={setIsReLoad}
