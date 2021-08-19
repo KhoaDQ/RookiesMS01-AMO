@@ -8,7 +8,7 @@ const PopupComplete = (props) => {
 
   useEffect(() => {
     setIsModalOpen(props.isModalOpen);
-  });
+  }, [props.isModalOpen]);
 
   const handleCancel = () => {
     setIsModalOpen(false);
@@ -17,7 +17,9 @@ const PopupComplete = (props) => {
 
   return (
     <div>
-      <div class={'modal ' + (isModalOpen ? 'modal__open' : 'modal__close')}>
+      <div
+        className={'modal ' + (isModalOpen ? 'modal__open' : 'modal__close')}
+      >
         <div className="modal__overlay"></div>
 
         <div className="modal__body">

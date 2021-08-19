@@ -74,7 +74,7 @@ function Request() {
 
   const handleFilterDate = (date, e) => {
     resetPage();
-    if (date == dateFilter) {
+    if (date === dateFilter) {
       setDateFilter('');
     } else setDateFilter(date);
     setIsReLoad(1);
@@ -161,10 +161,10 @@ function CompleteRequest(id, isComplete, setIsReLoad, setIsComplete) {
 
       console.log('Fetch' + id);
     }
-    if (id != '' && isComplete == 1) {
+    if (id !== '' && isComplete === 1) {
       completeRequest(id);
     }
-  }, [isComplete]);
+  }, [id, isComplete, setIsReLoad, setIsComplete]);
 }
 
 function FetchPageRequest(
@@ -203,7 +203,16 @@ function FetchPageRequest(
       fetch();
       setIsReLoad(0);
     }
-  }, [isReLoad]);
+  }, [
+    isReLoad,
+    stateFilter,
+    dateFilter,
+    searchText,
+    pageNumber,
+    optionSort.propertyName,
+    optionSort.desc,
+    setIsReLoad,
+  ]);
 
   const requestPage = useSelector((state) => state.RequestReducer);
 
@@ -214,7 +223,7 @@ function CheckLoading(setIsLoading, page) {
   useEffect(() => {
     console.log(page);
     if ('items' in page) setIsLoading(false);
-  }, [page]);
+  }, [page, setIsLoading]);
 }
 
 export default Request;
