@@ -7,6 +7,7 @@ using Rookie.AMO.Business.Interfaces;
 using Rookie.AMO.Contracts;
 using Rookie.AMO.Contracts.Constants;
 using Rookie.AMO.Contracts.Dtos.Assignment;
+using Rookie.AMO.Web.DataProviders;
 
 namespace Rookie.AMO.Web.Controllers
 {
@@ -15,16 +16,20 @@ namespace Rookie.AMO.Web.Controllers
     public class AssignmentController : ControllerBase 
     {
         private readonly IAssignmentService _assignmentService;
-        public AssignmentController(IAssignmentService assignmentService)
+        private readonly IUserService _userService;
+        public AssignmentController(IAssignmentService assignmentService, IUserService userService)
         {
             _assignmentService = assignmentService;
+            _userService = userService;
         }
 
         [HttpPost]
         public async Task<ActionResult<AssignmentDto>> CreateAsync([FromBody] AssignmentRequest assignmentRequest)
         {
             Ensure.Any.IsNotNull(assignmentRequest, nameof(assignmentRequest));
-            var assignment = await _assignmentService.AddAsync(assignmentRequest);
+            var assignedTo = Task.FromResult(_userService.GetByIdAsync(assignmentRequest.User_ID)).Result.Result.UserName;
+            var assignedBy = Task.FromResult(_userService.GetByIdAsync(assignmentRequest.Admin_ID)).Result.Result.UserName;
+            var assignment = await _assignmentService.AddAsync(assignmentRequest,assignedTo,assignedBy);
             return Created(Endpoints.Assignment, assignment);
         }
 
@@ -32,7 +37,8 @@ namespace Rookie.AMO.Web.Controllers
         public async Task<ActionResult> UpdateAsync(Guid id, [FromBody] AssignmentUpdateRequest request)
         {
             Ensure.Any.IsNotNull(request, nameof(request));
-            await _assignmentService.UpdateAsync(id,request);
+            var assignedTo = Task.FromResult(_userService.GetByIdAsync(request.User_ID)).Result.Result.UserName;
+            await _assignmentService.UpdateAsync(id,request,assignedTo);
             return NoContent();
         }
 

@@ -27,10 +27,12 @@ namespace Rookie.AMO.Business.Services
             _context = context;
         }
 
-        public async Task<AssignmentDto> AddAsync(AssignmentRequest assignmentRequest)
+        public async Task<AssignmentDto> AddAsync(AssignmentRequest assignmentRequest, string assignedTo,string assignedBy)
         {
             Ensure.Any.IsNotNull(assignmentRequest, nameof(assignmentRequest));
             var assignment = _mapper.Map<Assignment>(assignmentRequest);
+            assignment.AssignedBy = assignedBy;
+            assignment.AssignedTo = assignedTo;
             assignment.State = (StateList)EnumConverExtension.GetValueInt<StateList>("WaitingAccept");
             var item = await _baseRepository.AddAsync(assignment);
             return _mapper.Map<AssignmentDto>(item);
@@ -42,7 +44,7 @@ namespace Rookie.AMO.Business.Services
             await _baseRepository.DeleteAsync(id);
         }
 
-        public async Task<AssignmentDto> UpdateAsync(Guid id, AssignmentUpdateRequest request)
+        public async Task<AssignmentDto> UpdateAsync(Guid id, AssignmentUpdateRequest request,string assignedTo)
         {
 
             var assignmentUpdate = _mapper.Map<Assignment>(request);
@@ -50,6 +52,7 @@ namespace Rookie.AMO.Business.Services
             var assignment = await _context.Assignments.FindAsync(id);
 
             assignment.User_ID = assignmentUpdate.User_ID;
+            assignment.AssignedTo = assignedTo;
             assignment.AssetID = assignmentUpdate.AssetID;
             assignment.AssignedDate = assignmentUpdate.AssignedDate;
             assignment.Note = assignmentUpdate.Note;
@@ -80,7 +83,7 @@ namespace Rookie.AMO.Business.Services
             var query = _baseRepository.Entities;
 
             query = query.Where(x => string.IsNullOrEmpty(filter.KeySearch)|| x.Asset.Name.Contains(filter.KeySearch)
-                                || x.Asset.Code.Contains(filter.KeySearch));
+                                || x.Asset.Code.Contains(filter.KeySearch) || x.AssignedTo.Contains(filter.KeySearch));
 
 
             if (!string.IsNullOrEmpty(filter.State))
@@ -95,8 +98,26 @@ namespace Rookie.AMO.Business.Services
             }
 
 
-            if (!string.IsNullOrEmpty(filter.OrderProperty))
-                query = query.OrderByPropertyName(filter.OrderProperty, filter.Desc);
+            switch (filter.OrderProperty)
+            {
+                case "AssetCode":
+                    if(filter.Desc)
+                        query = query.OrderByDescending(a => a.Asset.Code);
+                    else
+                        query = query.OrderBy(a => a.Asset.Code);
+                    break;
+                case "AssetName":
+                    if (filter.Desc)
+                        query = query.OrderByDescending(a => a.Asset.Name);
+                    else
+                        query = query.OrderBy(a => a.Asset.Name);
+                    break;
+                case "":
+                    break;
+                default:
+                    query = query.OrderByPropertyName(filter.OrderProperty, filter.Desc);
+                    break;
+            }
 
 
             var assignments = await query
