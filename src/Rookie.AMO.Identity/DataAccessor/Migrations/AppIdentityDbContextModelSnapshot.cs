@@ -158,6 +158,9 @@ namespace Rookie.AMO.Identity.DataAccessor.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<int>("ChangePasswordTimes")
+                        .HasColumnType("int");
+
                     b.Property<string>("CodeStaff")
                         .HasColumnType("nvarchar(max)");
 

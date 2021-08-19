@@ -8,6 +8,8 @@ import AssetReducer from "./assets/AssetReducer";
 import CategoryReducer from "./CategoryReducer";
 import EditUserReducer from "./users/EditUserReducer";
 import EditAsset from "./assets/EditAsset";
+import ReportReducer from "./reports/ReportReducer";
+import RequestReducer from "./requests/RequestReducer"
 import AssignmentReducer from "./assignments/AssignmentReducer";
 export default combineReducers({
   getAllRoles: GetAllRolesReducer,
@@ -18,5 +20,7 @@ export default combineReducers({
   EditAsset,
   CategoryReducer,
   EditUserReducer,
+  ReportReducer,
+  RequestReducer,
   AssignmentReducer
 });

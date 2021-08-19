@@ -15,6 +15,8 @@ using Rookie.AMO.Identity.Filters;
 using Rookie.AMO.Identity.Security.Handler;
 using Rookie.AMO.Identity.Security.Requirement;
 using System.Reflection;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Rookie.AMO.Identity
 {
@@ -47,7 +49,15 @@ namespace Rookie.AMO.Identity
             .AddFluentValidation(fv =>
             {
                 fv.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-            });
+            })
+            .AddJsonOptions(ops =>
+            {
+                ops.JsonSerializerOptions.IgnoreNullValues = true;
+                ops.JsonSerializerOptions.WriteIndented = true;
+                ops.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+                ops.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
+                ops.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            }); ;
 
 
             services.AddAuthentication(options =>
