@@ -33,7 +33,7 @@ namespace Rookie.AMO.Identity.Business.Services
             user.UserName = AutoGenerateUserName(user.FirstName, user.LastName);
             user.CodeStaff = AutoGenerateStaffCode();
             user.ChangePasswordTimes = 0;
-            var password = $"{user.UserName}@{user.DateOfBirth:ddmmyyyy}";
+            var password = $"{user.UserName}@{user.DateOfBirth.Date:ddMMyyyy}";
             var createUserResult = await _userManager.CreateAsync(user, password);
 
             if (!createUserResult.Succeeded)
