@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './Popup.css';
-import { AiOutlineCloseSquare } from 'react-icons/ai';
-import { Link } from 'react-router-dom';
 
-const PopupInfor = (props) => {
+const PopupComplete = (props) => {
+  let { handleComplete } = props;
+
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
@@ -16,7 +16,7 @@ const PopupInfor = (props) => {
   };
 
   return (
-    <div className="popup">
+    <div>
       <div
         className={'modal ' + (isModalOpen ? 'modal__open' : 'modal__close')}
       >
@@ -25,23 +25,21 @@ const PopupInfor = (props) => {
         <div className="modal__body">
           <div className="auth-form">
             <div className="auth-form__header">
-              <div className="row">
-                <div className="col-md-8">
-                  <p className="auth-form__question">{props.title}</p>
-                </div>
-
-                <div className="col-md-3">
-                  <Link to={props.pathReturn}>
-                    <button className="close" onClick={handleCancel}>
-                      <AiOutlineCloseSquare />
-                    </button>
-                  </Link>
-                </div>
-              </div>
+              <p className="auth-form__question">Are you sure?</p>
             </div>
 
             <div className="auth-form__body">
-              <p className="auth-form__heading">{props.content}</p>
+              <p className="auth-form__heading">
+                Do you want to mark this returning request as 'Completed'?
+              </p>
+              <div className="auth-form__action">
+                <button onClick={handleComplete} className="btn-accept">
+                  Yes
+                </button>
+                <button onClick={handleCancel} className="btn-cancel">
+                  No
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -50,4 +48,4 @@ const PopupInfor = (props) => {
   );
 };
 
-export default PopupInfor;
+export default PopupComplete;

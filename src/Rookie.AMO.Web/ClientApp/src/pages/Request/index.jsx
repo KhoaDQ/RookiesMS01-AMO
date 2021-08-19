@@ -4,11 +4,11 @@ import apiCaller from '../../apis/callApi';
 import * as action from '../../actions/ManagerRequest/ActionType';
 import RequestList from '../../components/Request/RequestList';
 import RequestItem from '../../components/Request/RequestItem';
+import PopupComplete from '../../components/Popup/PopupComplete';
 
 const stateList = [
   { name: 'Completed', value: 'Completed' },
   { name: 'Waiting for returing', value: 'WaitingReturn' },
-  { name: 'Not available', value: 'NotAvailable' },
 ];
 
 function Request() {
@@ -25,6 +25,11 @@ function Request() {
   const [isLoading, setIsLoading] = useState(true);
   const [isReLoad, setIsReLoad] = useState(1);
 
+  //Popup complete request
+  const [idRequestComplete, setIdRequestComplete] = useState('');
+  const [isCompleteOpen, setIsCompleteOpen] = useState(false);
+  const [isComplete, setIsComplete] = useState(0);
+
   let requestPage = FetchPageRequest(
     stateFilter,
     dateFilter,
@@ -37,6 +42,8 @@ function Request() {
   CheckLoading(setIsLoading, requestPage);
 
   let requests = requestPage.items;
+
+  CompleteRequest(idRequestComplete, isComplete, setIsReLoad, setIsComplete);
 
   const resetPage = () => {
     setPageNumber(1);
@@ -67,7 +74,7 @@ function Request() {
 
   const handleFilterDate = (date, e) => {
     resetPage();
-    if (date == dateFilter) {
+    if (date === dateFilter) {
       setDateFilter('');
     } else setDateFilter(date);
     setIsReLoad(1);
@@ -84,12 +91,40 @@ function Request() {
               request={request}
               index={index}
               stateList={stateList}
+              handleCompleteOpen={handleCompleteOpen}
             />
           );
         });
       }
     }
     return result;
+  }
+
+  //Popup complete request
+  const handleCompleteOpen = (id, e) => {
+    console.log('complete open');
+    setIdRequestComplete(id);
+    handleCompleteShow(true);
+  };
+
+  const handleCompleteShow = (isCompleteOpen) => {
+    setIsCompleteOpen(isCompleteOpen);
+  };
+
+  const handleComplete = (e) => {
+    setIsComplete(1);
+    handleCompleteShow(false);
+  };
+
+  function completePopup(handleComplete, handleCompleteShow) {
+    if (1)
+      return (
+        <PopupComplete
+          isModalOpen={isCompleteOpen}
+          handleComplete={handleComplete}
+          handleModelShow={handleCompleteShow}
+        ></PopupComplete>
+      );
   }
 
   return (
@@ -109,8 +144,27 @@ function Request() {
       >
         {showRequests(requests)}
       </RequestList>
+      {completePopup(handleComplete, handleCompleteShow)}
     </div>
   );
+}
+
+function CompleteRequest(id, isComplete, setIsReLoad, setIsComplete) {
+  // const dispatch = useDispatch()
+
+  useEffect(() => {
+    async function completeRequest(id) {
+      // const res = await apiCaller('Request/'+id, 'PUT', null);
+      // dispatch({ type: action.COMPLETE_REQUEST, payload: id });
+      setIsReLoad(0);
+      setIsComplete(0);
+
+      console.log('Fetch' + id);
+    }
+    if (id !== '' && isComplete === 1) {
+      completeRequest(id);
+    }
+  }, [id, isComplete, setIsReLoad, setIsComplete]);
 }
 
 function FetchPageRequest(
@@ -149,7 +203,16 @@ function FetchPageRequest(
       fetch();
       setIsReLoad(0);
     }
-  }, [isReLoad]);
+  }, [
+    isReLoad,
+    stateFilter,
+    dateFilter,
+    searchText,
+    pageNumber,
+    optionSort.propertyName,
+    optionSort.desc,
+    setIsReLoad,
+  ]);
 
   const requestPage = useSelector((state) => state.RequestReducer);
 
@@ -160,7 +223,7 @@ function CheckLoading(setIsLoading, page) {
   useEffect(() => {
     console.log(page);
     if ('items' in page) setIsLoading(false);
-  }, [page]);
+  }, [page, setIsLoading]);
 }
 
 export default Request;
