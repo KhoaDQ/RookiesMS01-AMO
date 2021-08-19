@@ -15,18 +15,21 @@ import {
 } from "reactstrap";
 import "../style.css";
 import Filter from "../../Filter";
-import AssetPagination from "../../Pagination/AssetPagination";
+import AssignmentPagination from "../../Pagination/AssignmentPagination";
 import { AiFillCalendar } from "@react-icons/all-files/ai/AiFillCalendar";
+import ReactPaginate from "react-paginate";
 
 function AssignmentList(props) {
   const initSort = {
     Code: { propertyName: "Code", desc: true },
     Name: { propertyName: "Name", desc: true },
-    Category: { propertyName: "Category", desc: true },
+    AssignedTo: { propertyName: "AssignedTo", desc: true },
+    AssignedBy: { propertyName: "AssignedBy", desc: true },
+    AssignedDate: { propertyName: "AssignedDate", desc: true },
     State: { propertyName: "State", desc: true },
   }
 
-  let { handleSort, handleSearch, handleFilterState, handleFilterCat } = props
+  let { stateList, paging } = props
 
   const [searchText, setSearchText] = useState("")
   const [optionSort, setOptionSort] = useState(initSort);
@@ -39,19 +42,29 @@ function AssignmentList(props) {
 
     if (nameProp in optionSort) {
       optionSort[nameProp].desc = !optionSort[nameProp].desc
-      handleSort(e, optionSort[nameProp])
+      props.handleSort(e, optionSort[nameProp])
     }
   }
+  function changePage(event) {
+    const currentPage = event.selected + 1;
+    if (currentPage !== paging.page) {
+      // setPaging(
+      //     {
+      //         ...paging, currentPage: currentPage
+      //     })
+    }
+  }
+
   return (
     <div>
       <h5 className="right-title">Assignment List</h5>
       <Row className="right-bar">
         <Col md={3}>
           <Filter
-            options={props.stateList}
+            style={{ width: '200px' }}
+            options={stateList}
             displayValue="name"
-            placeholder="State"
-            handleFilter={handleFilterState} />
+            placeholder="State" />
         </Col>
         <Col md={3}>
           <InputGroup>
@@ -71,7 +84,7 @@ function AssignmentList(props) {
         <Col md={3}>
           <InputGroup>
             <Input placeholder="Search" name="searchText" value={searchText} onChange={handleChange} />
-            <InputGroupAddon addonType="append" onClick={(e) => { handleSearch(searchText, e) }} >
+            <InputGroupAddon addonType="append">
               <InputGroupText className="right__icon">
                 <AiOutlineSearch />
               </InputGroupText>
@@ -90,11 +103,11 @@ function AssignmentList(props) {
       <Table className="table_border_spacing">
         <thead>
           <tr>
-            <th>No.</th>
+            <th className='scale-col-5'>No.</th>
             <th onClick={(e) => { handleClickSort("Code", e) }}>Asset Code
               {optionSort.Code.desc ? <AiFillCaretDown /> : <AiFillCaretUp />}
             </th>
-            <th onClick={(e) => { handleClickSort("Name", e) }} className="header_name">Asset Name
+            <th onClick={(e) => { handleClickSort("Name", e) }} >Asset Name
               {optionSort.Name.desc ? <AiFillCaretDown /> : <AiFillCaretUp />}
             </th>
             <th onClick={(e) => { handleClickSort("AssignedTo", e) }}>Assigned to
@@ -106,17 +119,31 @@ function AssignmentList(props) {
             <th onClick={(e) => { handleClickSort("AssignedDate", e) }}>Assigned date
               {optionSort.AssignedDate.desc ? <AiFillCaretDown /> : <AiFillCaretUp />}
             </th>
-            <th onClick={(e) => { handleClickSort("State", e) }}>State
+            <th className='scale-col-12' onClick={(e) => { handleClickSort("State", e) }}>State
               {optionSort.State.desc ? <AiFillCaretDown /> : <AiFillCaretUp />}
             </th>
             <th className="header_tools"></th>
           </tr>
         </thead>
         <tbody>
-          {props.isLoading ? <tr><td className="rowNotify">...Loading</td></tr> : props.totalItems > 0 ? props.children : <tr><td className="rowNotify"> No assets are found! </td></tr>}
+          {paging.totalItems > 0 ? props.children :
+            <span style={{ width: '200px', display: 'block', margin: '0 auto' }} className="rowNotify"> No assets are found! </span>}
         </tbody>
       </Table>
-      {props.totalItems > 0 ? <AssetPagination totalPages={props.totalPages} pageNumber={props.pageNumber} setPageNumber={props.setPageNumber} setIsReLoad={props.setIsReLoad} /> : null}
+      {/* <AssignmentPagination
+        paging={paging}
+      /> */}
+      <ReactPaginate
+        previousLabel={'Previous'}
+        nextLabel={'Next'}
+        pageCount={paging.totalPages}
+        marginPagesDisplayed={0}
+        pageRangeDisplayed={2}
+        containerClassName="pagination"
+        pageLinkClassName="numberPage"
+        onPageChange={(e) => changePage(e)}
+        forcePage={paging.pageNumber - 1}
+      />
     </div>
 
   );

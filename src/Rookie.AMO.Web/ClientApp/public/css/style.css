@@ -39,3 +39,23 @@ span.right__icon.input-group-text {
 select {
     appearance: none;
 }
+
+table th {
+    font-size: 14px;
+}
+
+.scale-col-5 {
+    width: 5%;
+}
+
+.scale-col-8 {
+    width: 8%;
+}
+
+.scale-col-12 {
+    width: 12%;
+}
+
+li {
+    font-size: 14px;
+}

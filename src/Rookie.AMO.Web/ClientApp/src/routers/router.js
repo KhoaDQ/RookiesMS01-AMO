@@ -72,12 +72,12 @@ const routes = [
     ),
   },
   {
-    path: "/createassignment",
+    path: "/create-assignment",
     exact: false,
     main: () => <CreateAssignment />,
   },
   {
-    path: "/editassignment",
+    path: "/edit-assignments",
     exact: false,
     main: () => <EditAssignment />,
   },
