@@ -1,51 +1,44 @@
-import React from "react";
-import { Fragment } from "react";
-import { Table } from "reactstrap";
-import {
-  Col,
-  Row,
-  Button,
-  InputGroupText,
-  FormGroup,
-  InputGroupAddon,
-  Input,
-  InputGroup,
-} from "reactstrap";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import apiCaller from "../../apis/callApi";
+import ReportReducer from "../../reducers/reports/ReportReducer";
+import ReportList from "../../components/Report/ReportList/ReportList";
+import ReportItem from "../../components/Report/ReportItem/ReportItem";
+import * as action from "../../actions/Report/ReportAction";
 function Report() {
-  return (
-    <Fragment>
-      <h5 className="right-title">Report</h5>
-      <Row from className='text-right right-bar'>
-        <Col md={12}>
-          <Button color="danger">Export</Button>
-        </Col>
-      </Row>
-      <Table>
-        <thead>
-          <tr>
-            <th>Category</th>
-            <th>Total</th>
-            <th>Assigned</th>
-            <th>Available</th>
-            <th>Not Available</th>
-            <th>Waiting for recycling</th>
-            <th>Recycled</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Headset</td>
-            <td>1500</td>
-            <td>1200</td>
-            <td>298</td>
-            <td>2</td>
-            <td>0</td>
-            <td>0</td>
-          </tr>
-        </tbody>
-      </Table>
-    </Fragment>
-  );
+  const initialReport = {};
+
+  const [report, setReport] = useState(initialReport);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    async function fetchReport() {
+      const res = await apiCaller("ReportViewer/report", "GET", null);
+      console.log(res);
+      dispatch({
+        type: action.FETCH_REPORTS,
+        payload: res.data,
+      });
+    }
+    fetchReport();
+    console.log();
+  }, []);
+
+  const reports = useSelector((state) => state.ReportReducer);
+
+  function showReport(reports) {
+    let result = null;
+    if (reports != null) {
+      if (reports.length > 0) {
+        result = reports.map((report, index) => {
+          return <ReportItem key={index} report={report} />;
+        });
+      }
+    }
+    return result;
+  }
+  return <ReportList>{showReport(reports)}</ReportList>;
 }
 
 export default Report;
