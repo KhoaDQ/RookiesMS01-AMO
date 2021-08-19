@@ -34,7 +34,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Rookie.AMO.Business\Rookie.AMO.Business.csproj" />
     <ProjectReference Include="..\Rookie.AMO.Contracts\Rookie.AMO.Contracts.csproj" />
   </ItemGroup>
 
