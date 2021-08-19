@@ -30,10 +30,10 @@ namespace Rookie.AMO.DataAccessor.Entities
         public Guid AssetID { get; set; }
 
         [Required]
-        public Guid User_ID { get; set; }
+        public Guid UserID { get; set; }
 
         [Required]
-        public Guid Admin_ID { get; set; }
+        public Guid AdminID { get; set; }
 
         public virtual Asset Asset { get; set; }
 
