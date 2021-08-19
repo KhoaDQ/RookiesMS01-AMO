@@ -18,5 +18,6 @@ namespace Rookie.AMO.Identity.DataAccessor.Entities
         public string CodeStaff { get; set; }
         public string Location { get; set; }
         public bool Disable { get; set; }
+        public int ChangePasswordTimes { get; set; }
     }
 }

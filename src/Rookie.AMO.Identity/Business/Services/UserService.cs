@@ -32,8 +32,14 @@ namespace Rookie.AMO.Identity.Business.Services
 
             user.UserName = AutoGenerateUserName(user.FirstName, user.LastName);
             user.CodeStaff = AutoGenerateStaffCode();
-            var password = $"{user.UserName}@{user.DateOfBirth:ddmmyyyy}";
+            user.ChangePasswordTimes = 0;
+            var password = $"{user.UserName}@{user.DateOfBirth.Date:ddMMyyyy}";
             var createUserResult = await _userManager.CreateAsync(user, password);
+
+            if (!createUserResult.Succeeded)
+            {
+                throw new Exception(createUserResult.Errors.First().Description);
+            }
 
             var claims = new List<Claim>()
             {
@@ -46,16 +52,11 @@ namespace Rookie.AMO.Identity.Business.Services
 
             await _userManager.AddClaimsAsync(user, claims);
 
-            if (!createUserResult.Succeeded)
-            {
-                throw new Exception("Unexpected errors!");
-            }
-            
             var addRoleResult = await _userManager.AddToRoleAsync(user, userRequest.Type);
 
             if (!addRoleResult.Succeeded)
             {
-                throw new Exception("Unexpected errors!");
+                throw new Exception("Unexpected errors! Add role operation is not success.");
             }
 
             return _mapper.Map<UserDto>(user);

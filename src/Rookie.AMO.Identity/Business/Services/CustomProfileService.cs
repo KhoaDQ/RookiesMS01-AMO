@@ -44,6 +44,7 @@ namespace Rookie.AMO.Identity.Business.Services
                 {
                     new Claim(JwtClaimTypes.Subject, user.Id.ToString(CultureInfo.InvariantCulture)),
                     new Claim("userName", user.UserName),
+                    new Claim("changePasswordTimes", user.ChangePasswordTimes.ToString())
                 };
 
                 var userRoles = await _userManager.GetRolesAsync(user);
@@ -51,6 +52,7 @@ namespace Rookie.AMO.Identity.Business.Services
                 {
                     customClaims.Add(new Claim(JwtClaimTypes.Role, userRole));
                 }
+
                 context.IssuedClaims.AddRange(userClaims);
                 context.IssuedClaims.AddRange(customClaims);
             }

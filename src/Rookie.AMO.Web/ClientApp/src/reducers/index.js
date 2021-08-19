@@ -19,4 +19,5 @@ export default combineReducers({
   CategoryReducer,
   EditUserReducer,
   ReportReducer,
+  RequestReducer,
 });
