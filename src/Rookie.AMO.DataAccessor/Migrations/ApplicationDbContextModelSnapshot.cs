@@ -142,6 +142,9 @@ namespace Rookie.AMO.DataAccessor.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("AcceptedBy")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime?>("AcceptedDate")
                         .HasColumnType("datetime2");
 
@@ -157,6 +160,9 @@ namespace Rookie.AMO.DataAccessor.Migrations
                     b.Property<string>("Note")
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
+
+                    b.Property<string>("RequestedBy")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ReturnedDate")
                         .HasColumnType("datetime2");
