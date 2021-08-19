@@ -92,7 +92,7 @@ namespace Rookie.AMO.Business.Services
             }
             if (filter.AssignedDate != default(DateTime))
             {
-                query = query.Where(x =>DateTime.Compare(x.AssignedDate,filter.AssignedDate) ==0);
+                query = query.Where(x =>x.AssignedDate.Date.CompareTo(filter.AssignedDate.Date) == 0);
             }
 
 
