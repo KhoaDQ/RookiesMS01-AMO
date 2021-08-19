@@ -19,6 +19,9 @@ namespace Rookie.AMO.Business
             services.AddTransient<IAssetService, AssetService>();
 
             services.AddTransient<IReportViewerService, ReportViewerService>();
+            services.AddTransient<IAssignmentService, AssignmentService>();
+            services.AddTransient<IRequestService, RequestService>();
+
         }
     }
 }

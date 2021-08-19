@@ -155,7 +155,6 @@ namespace Rookie.AMO.Identity.Business.Services
             user.Gender = request.Gender;
             user.JoinedDate = request.JoinedDate;
             user.DateOfBirth = request.DateOfBirth;
-            user.UserName = AutoGenerateUserName(request.FirstName, request.LastName);
 
             await _userManager.UpdateAsync(user);
         }
