@@ -21,10 +21,10 @@ namespace Rookie.AMO.Identity.Business
             IIdentityServerBuilder builder;
             services.AddDataAccessorLayer(configuration, out builder);
             builder.AddProfileService<CustomProfileService>();
-
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IRoleService, RoleService>();
+        
         }
     }
 }

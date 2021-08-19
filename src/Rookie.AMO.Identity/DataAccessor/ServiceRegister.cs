@@ -15,6 +15,7 @@ namespace Rookie.AMO.Identity.DataAccessor
     {
         public static void AddDataAccessorLayer(this IServiceCollection services, IConfiguration configuration, out IIdentityServerBuilder builder)
         {
+
             services.AddDbContext<AppIdentityDbContext>(options =>
             {
                 options.UseSqlServer(configuration.GetConnectionString("AppIdentityDbContext"));
@@ -48,7 +49,7 @@ namespace Rookie.AMO.Identity.DataAccessor
                             configuration.GetConnectionString("AppOperationDbContext"));
                 })
                 .AddAspNetIdentity<User>();
-
+            
             if (Convert.ToBoolean(configuration["SeedData"]))
             {
                 var identityConnection = configuration.GetConnectionString("AppIdentityDbContext");
