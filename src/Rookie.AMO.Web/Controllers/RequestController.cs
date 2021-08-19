@@ -32,5 +32,12 @@ namespace Rookie.AMO.Web.Controllers
             await _requestService.CompleteAsync(id, username, adminId);
             return NoContent();
         }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteAsync([FromRoute] Guid id)
+        {
+            await _requestService.DeleteAsync(id);
+            return NoContent();
+        }
     }
 }
