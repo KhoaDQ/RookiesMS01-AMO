@@ -9,6 +9,7 @@ import CategoryReducer from "./CategoryReducer";
 import EditUserReducer from "./users/EditUserReducer";
 import EditAsset from "./assets/EditAsset";
 import ReportReducer from "./reports/ReportReducer";
+import RequestReducer from "./requests/RequestReducer"
 export default combineReducers({
   getAllRoles: GetAllRolesReducer,
   createUser: CreateUserReducer,
