@@ -14,14 +14,22 @@ function RequestItem(props) {
       <td>{request.requestedBy}</td>
       <td>{moment(request.assignedDate).format('YYYY-MM-DD')}</td>
       <td>{request.acceptedBy}</td>
-      <td>{moment(request.returnedDate).format('YYYY-MM-DD')}</td>
+      <td>
+        {request.returnedDate == '0001-01-01T00:00:00'
+          ? ''
+          : moment(request.returnedDate).format('YYYY-MM-DD')}
+      </td>
       <td>{stateList.filter((e) => e.value == request.state)[0].name}</td>{' '}
       <td onClick={(e) => e.stopPropagation()}>
         <span className="icon-nash icon-nash--red">
           <IoCloseSharp />
         </span>
         <span className="icon-nash icon-nash--black">
-          <BsCheck />
+          <BsCheck
+            onClick={(e) => {
+              props.handleCompleteOpen(request.id, e);
+            }}
+          />
         </span>
       </td>
     </tr>
