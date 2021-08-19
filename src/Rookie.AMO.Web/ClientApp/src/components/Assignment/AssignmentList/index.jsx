@@ -21,21 +21,25 @@ import ReactPaginate from "react-paginate";
 
 function AssignmentList(props) {
   const initSort = {
-    Code: { propertyName: "Code", desc: true },
-    Name: { propertyName: "Name", desc: true },
+    AssetCode: { propertyName: "Code", desc: true },
+    AssetName: { propertyName: "Name", desc: true },
     AssignedTo: { propertyName: "AssignedTo", desc: true },
     AssignedBy: { propertyName: "AssignedBy", desc: true },
     AssignedDate: { propertyName: "AssignedDate", desc: true },
     State: { propertyName: "State", desc: true },
   }
 
-  let { stateList, paging } = props
-
+  let { stateList, filters, setFilters, paging } = props
   const [searchText, setSearchText] = useState("")
+  const [filterDate, setFilterDate] = useState()
   const [optionSort, setOptionSort] = useState(initSort);
 
   const handleChange = (e) => {
-    setSearchText(e.target.value)
+    const { name, value } = e.target
+    if (name === 'AssignedDate')
+      setFilterDate(value)
+    else
+      setSearchText(value)
   }
   const handleClickSort = (nameProp, e) => {
     e.preventDefault()
@@ -45,16 +49,26 @@ function AssignmentList(props) {
       props.handleSort(e, optionSort[nameProp])
     }
   }
-  function changePage(event) {
-    const currentPage = event.selected + 1;
-    if (currentPage !== paging.page) {
-      // setPaging(
-      //     {
-      //         ...paging, currentPage: currentPage
-      //     })
-    }
+
+  const handleSearch = (e) => {
+    setFilters({ ...filters, KeySearch: searchText })
+  }
+  const handleFilterDate = (e) => {
+    setFilters({ ...filters, AssignedDate: filterDate })
   }
 
+  const handleSort = (e, option) => {
+    setOptionSort({ propertyName: option.propertyName, desc: option.desc.toString() })
+    // setIsReLoad(1)
+  }
+
+  const handleFilterState = (option, e) => {
+    if (option != null)
+      setFilters({ ...filters, State: option.map((a, index) => a.value).join(',') })
+    else
+      setFilters({ ...filters, State: '' })
+    // setIsReLoad(1)
+  }
   return (
     <div>
       <h5 className="right-title">Assignment List</h5>
@@ -64,6 +78,7 @@ function AssignmentList(props) {
             style={{ width: '200px' }}
             options={stateList}
             displayValue="name"
+            handleFilter={handleFilterState}
             placeholder="State" />
         </Col>
         <Col md={3}>
@@ -73,10 +88,12 @@ function AssignmentList(props) {
               className="form-control "
               id="AssignedDate"
               name="AssignedDate"
+              value={filterDate}
+              onChange={handleChange}
             />
             <InputGroupAddon addonType="append">
               <InputGroupText className="right__icon">
-                <AiFillCalendar />
+                <AiFillCalendar onClick={handleFilterDate} />
               </InputGroupText>
             </InputGroupAddon>
           </InputGroup>
@@ -86,7 +103,7 @@ function AssignmentList(props) {
             <Input placeholder="Search" name="searchText" value={searchText} onChange={handleChange} />
             <InputGroupAddon addonType="append">
               <InputGroupText className="right__icon">
-                <AiOutlineSearch />
+                <AiOutlineSearch onClick={handleSearch} />
               </InputGroupText>
             </InputGroupAddon>
           </InputGroup>
@@ -102,13 +119,13 @@ function AssignmentList(props) {
 
       <Table className="table_border_spacing">
         <thead>
-          <tr>
+          <tr style={{cursor:'pointer'}}>
             <th className='scale-col-5'>No.</th>
-            <th onClick={(e) => { handleClickSort("Code", e) }}>Asset Code
-              {optionSort.Code.desc ? <AiFillCaretDown /> : <AiFillCaretUp />}
+            <th onClick={(e) => { handleClickSort("AssetCode", e) }}>Asset Code
+              {optionSort.AssetCode.desc ? <AiFillCaretDown /> : <AiFillCaretUp />}
             </th>
-            <th onClick={(e) => { handleClickSort("Name", e) }} >Asset Name
-              {optionSort.Name.desc ? <AiFillCaretDown /> : <AiFillCaretUp />}
+            <th onClick={(e) => { handleClickSort("AssetName", e) }} >Asset Name
+              {optionSort.AssetName.desc ? <AiFillCaretDown /> : <AiFillCaretUp />}
             </th>
             <th onClick={(e) => { handleClickSort("AssignedTo", e) }}>Assigned to
               {optionSort.AssignedTo.desc ? <AiFillCaretDown /> : <AiFillCaretUp />}
@@ -130,19 +147,10 @@ function AssignmentList(props) {
             <span style={{ width: '200px', display: 'block', margin: '0 auto' }} className="rowNotify"> No assets are found! </span>}
         </tbody>
       </Table>
-      {/* <AssignmentPagination
+      <AssignmentPagination
+        filters={filters}
+        setFilters={setFilters}
         paging={paging}
-      /> */}
-      <ReactPaginate
-        previousLabel={'Previous'}
-        nextLabel={'Next'}
-        pageCount={paging.totalPages}
-        marginPagesDisplayed={0}
-        pageRangeDisplayed={2}
-        containerClassName="pagination"
-        pageLinkClassName="numberPage"
-        onPageChange={(e) => changePage(e)}
-        forcePage={paging.pageNumber - 1}
       />
     </div>
 

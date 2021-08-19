@@ -24,7 +24,7 @@ function AssignmentItem(props) {
     return (
         <>
             <tr onClick={handleShowInfoAssignment}>
-                <td hover >{index}</td>
+                <td hover >{index + 1}</td>
                 <td>{assignment.assetCode}</td>
                 <td>{assignment.assetName}</td>
                 <td>{assignment.assignedTo}</td>

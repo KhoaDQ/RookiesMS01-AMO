@@ -16,11 +16,12 @@ function ManageAssignment() {
   const dispatch = useDispatch()
 
   const [filters, setFilters] = useState({
-    stateFilter: '',
-    AssignedDateFilter: '',
-    searchText: '',
-    pageNumber: 1,
-    limit: 3
+    KeySearch: '',
+    Page: 1,
+    State: '',
+    Limit: 10,
+    Desc: false,
+    OrderProperty: 'AssetCode'
   })
 
   const [paging, setPaging] = useState({
@@ -71,15 +72,7 @@ function ManageAssignment() {
   //   // setIsReLoad(1)
   // }
 
-  // const handleFilterDate = (option, e) => {
-  //   if (option != null)
-  //     setFilters({ ...filters, AssignedDateFilter: option.map((a, index) => a.id).join(',') })
-  //   else
-  //     setFilters({ ...filters, AssignedDateFilter: '' })
-
-  //   resetPage()
-  //   // setIsReLoad(1)
-  // }
+  
 
   //Popup detail assignment
   // const handleDetail = (assignment, e) => {
@@ -128,13 +121,14 @@ function ManageAssignment() {
   // }
   useEffect(() => {
     fetchAssignment()
-  }, [])
+  }, [filters])
 
   async function fetchAssignment() {
     const paramsString = queryString.stringify(filters);
     let endpoint = `Assignment/find?${paramsString}`;
+    // console.log(endpoint);
     const res = await apiCaller(endpoint, 'GET', null);
-    console.log(res.data);
+    // console.log(res);
     setPaging(
       {
         currentPage: res.data.currentPage,
@@ -165,12 +159,15 @@ function ManageAssignment() {
     return result
   }
 
+  console.log(filters);
 
   return (
     <div className="Assignment">
 
       <AssignmentList
         stateList={stateList}
+        filters={filters}
+        setFilters={setFilters}
         paging={paging}
       >
         {showAssignments(assignments)}
