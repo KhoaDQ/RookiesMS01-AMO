@@ -11,6 +11,12 @@
 .smallText .icon-nash--red-dis {
   color: rgb(253, 159, 159);
 }
+
+.smallText .icon-nash--black-dis {
+  color: rgb(148, 148, 148);
+}
+
+.smallText .icon-nash--black-dis:hover,
 .smallText .icon-nash--red-dis:hover {
   cursor: default;
 }

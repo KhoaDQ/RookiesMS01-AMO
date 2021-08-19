@@ -34,14 +34,29 @@ function RequestItem(props) {
               request.returnedDate === '0001-01-01T00:00:00'
                 ? (e) => {
                     props.handleCompleteOpen(request.id, e);
-                    console.log('dang click');
                   }
                 : undefined
             }
           />
         </span>
-        <span className="icon-nash icon-nash--black">
-          <FaTimes />
+        <span
+          className={
+            'icon-nash ' +
+            (request.returnedDate === '0001-01-01T00:00:00'
+              ? 'icon-nash--black'
+              : 'icon-nash--black-dis')
+          }
+        >
+          <FaTimes
+            onClick={
+              request.returnedDate === '0001-01-01T00:00:00'
+                ? (e) => {
+                    props.handleCancelOpen(request.id, e);
+                    console.log('dang click');
+                  }
+                : undefined
+            }
+          />
         </span>
       </td>
     </tr>
