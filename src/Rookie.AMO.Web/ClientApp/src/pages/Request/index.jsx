@@ -43,7 +43,23 @@ function Request() {
 
   let requests = requestPage.items;
 
-  CompleteRequest(idRequestComplete, isComplete, setIsReLoad, setIsComplete);
+  useEffect(() => {
+    if (isComplete == 0) {
+      setTimeout(() => {
+        setIsReLoad(1);
+      }, 100);
+    }
+  }, [isComplete]);
+
+  CompleteRequest(
+    idRequestComplete,
+    isComplete,
+    isReLoad,
+    setIsReLoad,
+    setIsComplete,
+    'johnd',
+    'f1ebfde9-c567-4ed5-b96f-20b9b51b8251'
+  );
 
   const resetPage = () => {
     setPageNumber(1);
@@ -149,22 +165,32 @@ function Request() {
   );
 }
 
-function CompleteRequest(id, isComplete, setIsReLoad, setIsComplete) {
-  // const dispatch = useDispatch()
+function CompleteRequest(
+  id,
+  isComplete,
+  isReLoad,
+  setIsReLoad,
+  setIsComplete,
+  username,
+  adminId
+) {
+  const dispatch = useDispatch();
 
   useEffect(() => {
     async function completeRequest(id) {
-      // const res = await apiCaller('Request/'+id, 'PUT', null);
-      // dispatch({ type: action.COMPLETE_REQUEST, payload: id });
-      setIsReLoad(0);
-      setIsComplete(0);
-
-      console.log('Fetch' + id);
+      const res = await apiCaller(
+        'Request/complete/' + id + '/' + username + '/' + adminId,
+        'PUT',
+        null
+      );
+      dispatch({ type: action.COMPLETE_REQUEST, payload: id });
     }
     if (id !== '' && isComplete === 1) {
       completeRequest(id);
+      setIsReLoad(0);
+      setIsComplete(0);
     }
-  }, [id, isComplete, setIsReLoad, setIsComplete]);
+  }, [id, isComplete, isReLoad, setIsReLoad, setIsComplete]);
 }
 
 function FetchPageRequest(
@@ -194,8 +220,6 @@ function FetchPageRequest(
         '&Page=' +
         pageNumber +
         '&Limit=2';
-
-      console.log(enpoint);
       const res = await apiCaller(enpoint, 'GET', null);
       dispatch({ type: action.FETCH_REQUESTS, payload: res.data });
     }
@@ -221,7 +245,6 @@ function FetchPageRequest(
 
 function CheckLoading(setIsLoading, page) {
   useEffect(() => {
-    console.log(page);
     if ('items' in page) setIsLoading(false);
   }, [page, setIsLoading]);
 }

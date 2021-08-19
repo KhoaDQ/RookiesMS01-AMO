@@ -8,6 +8,13 @@
   font-size: 15px;
 }
 
+.smallText .icon-nash--red-dis {
+  color: rgb(253, 159, 159);
+}
+.smallText .icon-nash--red-dis:hover {
+  cursor: default;
+}
+
 .request_list .header_tools {
   width: 10%;
 }
