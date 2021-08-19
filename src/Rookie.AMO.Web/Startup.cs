@@ -19,6 +19,8 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Rookie.AMO.Web.DataProviders;
 using Refit;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace Rookie.AMO.Web
 {

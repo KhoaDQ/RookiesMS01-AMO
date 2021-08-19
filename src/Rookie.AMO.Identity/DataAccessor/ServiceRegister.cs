@@ -22,8 +22,10 @@ namespace Rookie.AMO.Identity.DataAccessor
             });
 
             services.AddIdentity<User, IdentityRole>(options => {
-                options.Password.RequireDigit = true;
+                options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireUppercase = false;
+                options.Password.RequireDigit = false;
+                options.Password.RequiredLength = 8;
             })
                     .AddEntityFrameworkStores<AppIdentityDbContext>()
                     .AddDefaultTokenProviders();

@@ -9,3 +9,5 @@ export const JoinedDateIsNotLaterThanDOB = "Joined date is not later than Date o
 export const JoinedDateIsNotSaturdayOrSunday ="Joined date is Saturday or Sunday. Please select a different date";
 export const FirstNameIsRequired = "First name is required!";
 export const LastNameIsRequired = "Last name is required!";
+export const TheCharacterIsInvalidNotAllowSpaceCharacter = "The character is invalid";
+export const ConfirmNewPasswordNotBeTheSame = "Confirm password must matching New password.";
