@@ -8,7 +8,7 @@ import AssignmentList from "../../components/Assignment/AssignmentList";
 // import PopupDetailAssignment from "../../components/Popup/PopupDetailAssignment";
 function ManageAssignment() {
   const [stateFilter, setStateFilter] = useState("")
-  const [categoryFilter, setCategoryFilter] = useState("")
+  const [AssignedDateFilterFilter, setAssignedDateFilterFilter] = useState("")
   const [searchText, setSearchText] = useState("")
   const [pageNumber, setPageNumber] = useState(1)
   const [optionSort, setOptionSort] = useState({ propertyName: "", desc: 'false' })
@@ -26,7 +26,7 @@ function ManageAssignment() {
   const [isDelete, setIsDelete] = useState(0)
 
   //Table assignments
-  let assignmentPage = FetchPageAssignment(stateFilter, categoryFilter, searchText, pageNumber, optionSort, isReLoad, setIsReLoad);
+  let assignmentPage = FetchPageAssignment(stateFilter, AssignedDateFilterFilter, searchText, pageNumber, optionSort, isReLoad, setIsReLoad);
   CheckLoading(setIsLoading, assignmentPage)
 
   let assignments = assignmentPage.items;
@@ -60,9 +60,9 @@ function ManageAssignment() {
 
   const handleFilterCat = (option, e) => {
     if (option != null)
-      setCategoryFilter(option.map((a, index) => a.id).join(','))
+      setAssignedDateFilterFilter(option.map((a, index) => a.id).join(','))
     else
-      setCategoryFilter("")
+      setAssignedDateFilterFilter("")
     resetPage()
     setIsReLoad(1)
   }
@@ -166,12 +166,12 @@ function ManageAssignment() {
 
 
   };
-  function FetchPageAssignment(stateFilter, categoryFilter, searchText, pageNumber, optionSort = { propertyName: "", desc: "false" }, isReLoad, setIsReLoad) {
+  function FetchPageAssignment(stateFilter, AssignedDateFilterFilter, searchText, pageNumber, optionSort = { propertyName: "", desc: "false" }, isReLoad, setIsReLoad) {
     const dispatch = useDispatch()
 
     useEffect(() => {
       async function fetch() {
-        let enpoint = 'Assignment/find?State=' + stateFilter + '&Category=' + categoryFilter + '&KeySearch=' + searchText + '&OrderProperty=' + optionSort.propertyName + '&Desc=' + optionSort.desc + '&Page=' + pageNumber + '&Limit=2';
+        let enpoint = 'Assignment/find?State=' + stateFilter + '&AssignedDateFilter=' + AssignedDateFilterFilter + '&KeySearch=' + searchText + '&OrderProperty=' + optionSort.propertyName + '&Desc=' + optionSort.desc + '&Page=' + pageNumber + '&Limit=5';
 
         console.log(enpoint)
         const res = await apiCaller(enpoint, 'GET', null);
