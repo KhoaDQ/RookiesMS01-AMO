@@ -15,11 +15,11 @@ namespace Rookie.AMO.Web.Controllers
     public class ReportViewerController : ControllerBase
     {
         private readonly IReportViewerService _reportViewerService;
-        private readonly IUserService _userService;
-        public ReportViewerController(IReportViewerService reportViewerService, IUserService userService)
+        private readonly IExportProvider _exportProvider;
+        public ReportViewerController(IReportViewerService reportViewerService, IExportProvider exportProvider)
         {
             _reportViewerService = reportViewerService;
-            _userService = userService;
+            _exportProvider = exportProvider;
         }
 
         [HttpGet("report")]
@@ -28,5 +28,17 @@ namespace Rookie.AMO.Web.Controllers
             return await _reportViewerService.GetAllAsync();
         }
 
+        [HttpGet("export")]
+        public async Task<FileContentResult> ExportReport()
+        {
+            var report = await _reportViewerService.GetAllAsync() as List<ReportDto>;
+
+            var file = _exportProvider.Export<ReportDto>(report, "report", "report");
+
+            return new FileContentResult(file, "application/octet-stream")
+            {
+                FileDownloadName = $"report_{DateTime.Now.ToString("yyyyMMdd")}.xlsx"
+            };
+        }
     }
 }

@@ -8,6 +8,8 @@ function ReportReducer(state = initialState, action) {
   switch (type) {
     case types.FETCH_REPORTS:
       return payload;
+      case types.FETCH_EXPORTS:
+        return payload;
     default:
       return state;
   }

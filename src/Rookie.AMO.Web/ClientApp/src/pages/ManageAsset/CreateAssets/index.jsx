@@ -22,27 +22,27 @@ import {
   FormText,
 } from "reactstrap";
 const CreateAssets = () => {
-
   const dispatch = useDispatch();
   const AssetReducer = useSelector((state) => state.AssetReducer);
   const CategoryReducer = useSelector((state) => state.CategoryReducer);
 
-    const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const initAsset = {
-        Name: "",
-        CategoryId: 0,
-        Specification: "",
-        InstalledDate: "",
-        State: "",
-    };
-    const [newAsset, setNewAsset] = useState(initAsset);
+  const initAsset = {
+    Name: "",
+    CategoryId: 0,
+    Specification: "",
+    InstalledDate: "",
+    State: "",
+  };
+  const [newAsset, setNewAsset] = useState(initAsset);
 
-    const disableButton = newAsset.Name === initAsset.Name
-        || newAsset.Specification === initAsset.Specification
-        || initAsset.InstalledDate === newAsset.InstalledDate
-        || initAsset.CategoryId === newAsset.CategoryId
-        || initAsset.State === newAsset.State;
+  const disableButton =
+    newAsset.Name === initAsset.Name ||
+    newAsset.Specification === initAsset.Specification ||
+    initAsset.InstalledDate === newAsset.InstalledDate ||
+    initAsset.CategoryId === newAsset.CategoryId ||
+    initAsset.State === newAsset.State;
 
   const schema = yup.object().shape({
     Name: yup
@@ -73,10 +73,10 @@ const CreateAssets = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setNewAsset({ ...newAsset, [name]: value });
-      console.log(value);
-      console.log(disableButton);
+    console.log(value);
+    console.log(disableButton);
   };
-    
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewAsset({ ...newAsset, [name]: value });
@@ -87,8 +87,8 @@ const CreateAssets = () => {
     const { name, value } = e.target;
 
     setNewAsset({ ...newAsset, [name]: value });
-      console.log(value);
-      console.log(disableButton); 
+    console.log(value);
+    console.log(disableButton);
   };
 
   const {
@@ -105,8 +105,6 @@ const CreateAssets = () => {
 
   const handleOnSubmit = (e) => {
     // e.preventDefault();
-
-   
 
     async function CreateAsset() {
       const res = await apiCaller("Asset", "POST", newAsset);
@@ -247,20 +245,24 @@ const CreateAssets = () => {
         </fieldset>
 
         <br></br>
-              <button type="submit" className="btn btn-outline-danger margin color" disabled={disableButton}>
-                  Save
+        <button
+          type="submit"
+          className="btn btn-outline-danger margin color"
+          disabled={disableButton}
+        >
+          Save
         </button>
         <button type="button" class="btn btn-outline-danger color1">
-                  <Link to="/manage-user">Cancel</Link>
+          <Link to="/manage-user">Cancel</Link>
         </button>
       </form>
-          <PopupInfor
-              title="Information"
-              content="Create Asset successfully"
-              handleModelShow={(content) => setIsModalOpen(content)}
-              isModalOpen={isModalOpen}
-              pathReturn="/manage-asset"
-          ></PopupInfor>
+      <PopupInfor
+        title="Information"
+        content="Create Asset successfully"
+        handleModelShow={(content) => setIsModalOpen(content)}
+        isModalOpen={isModalOpen}
+        pathReturn="/manage-asset"
+      ></PopupInfor>
     </div>
   );
 };

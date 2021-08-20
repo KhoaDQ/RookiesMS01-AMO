@@ -18,7 +18,7 @@ function ManageUser() {
     name: "",
     type: "",
     page: 1,
-    limit: 3
+    limit: 3,
   });
 
   const roles = useSelector((state) => state.getAllRoles);
@@ -50,11 +50,10 @@ function ManageUser() {
 
     if (userPage.items) {
       if (createdUser.id != null) {
-        var index = userPage.items.findIndex(x => x.id === createdUser.id);
+        var index = userPage.items.findIndex((x) => x.id === createdUser.id);
         if (index === -1) {
           userPage.items.pop();
-        } 
-        else {
+        } else {
           userPage.items.splice(index, 1);
         }
         userPage.items.unshift(createdUser);

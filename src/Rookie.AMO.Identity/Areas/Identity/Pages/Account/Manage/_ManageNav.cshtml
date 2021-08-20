@@ -1,4 +1,5 @@
 ﻿@inject SignInManager<User> SignInManager
+@using Rookie.AMO.Identity.DataAccessor.Entities;
 @{
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
 }
