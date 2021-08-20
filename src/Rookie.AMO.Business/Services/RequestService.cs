@@ -39,7 +39,10 @@ namespace Rookie.AMO.Business.Services
             var asset = await _context.Assets.FindAsync(request.AssetId);
             asset.State = StateList.Available;
 
-            var assignment = _context.Assignments.Where(x => x.AssetID == request.AssetId).FirstOrDefault();
+            var assignment = (from a in _context.Assignments
+                              where a.AssetID == request.AssetId
+                              select a).FirstOrDefault();
+
             if (assignment != null)
                 _context.Assignments.Remove(assignment);
 

@@ -4,7 +4,6 @@ import { IoIosCloseCircleOutline } from "@react-icons/all-files/io/IoIosCloseCir
 import { Link } from "react-router-dom";
 import { format } from 'date-fns';
 import "../style.css";
-import axios from 'axios';
 import { MdSettingsBackupRestore } from '@react-icons/all-files/md/MdSettingsBackupRestore';
 import PopupDetail from '../../Popup/PopupDetail';
 function AssignmentItem(props) {
@@ -21,7 +20,6 @@ function AssignmentItem(props) {
 
     let value = new Date(assignment.assignedDate)
     const dateString = format(value, 'dd/MM/yyyy')
-    console.log(dateString);
 
     return (
         <>

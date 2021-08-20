@@ -9,15 +9,14 @@ import { useSelector } from "react-redux";
 import PopupRedirect from "./components/Popup/PopupRedirect";
 import { useState } from "react";
 import { useEffect } from "react";
-import { CallbackComponent } from "redux-oidc";
 
 function App() {
-  const { user, isLoadingUser } = useSelector((state) => state.oidc);
+  const { user } = useSelector((state) => state.oidc);
   const [redirect, setRedirect] = useState(false);
 
   useEffect(() => {
     setRedirect(user == null);
-  }, [user, isLoadingUser]);
+  }, [user]);
 
   return (
     <Router>
