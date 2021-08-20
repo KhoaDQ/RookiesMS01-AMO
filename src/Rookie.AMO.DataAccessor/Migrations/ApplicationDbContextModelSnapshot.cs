@@ -74,7 +74,7 @@ namespace Rookie.AMO.DataAccessor.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("Admin_ID")
+                    b.Property<Guid>("AdminID")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("AssetID")
@@ -97,7 +97,7 @@ namespace Rookie.AMO.DataAccessor.Migrations
                     b.Property<int>("State")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("User_ID")
+                    b.Property<Guid>("UserID")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");

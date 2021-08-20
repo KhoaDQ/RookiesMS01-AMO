@@ -27,12 +27,10 @@ namespace Rookie.AMO.Business.Services
             _context = context;
         }
 
-        public async Task<AssignmentDto> AddAsync(AssignmentRequest assignmentRequest, string assignedTo,string assignedBy)
+        public async Task<AssignmentDto> AddAsync(AssignmentRequest assignmentRequest)
         {
             Ensure.Any.IsNotNull(assignmentRequest, nameof(assignmentRequest));
             var assignment = _mapper.Map<Assignment>(assignmentRequest);
-            assignment.AssignedBy = assignedBy;
-            assignment.AssignedTo = assignedTo;
             assignment.State = (StateList)EnumConverExtension.GetValueInt<StateList>("WaitingAccept");
             var item = await _baseRepository.AddAsync(assignment);
             return _mapper.Map<AssignmentDto>(item);
@@ -44,15 +42,15 @@ namespace Rookie.AMO.Business.Services
             await _baseRepository.DeleteAsync(id);
         }
 
-        public async Task<AssignmentDto> UpdateAsync(Guid id, AssignmentUpdateRequest request,string assignedTo)
+        public async Task<AssignmentDto> UpdateAsync(Guid id, AssignmentUpdateRequest request)
         {
 
             var assignmentUpdate = _mapper.Map<Assignment>(request);
 
             var assignment = await _context.Assignments.FindAsync(id);
 
-            assignment.User_ID = assignmentUpdate.User_ID;
-            assignment.AssignedTo = assignedTo;
+            assignment.UserID = assignmentUpdate.UserID;
+            assignment.AssignedTo = assignmentUpdate.AssignedTo;
             assignment.AssetID = assignmentUpdate.AssetID;
             assignment.AssignedDate = assignmentUpdate.AssignedDate;
             assignment.Note = assignmentUpdate.Note;
@@ -94,7 +92,7 @@ namespace Rookie.AMO.Business.Services
             }
             if (filter.AssignedDate != default(DateTime))
             {
-                query = query.Where(x =>DateTime.Compare(x.AssignedDate,filter.AssignedDate) ==0);
+                query = query.Where(x =>x.AssignedDate.Date.CompareTo(filter.AssignedDate.Date) == 0);
             }
 
 
