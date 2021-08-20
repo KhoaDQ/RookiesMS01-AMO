@@ -36,6 +36,10 @@ function Request() {
   const [isCancelOpen, setIsCancelOpen] = useState(false);
   const [isCancel, setIsCancel] = useState(0);
 
+  //Admin information
+  const { user } = useSelector((state) => state.oidc);
+  console.log(user.profile);
+
   let requestPage = FetchPageRequest(
     stateFilter,
     dateFilter,
