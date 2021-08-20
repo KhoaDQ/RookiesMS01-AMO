@@ -83,7 +83,7 @@ function UserList(props) {
           </Link>
         </Col>
       </Row>
-      <Table>
+      <Table className="table_border_spacing table">
         <thead>
           <tr>
             <th>Staff Code</th>

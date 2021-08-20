@@ -5,7 +5,7 @@ import { AiOutlineCloseSquare } from "react-icons/ai";
 const PopupDetail = (props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { content } = props
-  
+
   useEffect(() => {
     setIsModalOpen(props.isModalOpen);
   });
