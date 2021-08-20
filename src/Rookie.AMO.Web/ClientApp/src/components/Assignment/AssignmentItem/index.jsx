@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { IoMdCreate } from "@react-icons/all-files/io/IoMdCreate";
 import { IoIosCloseCircleOutline } from "@react-icons/all-files/io/IoIosCloseCircleOutline";
 import { Link } from "react-router-dom";
@@ -21,6 +21,8 @@ function AssignmentItem(props) {
 
     let value = new Date(assignment.assignedDate)
     const dateString = format(value, 'dd/MM/yyyy')
+    console.log(dateString);
+
     return (
         <>
             <tr onClick={handleShowInfoAssignment}>

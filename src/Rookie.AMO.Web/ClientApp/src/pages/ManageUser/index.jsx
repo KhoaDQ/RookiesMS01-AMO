@@ -6,6 +6,7 @@ import apiCaller from "../../apis/callApi";
 import UserItem from "../../components/User/UserItem";
 import UserList from "../../components/User/UserList";
 import { FETCH_ROLES } from "../../actions/ManageUser/ActionType";
+import PopupDelete from "../../components/Popup/PopupDelete";
 
 function ManageUser() {
   const [pageNumber, setPageNumber] = useState(1);
@@ -45,6 +46,9 @@ function ManageUser() {
     fetch();
   }, [paging]);
 
+  function handleDeleteOpen() {
+    console.log('okie');
+  }
   const showUsers = () => {
     let result = null;
 
@@ -53,7 +57,7 @@ function ManageUser() {
         var index = userPage.items.findIndex(x => x.id === createdUser.id);
         if (index === -1) {
           userPage.items.pop();
-        } 
+        }
         else {
           userPage.items.splice(index, 1);
         }
@@ -61,7 +65,11 @@ function ManageUser() {
       }
 
       result = userPage.items.map((user, index) => {
-        return <UserItem key={index} user={user} index={index} />;
+        return <UserItem
+          key={index}
+          user={user}
+          index={index}
+          handleDeleteOpen={handleDeleteOpen} />;
       });
     }
 
