@@ -42,22 +42,23 @@ const CreateUser = () => {
     joinedDate: "",
     gender: "Female",
     type: 0,
-    location: ""
+    location: "",
   };
 
   const [newUser, setNewUser] = useState(initUser);
-  const disableButton = newUser.firstName === initUser.firstName || newUser.lastName === initUser.lastName || 
-            initUser.dateOfBirth === newUser.dateOfBirth || initUser.joinedDate === newUser.joinedDate ||
-            initUser.type === newUser.type;
+  const disableButton =
+    newUser.firstName === initUser.firstName ||
+    newUser.lastName === initUser.lastName ||
+    initUser.dateOfBirth === newUser.dateOfBirth ||
+    initUser.joinedDate === newUser.joinedDate ||
+    initUser.type === newUser.type;
 
   const onSubmit = (e) => {
     try {
-      setNewUser({ ...newUser, location: user ? user.profile.location : ""});
+      setNewUser({ ...newUser, location: user ? user.profile.location : "" });
       dispatch(CreateUserAction(newUser));
       setModalOpen(true);
-    } catch (ex) {
-      
-    }
+    } catch (ex) {}
   };
 
   const handleInputChange = (event) => {
@@ -70,31 +71,32 @@ const CreateUser = () => {
   }, []);
 
   useEffect(() => {
-    setNewUser({ ...newUser, location: user ? user.profile.location : ""});
+    setNewUser({ ...newUser, location: user ? user.profile.location : "" });
   }, [user]);
 
   const theDateOf18YearsAgo = new Date();
   const theYearOf18YearsAgo = theDateOf18YearsAgo.getFullYear() - 18;
   theDateOf18YearsAgo.setFullYear(theYearOf18YearsAgo);
 
-  const theEarliestJoinedDate = newUser.dateOfBirth ? new Date(newUser.dateOfBirth) : new Date();
+  const theEarliestJoinedDate = newUser.dateOfBirth
+    ? new Date(newUser.dateOfBirth)
+    : new Date();
   theEarliestJoinedDate.setFullYear(theEarliestJoinedDate.getFullYear() + 18);
 
   const schema = yup.object().shape({
-    firstName: yup
-      .string()
-      .matches(/^[A-Za-z]+$/, TheCharacterIsInvalid),
-    lastName: yup
-      .string()
-      .matches(/^[A-Za-z\s]+$/, TheCharacterIsInvalid),
+    firstName: yup.string().matches(/^[A-Za-z]+$/, TheCharacterIsInvalid),
+    lastName: yup.string().matches(/^[A-Za-z\s]+$/, TheCharacterIsInvalid),
 
     dateOfBirth: yup.date().max(theDateOf18YearsAgo, UserUnder18),
 
     joinedDate: yup
       .date()
       .min(theEarliestJoinedDate, JoinedDateIsNotLaterThanDOB)
-      .test('NotWeekend', JoinedDateIsNotSaturdayOrSunday, 
-        (value) => value.getDay() !== 6 && value.getDay() !== 0)
+      .test(
+        "NotWeekend",
+        JoinedDateIsNotSaturdayOrSunday,
+        (value) => value.getDay() !== 6 && value.getDay() !== 0
+      ),
   });
 
   const {
@@ -103,7 +105,7 @@ const CreateUser = () => {
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
-    mode: "onChange"
+    mode: "onChange",
   });
 
   return (
@@ -240,12 +242,18 @@ const CreateUser = () => {
           </div>
         </div>
         <br></br>
-        <button type="submit" className="btn btn-outline-danger margin color" disabled={disableButton}>
+        <button
+          type="submit"
+          className="btn btn-outline-danger margin color"
+          disabled={disableButton}
+        >
           Save
         </button>
-        <button type="button" className="btn btn-outline-danger color1">
-          <Link to="/manage-user">Cancel</Link>
-        </button>
+        <Link to="/manage-user">
+          <button type="button" className="btn btn-outline-danger color1">
+            Cancel
+          </button>
+        </Link>
       </form>
       <PopupInfor
         title="Information"
