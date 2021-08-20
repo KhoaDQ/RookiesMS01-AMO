@@ -36,6 +36,11 @@ function Request() {
   const [isCancelOpen, setIsCancelOpen] = useState(false);
   const [isCancel, setIsCancel] = useState(0);
 
+  //Admin information
+  const { user } = useSelector((state) => state.oidc);
+  console.log(user.profile.userName);
+  console.log(user.profile.sub);
+
   let requestPage = FetchPageRequest(
     stateFilter,
     dateFilter,
@@ -50,11 +55,6 @@ function Request() {
   let requests = requestPage.items;
 
   useEffect(() => {
-    if (isComplete == 0) {
-      setTimeout(() => {
-        setIsReLoad(1);
-      }, 300);
-    }
     if (isCancel == 0) {
       setTimeout(() => {
         setIsReLoad(1);
@@ -68,8 +68,8 @@ function Request() {
     isReLoad,
     setIsReLoad,
     setIsComplete,
-    'johnd',
-    'f1ebfde9-c567-4ed5-b96f-20b9b51b8251'
+    user.profile.userName,
+    user.profile.sub
   );
 
   CancelRequest(idRequestCancel, isCancel, isReLoad, setIsReLoad, setIsCancel);
