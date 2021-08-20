@@ -10,13 +10,12 @@ function App() {
     <Router>
       <Fragment>
         <Header />
-        <Container className="App">
-
+        <Container className="App container-fluid">
           <Row>
-            <Col xs="6" sm="3">
+            <Col xs="6" sm="2">
               <LeftBar />
             </Col>
-            <Col sm="9">{showContentMenus(routes)}</Col>
+            <Col sm="10">{showContentMenus(routes)}</Col>
           </Row>
 
         </Container>

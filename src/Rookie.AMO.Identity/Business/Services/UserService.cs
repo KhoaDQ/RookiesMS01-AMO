@@ -32,48 +32,56 @@ namespace Rookie.AMO.Identity.Business.Services
 
             user.UserName = AutoGenerateUserName(user.FirstName, user.LastName);
             user.CodeStaff = AutoGenerateStaffCode();
-            var password = $"{user.UserName}@{user.DateOfBirth:ddmmyyyy}";
+            user.ChangePasswordTimes = 0;
+            var password = $"{user.UserName}@{user.DateOfBirth.Date:ddMMyyyy}";
             var createUserResult = await _userManager.CreateAsync(user, password);
+
+            if (!createUserResult.Succeeded)
+            {
+                throw new Exception(createUserResult.Errors.First().Description);
+            }
 
             var claims = new List<Claim>()
             {
                 new Claim(IdentityModel.JwtClaimTypes.GivenName, user.FirstName),
                 new Claim(IdentityModel.JwtClaimTypes.FamilyName, user.LastName),
+                new Claim(IdentityModel.JwtClaimTypes.Name, user.FullName),
                 new Claim(IdentityModel.JwtClaimTypes.Role, user.Type),
                 new Claim("location", user.Location)
             };
 
             await _userManager.AddClaimsAsync(user, claims);
 
-            if (!createUserResult.Succeeded)
-            {
-                throw new Exception("Unexpected errors!");
-            }
-
-            /*var role = await _roleManager.FindByNameAsync(userRequest.Type);
-            if (role == null)
-            {
-
-            }*/
             var addRoleResult = await _userManager.AddToRoleAsync(user, userRequest.Type);
 
             if (!addRoleResult.Succeeded)
             {
-                throw new Exception("Unexpected errors!");
+                throw new Exception("Unexpected errors! Add role operation is not success.");
             }
 
             return _mapper.Map<UserDto>(user);
         }
 
-        public async Task DeleteUserAsync(Guid userId)
+        public async Task DisableUserAsync(Guid userId)
         {
             var user = await _userManager.FindByIdAsync(userId.ToString());
-
             if (user == null)
             {
                 throw new NotFoundException("User not found!");
             }
-            await _userManager.DeleteAsync(user);
+            user.Disable = true;
+            await _userManager.UpdateAsync(user);
+        }
+
+        public async Task EnableUserAsync(Guid userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+            if (user == null)
+            {
+                throw new NotFoundException("User not found!");
+            }
+            user.Disable = false;
+            await _userManager.UpdateAsync(user);
         }
 
         public async Task<IEnumerable<UserDto>> GetAllAsync()
@@ -86,10 +94,13 @@ namespace Rookie.AMO.Identity.Business.Services
             return _mapper.Map<UserDto>(await _userManager.FindByIdAsync(userId.ToString()));
         }
 
-        public async Task<PagedResponseModel<UserDto>> PagedQueryAsync(string name, int page, int limit)
+        public async Task<PagedResponseModel<UserDto>> PagedQueryAsync(string name, string type, int page, int limit)
         {
             var query = _userManager.Users
-                                .Where(x => String.IsNullOrEmpty(name) || x.UserName.Contains(name))
+                                .Where(x => String.IsNullOrEmpty(type)
+                                || x.Type.ToLower().Contains(type.ToLower()))
+                                .Where(x => String.IsNullOrEmpty(name)
+                                || x.FullName.ToLower().Contains(name.ToLower()))
                                 .OrderBy(x => x.CodeStaff);
 
             var assets = await query
@@ -133,12 +144,20 @@ namespace Rookie.AMO.Identity.Business.Services
 
                 user.LastName = request.LastName;
             }
+
+            if ((user.LastName != request.LastName) || (user.FirstName != request.FirstName))
+            {
+                var newClaim = new Claim(IdentityModel.JwtClaimTypes.Name, user.FullName);
+                await _userManager.ReplaceClaimAsync(user, claims.First(x => x.Type == IdentityModel.JwtClaimTypes.Name), newClaim);
+
+                user.FullName = user.FirstName + user.LastName;
+            }
+
             user.Gender = request.Gender;
             user.JoinedDate = request.JoinedDate;
             user.DateOfBirth = request.DateOfBirth;
-            user.UserName = AutoGenerateUserName(request.FirstName, request.LastName);
 
-            var result = await _userManager.UpdateAsync(user);
+            await _userManager.UpdateAsync(user);
         }
 
         private string AutoGenerateStaffCode()

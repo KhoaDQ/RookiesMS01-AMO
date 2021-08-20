@@ -55,7 +55,7 @@ const routes = [
     main: () => <CreateUser />,
   },
   {
-    path: "/edituser/:id",
+    path: "/edit-user/:id",
     exact: false,
     main: ({ history, match }) => <EditUser history={history} match={match} />,
   },
@@ -72,12 +72,12 @@ const routes = [
     ),
   },
   {
-    path: "/createassignment",
+    path: "/create-assignment",
     exact: false,
     main: () => <CreateAssignment />,
   },
   {
-    path: "/editassignment",
+    path: "/edit-assignments",
     exact: false,
     main: () => <EditAssignment />,
   },

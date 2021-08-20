@@ -3,44 +3,40 @@ import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import moment, { isMoment } from "moment";
-
+import moment from "moment";
+import {
+  JoinedDateIsNotLaterThanDOB,
+  JoinedDateIsNotSaturdayOrSunday,
+  UserUnder18,
+} from "../../../constants/UserConstants";
 import { useDispatch, useSelector } from "react-redux";
 import apiCaller from "../../../apis/callApi";
 import * as action from "../../../actions/ManageUser/ActionType";
+import { GetAllRolesAction } from "../../../actions/ManageUser/GetAllRolesAction";
 import PopupInfor from "../../../components/Popup/PopupInfor";
 
-const date = new Date();
-
-const schema = yup.object().shape({
-  dateOfBirth: yup
-    .date()
-    .required()
-    .max(
-      (date.getFullYear() - 18).toString() +
-        "/" +
-        date.getMonth() +
-        "/" +
-        date.getDate(),
-      "User is under 18. Please select a different date"
-    ),
-
-  joinedDate: yup
-    .date()
-    .required()
-    .min(
-      yup.ref("dateOfBirth"),
-      "Joined date is not later than Date of Birth. Please select a different date"
-    ),
-});
-
 const EditUser = (props) => {
+  const dispatch = useDispatch();
   const [currentUser, setCurrentUser] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { roles } = useSelector((state) => state.getAllRoles);
   const result = FetchUser(props.match.params.id);
   useEffect(() => {
+    dispatch(GetAllRolesAction());
     setCurrentUser(result);
   }, [result]);
+
+  const options = roles.map((role, index) => (
+    <option value={role.name} key={index}>
+      {role.name}
+    </option>
+  ));
+  const choseAType = (
+    <option value={0} key={-1}>
+      Choose a type
+    </option>
+  );
+  const roleOptions = [choseAType, ...options];
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -54,7 +50,6 @@ const EditUser = (props) => {
 
   const submitForm = (data) => {
     FetchCurrentUser(props.match.params.id, currentUser);
-    //console.log(response);
     setIsModalOpen(true);
   };
 
@@ -62,13 +57,34 @@ const EditUser = (props) => {
     setIsModalOpen(content);
   };
 
+  const theDateOf18YearsAgo = new Date();
+  const theYearOf18YearsAgo = theDateOf18YearsAgo.getFullYear() - 18;
+  theDateOf18YearsAgo.setFullYear(theYearOf18YearsAgo);
+
+  const theEarliestJoinedDate = currentUser.dateOfBirth
+    ? new Date(currentUser.dateOfBirth)
+    : new Date();
+  theEarliestJoinedDate.setFullYear(theEarliestJoinedDate.getFullYear() + 18);
+
+  const schema = yup.object().shape({
+    dateOfBirth: yup.date().max(theDateOf18YearsAgo, UserUnder18),
+    joinedDate: yup
+      .date()
+      .min(theEarliestJoinedDate, JoinedDateIsNotLaterThanDOB)
+      .test(
+        "NotWeekend",
+        JoinedDateIsNotSaturdayOrSunday,
+        (value) => value.getDay() !== 6 && value.getDay() !== 0
+      ),
+  });
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    mode: "onChange",
     resolver: yupResolver(schema),
+    mode: "all",
   });
 
   return (
@@ -91,6 +107,7 @@ const EditUser = (props) => {
               value={currentUser.firstName}
               placeholder="FirstName"
               onChange={handleInputChange}
+              disabled
             />
           </div>
         </div>
@@ -108,6 +125,7 @@ const EditUser = (props) => {
               value={currentUser.lastName}
               placeholder="LastName"
               onChange={handleInputChange}
+              disabled
             />
           </div>
         </div>
@@ -122,17 +140,18 @@ const EditUser = (props) => {
           <div className="col-sm-10" className="resize">
             <input
               type="date"
-              {...register("dateOfBirth")}
+              {...register("dateOfBirth", { value: currentUser.dateOfBirth })}
               className="form-control "
               id="dateOfBirth"
               name="dateOfBirth"
+              defaultValue={moment(currentUser.dateOfBirth).format(
+                "YYYY-MM-DD"
+              )}
               value={moment(currentUser.dateOfBirth).format("YYYY-MM-DD")}
               placeholder="DateofBirth"
               onChange={handleInputChange}
             />
-            {errors.dateOfBirth && (
-              <p className="text-danger">{errors.dateOfBirth.message} !</p>
-            )}
+            {errors.dateOfBirth && <p>{errors.dateOfBirth.message}</p>}
           </div>
         </div>
         <br></br>
@@ -187,7 +206,7 @@ const EditUser = (props) => {
           </label>
           <div className="col-sm-10" className="resize">
             <input
-              {...register("joinedDate")}
+              {...register("joinedDate", { value: currentUser.joinedDate })}
               type="date"
               className="form-control "
               id="joinedDate"
@@ -196,16 +215,7 @@ const EditUser = (props) => {
               placeholder="JoinedDate"
               onChange={handleInputChange}
             />
-            {errors.joinedDate && (
-              <p className="text-danger">{errors.joinedDate.message} !</p>
-            )}
-            {(new Date(currentUser.joinedDate).getDay() == 6 ||
-              new Date(currentUser.joinedDate).getDay() == 0) && (
-              <p className="text-danger">
-                "Joined date is Saturday or Sunday. Please select a different
-                date" !
-              </p>
-            )}
+            {errors.joinedDate && <p>{errors.joinedDate.message}</p>}
           </div>
         </div>
         <br></br>
@@ -215,15 +225,13 @@ const EditUser = (props) => {
           </label>
           <div className="col-sm-10" className="resize">
             <select
-              name="Type"
+              name="type"
               className="custom-select custom-select-lg mb-3"
               className="form-control"
               value={currentUser.type}
               onChange={handleInputChange}
             >
-              <option value={0}></option>
-              <option value="Staff">Staff</option>
-              <option value="Admin">Admin</option>
+              {roleOptions}
             </select>
           </div>
         </div>
@@ -262,8 +270,6 @@ const EditUser = (props) => {
 
 function FetchUser(id) {
   const dispatch = useDispatch();
-  //htttps://localhost:5011/api/users/{id}
-  //15a9f5fd-00b9-4a55-b463-0fb7acdc6f88
   useEffect(() => {
     async function fetch() {
       let enpoint = `user/${id}`;
@@ -273,14 +279,11 @@ function FetchUser(id) {
     }
     fetch();
   }, []);
-
   const result = useSelector((state) => state.EditUserReducer);
   return result;
 }
 
 function FetchCurrentUser(id, user) {
-  //htttps://localhost:5011/api/users/{id}
-  //15a9f5fd-00b9-4a55-b463-0fb7acdc6f88
   async function fetch() {
     let enpoint = `user/${id}`;
     const res = await apiCaller(enpoint, "PUT", user);

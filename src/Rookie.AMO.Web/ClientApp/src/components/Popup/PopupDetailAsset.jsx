@@ -43,36 +43,36 @@ const PopupDetailAsset = (props) => {
 
             <div className="auth-form__body">
               <Container>
-                <Row>
+                <Row className="header_detail">
                   <Col xs="3">Asset Code</Col>
                   <Col xs="9">{asset.code}</Col>
                 </Row>
-                <Row>
+                <Row className="header_detail">
                 <Col xs="3">Asset Name</Col>
                 <Col xs="9">{asset.name}</Col>
                 </Row>
-                <Row>
+                <Row className="header_detail">
                 <Col xs="3">Category</Col>
                 <Col xs="9">{asset.categoryName}</Col>
                 </Row>
-                <Row>
+                <Row className="header_detail">
                 <Col xs="3">Installed Date</Col>
                 <Col xs="9">{asset.installedDate}</Col>
                 </Row>
-                <Row>
+                <Row className="header_detail">
                 <Col xs="3">State</Col>
                 <Col xs="9">{asset.state}</Col>
                 </Row>
-                <Row>
+                <Row className="header_detail">
                 <Col xs="3">Location</Col>
                 <Col xs="9">{asset.location}</Col>
                 </Row>
-                <Row>
-                <Col xs="3">Specification</Col>
+                <Row className="header_detail">
+                <Col  xs="3">Specification</Col>
                 <Col xs="9">{asset.specification}</Col>
                 </Row>
-                <Row>
-                <Col xs="3">History</Col>
+                <Row className="header_detail">
+                <Col  xs="3">History</Col>
                 <Col xs="9" className="table_history_container">
                     <Table className="table_history_assigned table_border_spacing">
                         <thead>

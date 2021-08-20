@@ -33,8 +33,9 @@ namespace Rookie.AMO.Identity.Quickstart.Account
             => await _userService.GetByIdAsync(userId);
 
         [HttpGet("find")]
-        public async Task<PagedResponseModel<UserDto>> PagedQueryAsync(string name, int page, int limit)
-            => await _userService.PagedQueryAsync(name, page, limit);
+        public async Task<PagedResponseModel<UserDto>> PagedQueryAsync
+            (string name, string type, int page, int limit)
+            => await _userService.PagedQueryAsync(name, type, page, limit);
 
         [HttpPost]
         public async Task<ActionResult<UserDto>> CreateUserAsync(UserRequest user)
@@ -45,12 +46,11 @@ namespace Rookie.AMO.Identity.Quickstart.Account
         }
 
         [HttpDelete]
-        public async Task<ActionResult> DeleteUserAsync(Guid userId)
+        public async Task<ActionResult> DisableUserAsync(Guid userId)
         {
-            await _userService.DeleteUserAsync(userId);
+            await _userService.DisableUserAsync(userId);
             return Ok();
         }
-
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(Guid id, [FromBody] UserUpdateRequest request)

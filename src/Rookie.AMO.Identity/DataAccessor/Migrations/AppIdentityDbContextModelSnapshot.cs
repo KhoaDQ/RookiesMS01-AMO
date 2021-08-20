@@ -150,12 +150,15 @@ namespace Rookie.AMO.Identity.DataAccessor.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("Rookie.AMO.Identity.Models.User", b =>
+            modelBuilder.Entity("Rookie.AMO.Identity.DataAccessor.Entities.User", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ChangePasswordTimes")
                         .HasColumnType("int");
 
                     b.Property<string>("CodeStaff")
@@ -168,6 +171,9 @@ namespace Rookie.AMO.Identity.DataAccessor.Migrations
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("Disable")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -176,6 +182,9 @@ namespace Rookie.AMO.Identity.DataAccessor.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FullName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Gender")
@@ -250,7 +259,7 @@ namespace Rookie.AMO.Identity.DataAccessor.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Rookie.AMO.Identity.Models.User", null)
+                    b.HasOne("Rookie.AMO.Identity.DataAccessor.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -259,7 +268,7 @@ namespace Rookie.AMO.Identity.DataAccessor.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Rookie.AMO.Identity.Models.User", null)
+                    b.HasOne("Rookie.AMO.Identity.DataAccessor.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -274,7 +283,7 @@ namespace Rookie.AMO.Identity.DataAccessor.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Rookie.AMO.Identity.Models.User", null)
+                    b.HasOne("Rookie.AMO.Identity.DataAccessor.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -283,7 +292,7 @@ namespace Rookie.AMO.Identity.DataAccessor.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Rookie.AMO.Identity.Models.User", null)
+                    b.HasOne("Rookie.AMO.Identity.DataAccessor.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

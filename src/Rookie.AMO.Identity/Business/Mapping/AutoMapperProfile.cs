@@ -16,7 +16,8 @@ namespace Rookie.AMO.Identity.Business.Mapping
 
         private void FromPresentationLayer()
         {
-            CreateMap<UserRequest, User>(MemberList.Destination);
+            CreateMap<UserRequest, User>(MemberList.Destination)
+                .ForMember(u => u.FullName, x => x.MapFrom(u => $"{u.FirstName} {u.LastName}"));
             CreateMap<UserUpdateRequest, User>(MemberList.Destination);
         }
 

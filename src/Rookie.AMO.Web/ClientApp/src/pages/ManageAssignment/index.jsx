@@ -1,117 +1,179 @@
-import React from "react";
-import { Table } from "reactstrap";
-import { IoMdCreate } from "@react-icons/all-files/io/IoMdCreate";
-import { IoIosCloseCircleOutline } from "@react-icons/all-files/io/IoIosCloseCircleOutline";
-import { MdSettingsBackupRestore } from "@react-icons/all-files/md/MdSettingsBackupRestore";
-import { AiOutlineSearch } from "@react-icons/all-files/ai/AiOutlineSearch";
-import { AiFillFilter } from "@react-icons/all-files/ai/AiFillFilter";
-import { AiFillCalendar } from "@react-icons/all-files/ai/AiFillCalendar";
-import { Link } from "react-router-dom";
-import {
-  Col,
-  Row,
-  Button,
-  InputGroupText,
-  FormGroup,
-  InputGroupAddon,
-  Input,
-  InputGroup,
-} from "reactstrap";
-function ManageAssignment() {
-  return (
-    <div classname="Assignment">
-      <h5 className="right-title">Assignment List</h5>
-      <Row className="right-bar">
-        <Col md={3}>
-          <InputGroup>
-            <select
-              className="custom-select custom-select-lg mb-3"
-              className="form-control"
-            >
-              <option selected>Type</option>
-              <option value={0}></option>
-              <option value={1}>Accepted</option>
-              <option value={2}>Waiting for acceptance</option>
-            </select>
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from 'react-redux';
+import * as action from '../../actions/ManagerAssignment/ActionType';
+import apiCaller from '../../apis/callApi';
+import AssignmentItem from "../../components/Assignment/AssignmentItem/";
+import AssignmentList from "../../components/Assignment/AssignmentList";
+import queryString from "query-string";
 
-            <InputGroupAddon addonType="append">
-              <InputGroupText className="right__icon">
-                <AiFillFilter />
-              </InputGroupText>
-            </InputGroupAddon>
-          </InputGroup>
-        </Col>
-        <Col md={3}>
-          <InputGroup>
-            <input
-              type="date"
-              className="form-control "
-              id="AssignedDate"
-              name="AssignedDate"
+// import PopupDelete from "../../components/Popup/PopupDelete";
+// import PopupDetailAssignment from "../../components/Popup/PopupDetailAssignment";
+const stateList = [
+  { name: "Accepted", value: "Accepted" },
+  { name: "Waiting for Acceptance", value: "WaitingAccept" }
+]
+function ManageAssignment() {
+  const dispatch = useDispatch()
+
+  const [filters, setFilters] = useState({
+    KeySearch: '',
+    Page: 1,
+    State: '',
+    Limit: 10,
+    Desc: false,
+    OrderProperty: 'AssetCode'
+  })
+
+  const [paging, setPaging] = useState({
+    currentPage: 1,
+    totalItems: 18,
+    totalPages: 1,
+  })
+  const assignments = useSelector(state => state.AssignmentReducer);
+
+  // const [optionSort, setOptionSort] = useState({ propertyName: "", desc: 'false' })
+
+  // // const [isLoading, setIsLoading] = useState(true)
+  // // const [isReLoad, setIsReLoad] = useState(1)
+
+  // //Popup detail assignment
+  // const [assignmentDetail, setAssignmentDetail] = useState()
+  // const [isDetailOpen, setIsDetailOpen] = useState(true)
+
+  // //Popup delete assignment
+  // const [idAssignmentDelete, setIdAssignmentDelete] = useState("");
+  // const [isDeleteOpen, setIsDeleteOpen] = useState(false)
+  // const [isDelete, setIsDelete] = useState(0)
+
+  // DeleteAssignment(idAssignmentDelete, isDelete, setIsReLoad, setIsDelete)
+
+  // const resetPage = () => {
+  //   setFilters({ ...filters, pageNumber: 1 })
+  //   // setIsReLoad(1)
+  // }
+
+  // const handleSort = (e, option) => {
+  //   setOptionSort({ propertyName: option.propertyName, desc: option.desc.toString() })
+  //   // setIsReLoad(1)
+  // }
+
+  // const handleSearch = (text, e) => {
+  //   resetPage()
+  //   setFilters({ ...filters, searchText: text })
+
+  //   // setIsReLoad(1)
+  // }
+  // const handleFilterState = (option, e) => {
+  //   if (option != null)
+  //     setFilters({ ...filters, stateFilter: option.map((a, index) => a.value).join(',') })
+  //   else
+  //     setFilters({ ...filters, stateFilter: '' })
+  //   resetPage()
+  //   // setIsReLoad(1)
+  // }
+
+  
+
+  //Popup detail assignment
+  // const handleDetail = (assignment, e) => {
+  //   <PopupDetail
+  //           title="Detailed Assignment Information"
+  //           content={assignment}
+  //           handleModelShow={handleModelShowFunction}
+  //           isModalOpen={isModalOpen}
+  //         ></PopupDetail>
+  //   setAssignmentDetail(assignment)
+  //   setIsDetailOpen(true)
+  // }
+
+  // const handleModelShow = (isDetailOpen) => {
+  //   setIsDetailOpen(isDetailOpen)
+  // }
+
+  // //Popup delete assignment
+  // const handleDeleteOpen = (id, e) => {
+  //   console.log("delete open")
+  //   setIdAssignmentDelete(id)
+  //   handleDeleteShow(true)
+  // };
+
+  // const handleDeleteShow = (isDeleteOpen) => {
+  //   setIsDeleteOpen(isDeleteOpen)
+  // }
+
+  // const handleDelete = (e) => {
+  //   setIsDelete(1)
+  //   handleDeleteShow(false)
+  // };
+
+  // function deletePopup(handleDelete, handleDeleteShow) {
+  //   if (1)
+  //     return (
+  //       <PopupDelete isModalOpen={isDeleteOpen} handleDelete={handleDelete} handleModelShow={handleDeleteShow}></PopupDelete>
+  //     )
+  // }
+
+  // function detailAssignment(assignmentDetail, isDetailOpen) {
+  //   if (assignmentDetail)
+  //     return (
+  //       <PopupDetailAssignment assignment={assignmentDetail} isModalOpen={isDetailOpen} handleModelShow={handleModelShow} />
+  //     )
+  // }
+  useEffect(() => {
+    fetchAssignment()
+  }, [filters])
+
+  async function fetchAssignment() {
+    const paramsString = queryString.stringify(filters);
+    let endpoint = `Assignment/find?${paramsString}`;
+    // console.log(endpoint);
+    const res = await apiCaller(endpoint, 'GET', null);
+    // console.log(res);
+    setPaging(
+      {
+        currentPage: res.data.currentPage,
+        totalItems: res.data.totalItems,
+        totalPages: res.data.totalPages
+      }
+    )
+    dispatch({ type: action.FETCH_ASSIGNMENTS, payload: res.data.items });
+  }
+
+  function showAssignments(assignments) {
+    let result = null
+    if (assignments != null) {
+      if (assignments.length > 0) {
+        result = assignments.map((assignment, index) => {
+          return (
+            <AssignmentItem
+              key={index}
+              assignment={assignment}
+              index={index}
+            // stateList={stateList}
+            // handleDeleteOpen = {handleDeleteOpen}
             />
-            <InputGroupAddon addonType="append">
-              <InputGroupText className="right__icon">
-                <AiFillCalendar />
-              </InputGroupText>
-            </InputGroupAddon>
-          </InputGroup>
-        </Col>
-        <Col md={3}>
-          <InputGroup>
-            <Input placeholder="Search" />
-            <InputGroupAddon addonType="append">
-              <InputGroupText className="right__icon">
-                <AiOutlineSearch />
-              </InputGroupText>
-            </InputGroupAddon>
-          </InputGroup>
-        </Col>
-        <Col md={3} className="text-right">
-          <Button color="danger">
-            <Link to="/createassignment" className="UserIcon">
-              Create New Assignment
-            </Link>
-          </Button>
-        </Col>
-      </Row>
-      <Table>
-        <thead>
-          <tr>
-            <th>No.</th>
-            <th>Asset Code</th>
-            <th>Asset Name</th>
-            <th>Assigned to</th>
-            <th>Assigned by</th>
-            <th>Assigned Date</th>
-            <th>State</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td>MO100005</td>
-            <td>Monitor Dell UltraSharp</td>
-            <td>yentth</td>
-            <td>tuanha</td>
-            <td>15/03/2019</td>
-            <td>Accepted</td>
-            <td>
-              <span className="icon-nash icon-nash--black">
-                <Link to="/editassignment">
-                  <IoMdCreate />
-                </Link>
-              </span>
-              <span className="icon-nash icon-nash--red">
-                <IoIosCloseCircleOutline />
-              </span>
-              <span className="icon-nash icon-nash--blue">
-                <MdSettingsBackupRestore />
-              </span>
-            </td>
-          </tr>
-        </tbody>
-      </Table>
+          )
+        })
+      }
+    }
+    return result
+  }
+
+  console.log(filters);
+
+  return (
+    <div className="Assignment">
+
+      <AssignmentList
+        stateList={stateList}
+        filters={filters}
+        setFilters={setFilters}
+        paging={paging}
+      >
+        {showAssignments(assignments)}
+      </AssignmentList>
+      {/* {detailAssignment(assignmentDetail, isDetailOpen)}
+      {deletePopup(handleDelete, handleDeleteShow)} */}
     </div>
   );
 }

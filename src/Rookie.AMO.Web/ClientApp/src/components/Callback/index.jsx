@@ -11,7 +11,6 @@ export default function Callback() {
       userManager={userManager}
       successCallback={(res) => {
         localStorage.setItem("access_token", res.access_token);
-        console.log(res);
         userManager
           .signinRedirectCallback({ response_mode: "query" })
           .then(history.push(""));

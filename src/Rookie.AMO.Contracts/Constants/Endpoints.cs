@@ -6,5 +6,6 @@ namespace Rookie.AMO.Contracts.Constants
         public const string Asset = "api/asset";
         public const string User = "/api/user";
         public const string Role = "/api/role";
+        public const string Assignment = "api/assignment";
     }
 }

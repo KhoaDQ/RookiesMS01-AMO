@@ -15,12 +15,10 @@ import {
 } from "../../../constants/UserConstants";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useHistory } from "react-router";
 import PopupInfor from "../../../components/Popup/PopupInfor";
 
 const CreateUser = () => {
   const dispatch = useDispatch();
-  const history = useHistory();
   const { user } = useSelector((state) => state.oidc);
   const { roles } = useSelector((state) => state.getAllRoles);
   const [modalOpen, setModalOpen] = useState(false);
@@ -54,6 +52,7 @@ const CreateUser = () => {
 
   const onSubmit = (e) => {
     try {
+      setNewUser({ ...newUser, location: user ? user.profile.location : ""});
       dispatch(CreateUserAction(newUser));
       setModalOpen(true);
     } catch (ex) {
@@ -68,6 +67,9 @@ const CreateUser = () => {
 
   useEffect(() => {
     dispatch(GetAllRolesAction());
+  }, []);
+
+  useEffect(() => {
     setNewUser({ ...newUser, location: user ? user.profile.location : ""});
   }, [user]);
 
@@ -121,6 +123,7 @@ const CreateUser = () => {
               name="firstName"
               value={newUser.firstName}
               onChange={handleInputChange}
+              maxlength="100"
             />
             {errors.firstName && <p>{errors.firstName.message}</p>}
           </div>
@@ -139,6 +142,7 @@ const CreateUser = () => {
               name="lastName"
               value={newUser.lastName}
               onChange={handleInputChange}
+              maxlength="100"
             />
             {errors.lastName && <p>{errors.lastName.message}</p>}
           </div>

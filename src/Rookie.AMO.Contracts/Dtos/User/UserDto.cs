@@ -12,7 +12,8 @@ namespace Rookie.AMO.Contracts.Dtos.User
         public Guid Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-
+        public string FullName { get; set; }
+        public string UserName { get; set; }
         [DataType(DataType.Date)]
         public DateTime DateOfBirth { get; set; }
         [DataType(DataType.Date)]
@@ -21,5 +22,6 @@ namespace Rookie.AMO.Contracts.Dtos.User
         public string Type { get; set; }
         public string CodeStaff { get; set; }
         public string Location { get; set; }
+        public int ChangePasswordTimes { get; set; }
     }
 }
