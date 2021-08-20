@@ -15,7 +15,8 @@ namespace Rookie.AMO.Business.Interfaces
         Task<PagedResponseModel<AssignmentDto>> PagedQueryAsync(FilterAssignmentsModel filter);
 
         Task<AssignmentDto> GetByIdAsync(Guid id);
-
+        
+        Task<IEnumerable<AssignmentDto>> GetByUserIdAsync(Guid userId);
 
         Task<AssignmentDto> AddAsync(AssignmentRequest assignmentRequest);
 
