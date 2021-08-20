@@ -28,7 +28,7 @@ function App() {
             <Col xs="6" sm="2">
               <LeftBar />
             </Col>
-            <Col sm="10">{showContentMenus(routes)}</Col>
+            <Col sm="10">{showContentMenus(routes,user)}</Col>
           </Row>
         </Container>
         <PopupRedirect
