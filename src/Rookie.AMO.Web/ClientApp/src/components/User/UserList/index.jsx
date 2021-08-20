@@ -27,7 +27,7 @@ function UserList(props) {
     const { name, value } = e.target;
     setTempPaging({ ...tempPaging, [name]: value });
   }
-  
+
   const type = roles.map((role, index) => {
     return (
       <option value={role.name} >{role.name}</option>
@@ -42,7 +42,7 @@ function UserList(props) {
           <InputGroup>
             <select
               className="form-control"
-              name = "type"
+              name="type"
               value={tempPaging.type}
               onChange={handleChange}
             >
@@ -72,7 +72,7 @@ function UserList(props) {
           </Button>
         </Col>
       </Row>
-      <Table>
+      <Table className="table_border_spacing table">
         <thead>
           <tr>
             <th>Staff Code</th>
@@ -87,7 +87,7 @@ function UserList(props) {
           {props.totalItems > 0 ? props.children : (paging.name != "") ? <span>No users are found!</span> : <span>...Loading</span>}
         </tbody>
       </Table>
-      {props.totalPages > 0 ? <UserPagination setPageReload={props.setPageReload} paging={paging} setPaging={props.setPaging} totalPages={props.totalPages} pageNumber={props.pageNumber} setPageNumber={props.setPageNumber}  /> : null}
+      {props.totalPages > 0 ? <UserPagination setPageReload={props.setPageReload} paging={paging} setPaging={props.setPaging} totalPages={props.totalPages} pageNumber={props.pageNumber} setPageNumber={props.setPageNumber} /> : null}
     </div>
   );
 }
