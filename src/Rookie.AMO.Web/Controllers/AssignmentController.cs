@@ -50,7 +50,7 @@ namespace Rookie.AMO.Web.Controllers
         public async Task<AssignmentDto> GetByIdAsync(Guid id)
             => await _assignmentService.GetByIdAsync(id);
 
-        [HttpGet("user/{id}")]
+        [HttpGet("user/{userId}")]
         public async Task<IEnumerable<AssignmentDto>> GetByUserIdAsync(Guid userId)
             => await _assignmentService.GetByUserIdAsync(userId);
 
