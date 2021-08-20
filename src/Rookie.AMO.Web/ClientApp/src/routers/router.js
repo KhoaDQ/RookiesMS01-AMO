@@ -17,52 +17,61 @@ const routes = [
     path: "/",
     exact: true,
     main: () => <Home />,
-  },
-  {
-    path: "/callback",
-    exact: false,
-    main: () => <Callback />,
+    allowedRole: ["Admin", "Staff"],
   },
   {
     path: "/manage-user",
     exact: false,
     main: () => <ManageUser />,
+    allowedRole: ["Admin"],
   },
-
+  {
+    path: "/callback",
+    exact: false,
+    main: () => <Callback />,
+    allowedRole: [],
+  },
   {
     path: "/manage-asset",
     exact: false,
     main: () => <ManageAsset />,
+    allowedRole: ["Admin"],
   },
   {
     path: "/manage-assignment",
     exact: false,
     main: () => <ManageAssignment />,
+    allowedRole: ["Admin"],
   },
   {
     path: "/report",
     exact: false,
     main: () => <Report />,
+    allowedRole: ["Admin"],
   },
   {
     path: "/request-return",
     exact: false,
     main: () => <Request />,
+    allowedRole: ["Admin"],
   },
   {
     path: "/create-user",
     exact: false,
     main: () => <CreateUser />,
+    allowedRole: ["Admin"],
   },
   {
     path: "/edit-user/:id",
     exact: false,
     main: ({ history, match }) => <EditUser history={history} match={match} />,
+    allowedRole: ["Admin"],
   },
   {
     path: "/createassets",
     exact: false,
     main: () => <CreateAssets />,
+    allowedRole: ["Admin"],
   },
   {
     path: "/edit-assets/:id",
@@ -70,21 +79,25 @@ const routes = [
     main: ({ history, match }) => (
       <EditAssets history={history} match={match} />
     ),
+    allowedRole: ["Admin"],
   },
   {
     path: "/createassignment",
     exact: false,
     main: () => <CreateAssignment />,
+    allowedRole: ["Admin"],
   },
   {
     path: "/editassignment",
     exact: false,
     main: () => <EditAssignment />,
+    allowedRole: ["Admin"],
   },
   {
     path: "",
     exact: false,
-    // main: () => <NotFoundPage />
+    // main: () => <NotFoundPage />,
+    allowedRole: [""],
   },
 ];
 
