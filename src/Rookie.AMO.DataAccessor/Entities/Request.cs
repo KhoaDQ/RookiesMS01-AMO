@@ -31,12 +31,12 @@ namespace Rookie.AMO.DataAccessor.Entities
 
         [Required]
         [ForeignKey("Asset")]
-        public Guid AssetId { get; set; }
+        public Guid AssetID { get; set; }
 
         [Required]
-        public Guid UserId { get; set; }
+        public Guid UserID { get; set; }
 
-        public Guid? AdminId { get; set; }
+        public Guid? AdminID { get; set; }
 
         public virtual Asset Asset { get; set; }
 

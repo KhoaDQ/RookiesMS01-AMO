@@ -34,13 +34,13 @@ namespace Rookie.AMO.Business.Services
             request.State = StateList.Completed;
             request.ReturnedDate = DateTime.Now;
             request.AcceptedBy = adminUsername;
-            request.AdminId = adminId;
+            request.AdminID = adminId;
 
-            var asset = await _context.Assets.FindAsync(request.AssetId);
+            var asset = await _context.Assets.FindAsync(request.AssetID);
             asset.State = StateList.Available;
 
             var assignment = (from a in _context.Assignments
-                              where a.AssetID == request.AssetId
+                              where a.AssetID == request.AssetID
                               select a).FirstOrDefault();
 
             if (assignment != null)
