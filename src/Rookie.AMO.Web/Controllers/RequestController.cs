@@ -25,5 +25,19 @@ namespace Rookie.AMO.Web.Controllers
         {
             return await _requestService.PagedQueryAsync(filterRequestsModel);
         }
+
+        [HttpPut("complete/{id}/{username}/{adminId}")]
+        public async Task<ActionResult> CompleteAsync(Guid id, string username, Guid adminId)
+        {
+            await _requestService.CompleteAsync(id, username, adminId);
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteAsync([FromRoute] Guid id)
+        {
+            await _requestService.DeleteAsync(id);
+            return NoContent();
+        }
     }
 }

@@ -82,13 +82,13 @@ const routes = [
     allowedRole: ["Admin"],
   },
   {
-    path: "/createassignment",
+    path: "/create-assignment",
     exact: false,
     main: () => <CreateAssignment />,
     allowedRole: ["Admin"],
   },
   {
-    path: "/editassignment",
+    path: "/edit-assignments",
     exact: false,
     main: () => <EditAssignment />,
     allowedRole: ["Admin"],

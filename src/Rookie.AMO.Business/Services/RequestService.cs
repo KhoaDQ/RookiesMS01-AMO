@@ -27,6 +27,32 @@ namespace Rookie.AMO.Business.Services
             _context = context;
         }
 
+        public async Task CompleteAsync(Guid id, string adminUsername, Guid adminId)
+        {
+
+            var request = await _context.Requests.FindAsync(id);
+            request.State = StateList.Completed;
+            request.ReturnedDate = DateTime.Now;
+            request.AcceptedBy = adminUsername;
+            request.AdminId = adminId;
+
+            var asset = await _context.Assets.FindAsync(request.AssetId);
+            asset.State = StateList.Available;
+
+            var assignment = _context.Assignments.Where(x => x.AssetID == request.AssetId).FirstOrDefault();
+            if (assignment != null)
+                _context.Assignments.Remove(assignment);
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(Guid id)
+        {
+            var request = _context.Requests.FirstOrDefault(x => (x.Id == id));
+            _context.Requests.Remove(request);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<PagedResponseModel<RequestDto>> PagedQueryAsync(FilterRequestsModel filter)
         {
             var query = _baseRepository.Entities;
@@ -43,8 +69,10 @@ namespace Rookie.AMO.Business.Services
             }
             if (filter.ReturnedDate != default(DateTime) && filter.ReturnedDate != null)
             {
-                query = query.Where(x => x.ReturnedDate == filter.ReturnedDate);
+                query = query.Where(x => x.ReturnedDate.Value.Date == filter.ReturnedDate.Value.Date);
             }
+
+            filter.ReturnedDate.ToString();
 
             if (!string.IsNullOrEmpty(filter.OrderProperty))
                 switch (filter.OrderProperty)

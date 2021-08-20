@@ -74,7 +74,7 @@ namespace Rookie.AMO.DataAccessor.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("Admin_ID")
+                    b.Property<Guid>("AdminID")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("AssetID")
@@ -97,7 +97,7 @@ namespace Rookie.AMO.DataAccessor.Migrations
                     b.Property<int>("State")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("User_ID")
+                    b.Property<Guid>("UserID")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -145,13 +145,10 @@ namespace Rookie.AMO.DataAccessor.Migrations
                     b.Property<string>("AcceptedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("AcceptedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("Admin_ID")
+                    b.Property<Guid?>("AdminId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("AssetID")
+                    b.Property<Guid>("AssetId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("AssignedDate")
@@ -162,6 +159,7 @@ namespace Rookie.AMO.DataAccessor.Migrations
                         .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("RequestedBy")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ReturnedDate")
@@ -170,12 +168,12 @@ namespace Rookie.AMO.DataAccessor.Migrations
                     b.Property<int>("State")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("User_ID")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AssetID");
+                    b.HasIndex("AssetId");
 
                     b.ToTable("Request");
                 });
@@ -206,7 +204,7 @@ namespace Rookie.AMO.DataAccessor.Migrations
                 {
                     b.HasOne("Rookie.AMO.DataAccessor.Entities.Asset", "Asset")
                         .WithMany()
-                        .HasForeignKey("AssetID")
+                        .HasForeignKey("AssetId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
