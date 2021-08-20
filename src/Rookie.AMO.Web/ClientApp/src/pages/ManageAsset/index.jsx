@@ -26,7 +26,7 @@ function ManageAsset() {
     OrderProperty: "", 
     Desc: false,
     Page: 1,
-    Limit: 3
+    Limit: 19
   });
 
   const [isLoading, setIsLoading] = useState(true);
