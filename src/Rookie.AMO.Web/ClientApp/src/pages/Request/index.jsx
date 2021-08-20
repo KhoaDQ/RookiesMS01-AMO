@@ -53,9 +53,14 @@ function Request() {
     if (isComplete == 0) {
       setTimeout(() => {
         setIsReLoad(1);
-      }, 100);
+      }, 300);
     }
-  }, [isComplete]);
+    if (isCancel == 0) {
+      setTimeout(() => {
+        setIsReLoad(1);
+      }, 300);
+    }
+  }, [isComplete, isCancel]);
 
   CompleteRequest(
     idRequestComplete,
@@ -230,11 +235,12 @@ function CompleteRequest(
 }
 
 function CancelRequest(id, isCancel, isReLoad, setIsReLoad, setIsCancel) {
-  //const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     async function cancelRequest(id) {
-      console.log('dang fetch' + id);
+      const res = await apiCaller('Request/' + id, 'DELETE', null);
+      dispatch({ type: action.CANCEL_REQUEST, payload: id });
     }
     if (id !== '' && isCancel === 1) {
       cancelRequest(id);
