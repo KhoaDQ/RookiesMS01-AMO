@@ -8,6 +8,7 @@ namespace Rookie.AMO.Contracts.Dtos.Assignment
 {
     public class AssignmentDto
     {
+        public Guid Id { get; set; }
         public string AssetCode { get; set; }
 
         public string AssetName { get; set; }
