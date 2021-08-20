@@ -1,4 +1,4 @@
-const origin = "https://asset-management-team1.azurewebsites.net";
+const origin = "https://batch2group1.azurewebsites.net";
 export const API_URL = origin + "/api";
 export const BASE_URL = origin;
 
