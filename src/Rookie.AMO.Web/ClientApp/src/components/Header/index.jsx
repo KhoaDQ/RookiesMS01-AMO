@@ -9,15 +9,15 @@ import {
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
-  Button
 } from "reactstrap";
 import "./Header.css";
 import { useSelector } from "react-redux";
 import userManager from "../../utils/userManager";
+
 const Header = (props) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const oidc = useSelector((state) => state.oidc);
-  const {user} = oidc;
+  const { user } = oidc;
   const toggle = () => setDropdownOpen((prevState) => !prevState);
   return (
     <div className="header">
@@ -28,19 +28,18 @@ const Header = (props) => {
               Home
             </Link>
           </Col>
-          {user != null ? (
+          {user != null && (
             <Col xs="6" className="header-right">
               <Dropdown isOpen={dropdownOpen} toggle={toggle}>
                 <DropdownToggle caret>{user.profile.userName}</DropdownToggle>
                 <DropdownMenu>
                   <DropdownItem header>{user.profile.userName}</DropdownItem>
-                  <DropdownItem onClick={() => userManager.signoutRedirect()}>Logout</DropdownItem>
+                  <DropdownItem>Change password</DropdownItem>
+                  <DropdownItem onClick={() => userManager.signoutRedirect()}>
+                    Logout
+                  </DropdownItem>
                 </DropdownMenu>
               </Dropdown>
-            </Col>
-          ) : (
-            <Col xs="6" className="header-right">
-              <Button onClick={() => userManager.signinRedirect()}>Login</Button>
             </Col>
           )}
         </Row>

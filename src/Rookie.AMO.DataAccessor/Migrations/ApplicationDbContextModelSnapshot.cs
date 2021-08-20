@@ -74,28 +74,20 @@ namespace Rookie.AMO.DataAccessor.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("Admin_ID")
+                    b.Property<Guid>("AdminID")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("AssetId")
+                    b.Property<Guid>("AssetID")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("Asset_ID")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("AssignedBy")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("AssignedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatorId")
+                    b.Property<string>("AssignedTo")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Note")
                         .IsRequired()
@@ -105,15 +97,12 @@ namespace Rookie.AMO.DataAccessor.Migrations
                     b.Property<int>("State")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("User_ID")
+                    b.Property<Guid>("UserID")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AssetId");
+                    b.HasIndex("AssetID");
 
                     b.ToTable("Assignment");
                 });
@@ -153,47 +142,33 @@ namespace Rookie.AMO.DataAccessor.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("AcceptedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("AcceptedBy")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("Admin_ID")
+                    b.Property<Guid?>("AdminId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("AssetId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("Asset_ID")
+                    b.Property<Guid>("AssetId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("AssignedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatorId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
                     b.Property<string>("Note")
-                        .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
-                    b.Property<DateTime>("ReturnedDate")
+                    b.Property<string>("RequestedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ReturnedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("State")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("User_ID")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -218,7 +193,9 @@ namespace Rookie.AMO.DataAccessor.Migrations
                 {
                     b.HasOne("Rookie.AMO.DataAccessor.Entities.Asset", "Asset")
                         .WithMany()
-                        .HasForeignKey("AssetId");
+                        .HasForeignKey("AssetID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Asset");
                 });
@@ -227,7 +204,9 @@ namespace Rookie.AMO.DataAccessor.Migrations
                 {
                     b.HasOne("Rookie.AMO.DataAccessor.Entities.Asset", "Asset")
                         .WithMany()
-                        .HasForeignKey("AssetId");
+                        .HasForeignKey("AssetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Asset");
                 });

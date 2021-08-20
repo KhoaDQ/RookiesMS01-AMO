@@ -31,15 +31,6 @@ span.right__icon.input-group-text {
     cursor: pointer;
 }
 
-table {
-    font-size: 15px;
-    margin-top: 1rem;
-}
-
-input, select, button {
-    font-size: 12px!important;
-}
-
 .detail-item:hover {
     cursor: pointer;
     background-color: lightslategray;
@@ -47,4 +38,24 @@ input, select, button {
 
 select {
     appearance: none;
+}
+
+table th {
+    font-size: 14px;
+}
+
+.scale-col-5 {
+    width: 5%;
+}
+
+.scale-col-8 {
+    width: 8%;
+}
+
+.scale-col-12 {
+    width: 12%;
+}
+
+li {
+    font-size: 14px;
 }

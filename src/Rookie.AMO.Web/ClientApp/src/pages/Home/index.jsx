@@ -3,7 +3,7 @@ import { Table } from 'reactstrap';
 import { BsCheck } from "@react-icons/all-files/bs/BsCheck";
 import { IoCloseSharp } from "@react-icons/all-files/io5/IoCloseSharp";
 import { MdSettingsBackupRestore } from "@react-icons/all-files/md/MdSettingsBackupRestore"
-// import './Home.css'
+
 function Home() {
   return (
     <div className="home">

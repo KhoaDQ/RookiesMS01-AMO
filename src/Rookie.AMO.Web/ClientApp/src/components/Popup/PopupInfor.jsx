@@ -1,15 +1,14 @@
-import React, { useState, useEffect } from "react";
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
-import "./Popup.css";
-import { AiOutlineCloseSquare } from "react-icons/ai";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import './Popup.css';
+import { AiOutlineCloseSquare } from 'react-icons/ai';
+import { Link } from 'react-router-dom';
 
 const PopupInfor = (props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     setIsModalOpen(props.isModalOpen);
-  });
+  }, [props.isModalOpen]);
 
   const handleCancel = () => {
     setIsModalOpen(false);
@@ -19,7 +18,7 @@ const PopupInfor = (props) => {
   return (
     <div className="popup">
       <div
-        className={"modal " + (isModalOpen ? "modal__open" : "modal__close")}
+        className={'modal ' + (isModalOpen ? 'modal__open' : 'modal__close')}
       >
         <div className="modal__overlay"></div>
 

@@ -17,6 +17,11 @@ namespace Rookie.AMO.Business
             services.AddTransient(typeof(IBaseRepository<>), typeof(BaseRepository<>));
             services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<IAssetService, AssetService>();
+
+            services.AddTransient<IReportViewerService, ReportViewerService>();
+            services.AddTransient<IAssignmentService, AssignmentService>();
+            services.AddTransient<IRequestService, RequestService>();
+
         }
     }
 }
