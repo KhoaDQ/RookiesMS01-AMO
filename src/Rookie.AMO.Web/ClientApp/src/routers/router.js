@@ -20,16 +20,16 @@ const routes = [
     allowedRole: ["Admin", "Staff"],
   },
   {
-    path: "/manage-user",
-    exact: false,
-    main: () => <ManageUser />,
-    allowedRole: ["Admin"],
-  },
-  {
     path: "/callback",
     exact: false,
     main: () => <Callback />,
     allowedRole: [],
+  },
+  {
+    path: "/manage-user",
+    exact: false,
+    main: () => <ManageUser />,
+    allowedRole: ["Admin"],
   },
   {
     path: "/manage-asset",

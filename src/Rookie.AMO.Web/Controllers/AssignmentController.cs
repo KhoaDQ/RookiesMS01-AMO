@@ -16,11 +16,9 @@ namespace Rookie.AMO.Web.Controllers
     public class AssignmentController : ControllerBase 
     {
         private readonly IAssignmentService _assignmentService;
-        private readonly IUserService _userService;
-        public AssignmentController(IAssignmentService assignmentService, IUserService userService)
+        public AssignmentController(IAssignmentService assignmentService)
         {
             _assignmentService = assignmentService;
-            _userService = userService;
         }
 
         [HttpPost]
@@ -51,6 +49,10 @@ namespace Rookie.AMO.Web.Controllers
         [HttpGet("{id}")]
         public async Task<AssignmentDto> GetByIdAsync(Guid id)
             => await _assignmentService.GetByIdAsync(id);
+
+        [HttpGet("user/{userId}")]
+        public async Task<IEnumerable<AssignmentDto>> GetByUserIdAsync(Guid userId)
+            => await _assignmentService.GetByUserIdAsync(userId);
 
         [HttpGet]
         public async Task<IEnumerable<AssignmentDto>> GetAsync()
