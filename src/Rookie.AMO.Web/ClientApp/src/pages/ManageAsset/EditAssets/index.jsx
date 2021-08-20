@@ -162,7 +162,7 @@ const EditAssets = (props) => {
                   id="gridRadios1"
                   value="Available"
                   defaultValue="option1"
-                  defaultChecked={state.state === "Available"}
+                  defaultChecked={state.state == "Available"}
                   onChange={(e) => {
                     handleRadioChange(e);
                   }}
@@ -194,9 +194,9 @@ const EditAssets = (props) => {
                   type="radio"
                   name="state"
                   id="gridRadios3"
-                  value="Waiting"
+                  value="WaitingRecycle"
                   defaultValue="option3"
-                  defaultChecked={state.state === "Waiting"}
+                  defaultChecked={state.state === "WaitingRecycle"}
                   onChange={(e) => {
                     handleRadioChange(e);
                   }}

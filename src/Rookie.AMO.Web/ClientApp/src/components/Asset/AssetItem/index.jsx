@@ -8,7 +8,7 @@ function AssetItem(props) {
     let { asset, index, stateList } = props
 
     return (
-        <tr onClick = {(e)=>{props.handleDetail(asset,e)}}>
+        <tr onClick = {(e)=>{props.handleDetail(asset,e)}} className = {index == -1 ? "newRow": ""}>
             <td >{asset.code}</td>
             <td>{asset.name}</td>
             <td>{asset.categoryName}</td>

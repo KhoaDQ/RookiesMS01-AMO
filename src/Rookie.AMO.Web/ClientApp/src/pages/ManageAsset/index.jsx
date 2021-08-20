@@ -18,41 +18,42 @@ const stateList = [
 ];
 
 function ManageAsset() {
-  //Table assets
+  // Table assets
   const [filterPage,setFilterPage] = useState({
-    State : "",
+    State : "Available, NotAvailable, Assigned",
     Category : "",
     KeySearch : "",
     OrderProperty: "", 
     Desc: false,
     Page: 1,
-    Limit: 19
+    Limit: 3
   });
 
   const [isLoading, setIsLoading] = useState(true);
+  const [isReload,setIsReload] = useState(0)
 
   const assetChange = useSelector((state) => state.AssetReducer.assetChange)
 
-  //Popup detail asset
+
+  // Popup detail asset
   const [assetDetail, setAssetDetail] = useState();
   const [isDetailOpen, setIsDetailOpen] = useState(true);
 
-  //Popup delete asset
+  // Popup delete asset
   const [idAssetDelete, setIdAssetDelete] = useState("");
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [isDelete, setIsDelete] = useState(0);
 
-  //Table assets
-  let assetPage = FetchPageAsset(
-    filterPage
-  );
-  CheckLoading(setIsLoading, assetPage);
+  // Table assets
+  let assetPage = FetchPageAsset(filterPage,isReload);
 
-  let assets= assetPage.items;
+  CheckLoading(setIsLoading, assetPage);
 
   var categories = FetchCategories();
 
-  DeleteAsset(idAssetDelete, isDelete, setIsDelete);
+  // Delete asset
+  const triggerFetchAsset = () => setIsReload(t=>!t);
+  DeleteAsset(idAssetDelete, isDelete, setIsDelete, triggerFetchAsset);
   
   //Popup detail asset
   const handleDetail = (asset, e) => {
@@ -86,7 +87,7 @@ function ManageAsset() {
     handleDeleteShow(false);
   };
 
-  function deletePopup(handleDelete, handleDeleteShow) {
+  function deletePopup() {
       return (
         <PopupDelete
           isModalOpen={isDeleteOpen}
@@ -96,7 +97,7 @@ function ManageAsset() {
       );
   }
 
-  function detailAsset(assetDetail, isDetailOpen) {
+  function detailAsset() {
     if (assetDetail)
       return (
         <PopupDetailAsset
@@ -109,36 +110,36 @@ function ManageAsset() {
 
   function showAssets() {
     let result = null;
-    if (assets != null) {
-      if (assets.length > 0) {
-        if(assetChange != undefined){
-          console.log(assetChange)
-          var index = assets.findIndex(x => x.id === assetChange.id);
-          if (index === -1) {
-            assets.pop();
-          } 
-          else {
-            assets.splice(index, 1);
-          }
-          assets.unshift(assetChange);
-          console.log()
+    if(!isLoading){
+
+      let assets= assetPage.items;
+
+      if (assets != null) {
+        if (assets.length > 0) {
+
+          if(assetChange != undefined)
+            assets.splice(0,0,assetChange);
+            
+          let stateAsset = null   
+          result = assets.map((asset, index) => {
+            if(index == 0 && assetChange != undefined)
+              index = -1
+            stateAsset = stateList.find(({value}) => value == asset.state)
+            if(stateAsset!=undefined)
+              asset.state = stateAsset.name
+
+            return (
+              <AssetItem
+                key={index}
+                asset={asset}
+                index={index}
+                stateList={stateList}
+                handleDetail={handleDetail}
+                handleDeleteOpen={handleDeleteOpen}
+              />
+            );
+          });
         }
-        let stateAsset = null
-        result = assets.map((asset, index) => {
-          stateAsset = stateList.find(({value}) => value == asset.state)
-          if(stateAsset!=undefined)
-            asset.state = stateAsset.name
-          return (
-            <AssetItem
-              key={index}
-              asset={asset}
-              index={index}
-              stateList={stateList}
-              handleDetail={handleDetail}
-              handleDeleteOpen={handleDeleteOpen}
-            />
-          );
-        });
       }
     }
     return result;
@@ -162,7 +163,7 @@ function ManageAsset() {
     </div>
   );
 }
-function DeleteAsset(id, isDelete, setIsDelete) {
+function DeleteAsset(id, isDelete, setIsDelete,triggerFetchAsset) {
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -170,29 +171,28 @@ function DeleteAsset(id, isDelete, setIsDelete) {
       const res = await apiCaller("Asset/" + id, "Delete", null);
       dispatch({ type: action.DELETE_ASSET, payload: id });
     }
-    if (id != "") {
-      deleteAsset(id);
+    if (isDelete && id != "") {
+      deleteAsset(id).then(()=>{
+        triggerFetchAsset();
+        setIsDelete(0);
+      });
     }
   }, [isDelete]);
 }
-function FetchPageAsset(
-  filterPage
-) {
+function FetchPageAsset(filterPage,isReload) {
   const dispatch = useDispatch();
 
   useEffect(() => {
     async function fetch() {
       const paramsString = queryString.stringify(filterPage);
       let endpoint =`Asset/find?${paramsString}`
-      console.log(filterPage)
       const res = await apiCaller(endpoint, "GET", null);
       dispatch({ type: action.FETCH_ASSETS, payload: res.data });
     }
     fetch();
-  }, [filterPage]);
+  }, [filterPage,isReload]);
 
   const assetPage = useSelector((state) => state.AssetReducer.payload);
-  console.log(assetPage)
   if(assetPage == undefined )
     return {};
   return assetPage;
