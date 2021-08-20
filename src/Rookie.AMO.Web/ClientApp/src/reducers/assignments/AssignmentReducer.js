@@ -11,6 +11,9 @@ function AssignmentReducer(state = initialState, action) {
 
         case types.FETCH_ASSIGNMENTS:
             return payload;
+        
+        case types.GET_ASSIGNMENT_BY_ID:
+            return payload;
 
         case types.DELETE_ASSIGNMENT:
             return {...state};
