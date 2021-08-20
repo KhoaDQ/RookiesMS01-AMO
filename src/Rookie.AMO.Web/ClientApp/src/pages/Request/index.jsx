@@ -5,6 +5,7 @@ import * as action from '../../actions/ManagerRequest/ActionType';
 import RequestList from '../../components/Request/RequestList';
 import RequestItem from '../../components/Request/RequestItem';
 import PopupComplete from '../../components/Popup/PopupComplete';
+import PopupCancel from '../../components/Popup/PopupCancel';
 
 const stateList = [
   { name: 'Completed', value: 'Completed' },
@@ -30,6 +31,11 @@ function Request() {
   const [isCompleteOpen, setIsCompleteOpen] = useState(false);
   const [isComplete, setIsComplete] = useState(0);
 
+  //Popup cancel request
+  const [idRequestCancel, setIdRequestCancel] = useState('');
+  const [isCancelOpen, setIsCancelOpen] = useState(false);
+  const [isCancel, setIsCancel] = useState(0);
+
   let requestPage = FetchPageRequest(
     stateFilter,
     dateFilter,
@@ -43,7 +49,25 @@ function Request() {
 
   let requests = requestPage.items;
 
-  CompleteRequest(idRequestComplete, isComplete, setIsReLoad, setIsComplete);
+  useEffect(() => {
+    if (isComplete == 0) {
+      setTimeout(() => {
+        setIsReLoad(1);
+      }, 100);
+    }
+  }, [isComplete]);
+
+  CompleteRequest(
+    idRequestComplete,
+    isComplete,
+    isReLoad,
+    setIsReLoad,
+    setIsComplete,
+    'johnd',
+    'f1ebfde9-c567-4ed5-b96f-20b9b51b8251'
+  );
+
+  CancelRequest(idRequestCancel, isCancel, isReLoad, setIsReLoad, setIsCancel);
 
   const resetPage = () => {
     setPageNumber(1);
@@ -92,6 +116,7 @@ function Request() {
               index={index}
               stateList={stateList}
               handleCompleteOpen={handleCompleteOpen}
+              handleCancelOpen={handleCancelOpen}
             />
           );
         });
@@ -102,7 +127,6 @@ function Request() {
 
   //Popup complete request
   const handleCompleteOpen = (id, e) => {
-    console.log('complete open');
     setIdRequestComplete(id);
     handleCompleteShow(true);
   };
@@ -127,6 +151,33 @@ function Request() {
       );
   }
 
+  //Popup cancel request
+  const handleCancelOpen = (id, e) => {
+    console.log('cancel open');
+    setIdRequestCancel(id);
+    handleCancelShow(true);
+  };
+
+  const handleCancelShow = (isCancelOpen) => {
+    setIsCancelOpen(isCancelOpen);
+  };
+
+  const handleCancel = (e) => {
+    setIsCancel(1);
+    handleCancelShow(false);
+  };
+
+  function cancelPopup(handleCancel, handleCancelShow) {
+    if (1)
+      return (
+        <PopupCancel
+          isModalOpen={isCancelOpen}
+          handleCancel={handleCancel}
+          handleModelShow={handleCancelShow}
+        ></PopupCancel>
+      );
+  }
+
   return (
     <div>
       <RequestList
@@ -145,26 +196,52 @@ function Request() {
         {showRequests(requests)}
       </RequestList>
       {completePopup(handleComplete, handleCompleteShow)}
+      {cancelPopup(handleCancel, handleCancelShow)}
     </div>
   );
 }
 
-function CompleteRequest(id, isComplete, setIsReLoad, setIsComplete) {
-  // const dispatch = useDispatch()
+function CompleteRequest(
+  id,
+  isComplete,
+  isReLoad,
+  setIsReLoad,
+  setIsComplete,
+  username,
+  adminId
+) {
+  const dispatch = useDispatch();
 
   useEffect(() => {
     async function completeRequest(id) {
-      // const res = await apiCaller('Request/'+id, 'PUT', null);
-      // dispatch({ type: action.COMPLETE_REQUEST, payload: id });
-      setIsReLoad(0);
-      setIsComplete(0);
-
-      console.log('Fetch' + id);
+      const res = await apiCaller(
+        'Request/complete/' + id + '/' + username + '/' + adminId,
+        'PUT',
+        null
+      );
+      dispatch({ type: action.COMPLETE_REQUEST, payload: id });
     }
     if (id !== '' && isComplete === 1) {
       completeRequest(id);
+      setIsReLoad(0);
+      setIsComplete(0);
     }
-  }, [id, isComplete, setIsReLoad, setIsComplete]);
+  }, [id, isComplete, isReLoad, setIsReLoad, setIsComplete]);
+}
+
+function CancelRequest(id, isCancel, isReLoad, setIsReLoad, setIsCancel) {
+  //const dispatch = useDispatch();
+
+  useEffect(() => {
+    async function cancelRequest(id) {
+      console.log('dang fetch' + id);
+    }
+    if (id !== '' && isCancel === 1) {
+      cancelRequest(id);
+      setIsReLoad(0);
+      setIsCancel(0);
+    }
+  }, [id, isCancel, isReLoad, setIsReLoad, setIsCancel]);
 }
 
 function FetchPageRequest(
@@ -194,8 +271,6 @@ function FetchPageRequest(
         '&Page=' +
         pageNumber +
         '&Limit=2';
-
-      console.log(enpoint);
       const res = await apiCaller(enpoint, 'GET', null);
       dispatch({ type: action.FETCH_REQUESTS, payload: res.data });
     }
@@ -221,7 +296,6 @@ function FetchPageRequest(
 
 function CheckLoading(setIsLoading, page) {
   useEffect(() => {
-    console.log(page);
     if ('items' in page) setIsLoading(false);
   }, [page, setIsLoading]);
 }

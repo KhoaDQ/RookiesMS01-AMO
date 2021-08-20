@@ -46,6 +46,13 @@ namespace Rookie.AMO.Business.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task DeleteAsync(Guid id)
+        {
+            var request = _context.Requests.FirstOrDefault(x => (x.Id == id));
+            _context.Requests.Remove(request);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<PagedResponseModel<RequestDto>> PagedQueryAsync(FilterRequestsModel filter)
         {
             var query = _baseRepository.Entities;
