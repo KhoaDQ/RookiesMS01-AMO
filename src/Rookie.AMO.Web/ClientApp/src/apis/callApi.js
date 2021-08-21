@@ -6,14 +6,14 @@ export default function callApi(endpoint, method, body) {
   if (token === null)
     return axios({
       method: method,
-      url: `${Config.API_URL}/${endpoint}`,
+      url: `${Config.API_URL_AZURE}/${endpoint}`,
       data: body,
     }).catch((err) => console.log(err));
   else {
     let auToken = `Bearer ${token}`;
     return axios({
       method: method,
-      url: `${Config.API_URL}/${endpoint}`,
+      url: `${Config.API_URL_AZURE}/${endpoint}`,
       headers: { Authorization: auToken },
       data: body,
     }).catch((err) => console.log(err));
