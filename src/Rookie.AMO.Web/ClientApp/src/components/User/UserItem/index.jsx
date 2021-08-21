@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from "react";
 import { IoMdCreate } from "@react-icons/all-files/io/IoMdCreate";
 import { IoIosCloseCircleOutline } from "@react-icons/all-files/io/IoIosCloseCircleOutline";
-import PopupDetail from "../../../components/Popup/PopupDetail";
+import PopupDetailUser from "../../../components/Popup/PopupDetailUser";
 import { Link } from "react-router-dom";
 import { format } from 'date-fns';
 
@@ -39,12 +39,12 @@ function UserItem(props) {
           </span>
         </td>
       </tr>
-      <PopupDetail
+      <PopupDetailUser
         title="Detailed User Information"
-        content={user}
+        user={user}
         handleModelShow={handleModelShowFunction}
         isModalOpen={isModalOpen}
-      ></PopupDetail>
+      ></PopupDetailUser>
     </Fragment>
   );
 }

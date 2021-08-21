@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { format } from 'date-fns';
 import "../style.css";
 import { MdSettingsBackupRestore } from '@react-icons/all-files/md/MdSettingsBackupRestore';
-import PopupDetail from '../../Popup/PopupDetail';
+import PopupDetailAssignment from '../../Popup/PopupDetailAssignment';
 function AssignmentItem(props) {
     let { assignment, index } = props
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -46,12 +46,12 @@ function AssignmentItem(props) {
                     </span>
                 </td>
             </tr>
-            <PopupDetail
-                title="Detailed User Information"
-                content={assignment}
+            <PopupDetailAssignment
+                title="Detailed Assignment Information"
+                assignment={assignment}
                 handleModelShow={handleModelShowFunction}
                 isModalOpen={isModalOpen}
-            ></PopupDetail>
+            ></PopupDetailAssignment>
         </>
     )
 }
