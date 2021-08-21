@@ -19,9 +19,6 @@ namespace Rookie.AMO.DataAccessor.Entities
         public DateTime AssignedDate { get; set; }
 
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
-        public DateTime? AcceptedDate { get; set; }
-
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime? ReturnedDate { get; set; }
 
 
@@ -37,13 +34,13 @@ namespace Rookie.AMO.DataAccessor.Entities
         public Guid AssetID { get; set; }
 
         [Required]
-        public Guid User_ID { get; set; }
+        public Guid UserID { get; set; }
 
-        [Required]
-        public Guid Admin_ID { get; set; }
+        public Guid? AdminID { get; set; }
 
         public virtual Asset Asset { get; set; }
 
+        [Required]
         public string RequestedBy { get; set; }
 
         public string AcceptedBy { get; set; }

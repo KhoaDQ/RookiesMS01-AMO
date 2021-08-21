@@ -10,8 +10,8 @@ import EditUserReducer from './users/EditUserReducer';
 import EditAsset from './assets/EditAsset';
 import RequestReducer from './requests/RequestReducer';
 import ReportReducer from "./reports/ReportReducer";
-
-
+import RequestReducer from "./requests/RequestReducer"
+import AssignmentReducer from "./assignments/AssignmentReducer";
 export default combineReducers({
   getAllRoles: GetAllRolesReducer,
   createUser: CreateUserReducer,
@@ -23,4 +23,5 @@ export default combineReducers({
   EditUserReducer,
   ReportReducer,
   RequestReducer,
+  AssignmentReducer
 });

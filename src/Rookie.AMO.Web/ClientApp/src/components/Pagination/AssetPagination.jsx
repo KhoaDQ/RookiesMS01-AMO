@@ -1,13 +1,16 @@
 import React from "react";
+import { useState } from "react";
 import ReactPaginate from 'react-paginate';
 import "./style.css";
 
 export default function AssetPagination(props) {
-    let { totalPages, pageNumber, setPageNumber, setIsReLoad} = props
+  let { totalPages, filterPage,setFilterPage} = props
+
+  const [pageNumber,setPageNumber] = useState(filterPage.Page-1)
 
   function changePage(event) {
-    setPageNumber(event.selected + 1)
-    setIsReLoad(1)
+    setFilterPage({...filterPage,Page:event.selected + 1});
+    setPageNumber(event.selected);
   }
 
   return (
@@ -20,7 +23,7 @@ export default function AssetPagination(props) {
       containerClassName="pagination"
       pageLinkClassName="numberPage"
       onPageChange={(e) => changePage(e)}
-      forcePage={pageNumber - 1}
+      forcePage={pageNumber}
     />
   )
 }

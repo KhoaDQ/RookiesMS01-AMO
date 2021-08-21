@@ -10,6 +10,7 @@ import {
   InputGroup,
 } from "reactstrap";
 import { Fragment } from "react";
+import React from "react";
 import "../../Asset/style.css";
 import handleExport from "../../../pages/Report/index";
 function ReportList(props) {
@@ -23,7 +24,9 @@ function ReportList(props) {
     "Waiting for recycling",
     "Recycled",
   ];
-
+  const listReport = listArray.map((item, index) => {
+    return <th key={index}>{item}</th>;
+  });
   return (
     <Fragment>
       <h5 className="right-title">Report</h5>
@@ -36,11 +39,7 @@ function ReportList(props) {
       </Row>
       <Table className="table_border_spacing">
         <thead>
-          <tr>
-            {listArray.map((item, index) => (
-              <th key={index}>{item}</th>
-            ))}
-          </tr>
+          <tr>{listReport}</tr>
         </thead>
         <tbody>{props.children}</tbody>
       </Table>

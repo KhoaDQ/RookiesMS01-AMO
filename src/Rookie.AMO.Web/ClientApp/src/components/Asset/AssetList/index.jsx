@@ -25,14 +25,19 @@ function AssetList(props){
     State: {propertyName: "State", desc: true},
   }
 
-  let {handleSort, handleSearch, handleFilterState,handleFilterCat} = props
-
   const [searchText,setSearchText] = useState("")
   const [optionSort,setOptionSort] = useState(initSort);
+
+  let {filterPage,setFilterPage} = props
+
+  const resetPage = () => {
+    setFilterPage({...filterPage,Page:1})
+  };
 
   const handleChange = (e) => {
     setSearchText(e.target.value)
   }
+
   const handleClickSort = (nameProp,e) =>{
     e.preventDefault()
 
@@ -41,6 +46,42 @@ function AssetList(props){
       handleSort(e,optionSort[nameProp])
     }
   }
+
+  const handleSort = (e, option) => {
+    setFilterPage({
+      ...filterPage,
+      OrderProperty: option.propertyName,
+      Desc: option.desc,
+    });
+  };
+
+  const handleSearch = (text, e) => {
+    resetPage();
+    setFilterPage({...filterPage, KeySearch: text});
+  };
+
+  const handleFilterState = (option, e) => {
+    resetPage();
+    if (option != null){
+      setFilterPage({...filterPage, State: option.map((a, index) => a.value).join(",")});
+      console.log(filterPage)
+    }
+    else {
+      setFilterPage({...filterPage, State: ""});
+    }
+  };
+
+  const handleFilterCat = (option, e) => {
+    resetPage();
+    
+    if (option != null){
+      setFilterPage({...filterPage, Category: option.map((a, index) => a.id).join(",")});
+    }
+    else{ 
+      setFilterPage({...filterPage, Category: ""});
+    }
+  };
+
   return(
     <div>
       <h5 className="right-title">Asset List</h5>
@@ -48,6 +89,7 @@ function AssetList(props){
         <Col md={3}>
           <Filter
             options = {props.stateList}
+            defaultOption = {props.stateList.filter(s=> s.value == 'Available' || s.value == 'NotAvailable' || s.value == 'Assigned')}
             displayValue = "name"
             placeholder="State"
             handleFilter = {handleFilterState}/>
@@ -82,7 +124,7 @@ function AssetList(props){
       </Row>
       <Table className="table_border_spacing">
         <thead>
-          <tr>
+          <tr style={{ cursor: 'pointer' }}>
             <th onClick={(e) =>{handleClickSort("Code",e)}}>Asset Code
             {optionSort.Code.desc?<AiFillCaretDown/>:<AiFillCaretUp/>}
             </th>
@@ -102,7 +144,7 @@ function AssetList(props){
           {props.isLoading ? <tr><td className="rowNotify">...Loading</td></tr> : props.totalItems > 0 ? props.children : <tr><td className="rowNotify"> No assets are found! </td></tr>}
         </tbody>
       </Table>
-      { props.totalItems > 0 ? <AssetPagination totalPages = {props.totalPages} pageNumber = {props.pageNumber} setPageNumber = {props.setPageNumber} setIsReLoad={props.setIsReLoad}/>:null}
+      { props.totalItems > 0 ? <AssetPagination totalPages = {props.totalPages} pageNumber = {props.pageNumber} filterPage={filterPage} setFilterPage = {setFilterPage} />:null}
     </div>
 
   );

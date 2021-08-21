@@ -145,10 +145,7 @@ namespace Rookie.AMO.DataAccessor.Migrations
                     b.Property<string>("AcceptedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("AcceptedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("Admin_ID")
+                    b.Property<Guid?>("AdminID")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("AssetID")
@@ -162,6 +159,7 @@ namespace Rookie.AMO.DataAccessor.Migrations
                         .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("RequestedBy")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ReturnedDate")
@@ -170,7 +168,7 @@ namespace Rookie.AMO.DataAccessor.Migrations
                     b.Property<int>("State")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("User_ID")
+                    b.Property<Guid>("UserID")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");

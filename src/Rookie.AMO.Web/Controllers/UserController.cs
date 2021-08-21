@@ -29,8 +29,8 @@ namespace Rookie.AMO.Web.Controllers
         public Task<UserDto> GetByIdAsync(Guid userId)
             => _userService.GetByIdAsync(userId);
         [HttpGet("find")]
-        public Task<PagedResponseModel<UserDto>> PagedQueryUserAsync(string name, string type, int page, int limit)
-            => _userService.PagedQueryAsync(name, type, page, limit, HttpContext.Request.Headers["Authorization"]);
+        public Task<PagedResponseModel<UserDto>> PagedQueryUserAsync(string name, string type, int page, int limit,string propertyName,bool desc)
+            => _userService.PagedQueryAsync(name, type, page, limit,propertyName,desc, HttpContext.Request.Headers["Authorization"]);
         [HttpDelete("{userId}")]
         public Task<IActionResult> DisableUserAsync(Guid userId)
             => _userService.DisableUserAsync(userId);

@@ -1,6 +1,6 @@
 import React from 'react';
-import { BsCheck } from '@react-icons/all-files/bs/BsCheck';
-import { IoCloseSharp } from '@react-icons/all-files/io5/IoCloseSharp';
+import { FaCheck } from '@react-icons/all-files/fa/FaCheck';
+import { FaTimes } from '@react-icons/all-files/fa/FaTimes';
 import moment from 'moment';
 import '../style.css';
 function RequestItem(props) {
@@ -21,14 +21,41 @@ function RequestItem(props) {
       </td>
       <td>{stateList.filter((e) => e.value === request.state)[0].name}</td>
       <td onClick={(e) => e.stopPropagation()}>
-        <span className="icon-nash icon-nash--red">
-          <IoCloseSharp />
+        <span
+          className={
+            'icon-nash ' +
+            (request.returnedDate === '0001-01-01T00:00:00'
+              ? 'icon-nash--red'
+              : 'icon-nash--red-dis')
+          }
+        >
+          <FaCheck
+            onClick={
+              request.returnedDate === '0001-01-01T00:00:00'
+                ? (e) => {
+                    props.handleCompleteOpen(request.id, e);
+                  }
+                : undefined
+            }
+          />
         </span>
-        <span className="icon-nash icon-nash--black">
-          <BsCheck
-            onClick={(e) => {
-              props.handleCompleteOpen(request.id, e);
-            }}
+        <span
+          className={
+            'icon-nash ' +
+            (request.returnedDate === '0001-01-01T00:00:00'
+              ? 'icon-nash--black'
+              : 'icon-nash--black-dis')
+          }
+        >
+          <FaTimes
+            onClick={
+              request.returnedDate === '0001-01-01T00:00:00'
+                ? (e) => {
+                    props.handleCancelOpen(request.id, e);
+                    console.log('dang click');
+                  }
+                : undefined
+            }
           />
         </span>
       </td>

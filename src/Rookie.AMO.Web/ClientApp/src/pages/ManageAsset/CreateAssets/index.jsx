@@ -108,7 +108,7 @@ const CreateAssets = () => {
 
     async function CreateAsset() {
       const res = await apiCaller("Asset", "POST", newAsset);
-      dispatch({ type: action.CREATE_ASSET, payload: res });
+      dispatch({ type: action.CREATE_ASSET, payload: res.data });
     }
 
     try {
