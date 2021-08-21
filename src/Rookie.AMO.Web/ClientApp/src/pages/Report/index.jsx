@@ -29,7 +29,7 @@ function Report() {
   }, []);
 
   function handleExport() {
-    FileSaver.saveAs(`${Config.API_URL}/${"ReportViewer/export"}`);
+      FileSaver.saveAs(`${Config.API_URL_AZURE}/${"ReportViewer/export"}`);
   }
   function showReport(reports) {
     let result = null;
