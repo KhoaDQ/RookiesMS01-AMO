@@ -3,10 +3,18 @@ h5.right-title {
     font-weight: bold;
 }
 
+.hover_logo:hover {
+    text-decoration: none;
+}
+
 .icon-nash {
     font-size: 20px;
     cursor: pointer;
     margin-right: 1rem;
+}
+
+.icon-nash:last-child {
+    margin-right: 0;
 }
 
 .icon-nash--red {

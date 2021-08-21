@@ -19,7 +19,7 @@ function ManageAssignment() {
     KeySearch: '',
     Page: 1,
     State: '',
-    Limit: 3,
+    Limit: 19,
     Desc: true,
     OrderProperty: 'AssetCode'
   })

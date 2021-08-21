@@ -21,7 +21,7 @@ const Header = (props) => {
   const toggle = () => setDropdownOpen((prevState) => !prevState);
   return (
     <div className="header">
-      <Container>
+      <Container className='container-fluid'>
         <Row>
           <Col xs="6">
             <Link to="/" className="header-logo">

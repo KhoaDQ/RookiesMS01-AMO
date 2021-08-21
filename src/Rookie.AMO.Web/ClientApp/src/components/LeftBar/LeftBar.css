@@ -1,6 +1,9 @@
 .left-bar__title {
     color: #CF2338;
     font-weight: bold;
+    margin-top: 0.5rem;
+    font-size: 16px;
+    text-decoration: none;
 }
 
 .left-bar__menu {
@@ -13,12 +16,9 @@
 }
 
 .left-bar__item--active {
-   
     background-color: #CF2338;
     color: white;
 }
-
-
 
 .left-bar__link {
     text-decoration: none;

@@ -7,33 +7,33 @@ import UserItem from "../../components/User/UserItem";
 import UserList from "../../components/User/UserList";
 import { FETCH_ROLES } from "../../actions/ManageUser/ActionType";
 import PopupDelete from "../../components/Popup/PopupDelete";
-
+const stateList = [
+  { name: "Admin", value: "Admin" },
+  { name: "Staff", value: "Staff" }
+]
 function ManageUser() {
   const [pageNumber, setPageNumber] = useState(1);
-  const [optionSort, setOptionSort] = useState({
-    propertyName: "",
-    desc: false,
-  });
-
   const [paging, setPaging] = useState({
     name: "",
     type: "",
     page: 1,
-    limit: 3
+    limit: 19,
+    propertyName: "StaffCode",
+    desc: false,
   });
 
-  const roles = useSelector((state) => state.getAllRoles);
+  // const roles = useSelector((state) => state.getAllRoles);
   const userPage = useSelector((state) => state.UserReducer);
   const { createdUser } = useSelector((state) => state.createUser);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    async function fetchRoles() {
-      const res = await apiCaller("Role", "GET", null);
-      dispatch({ type: FETCH_ROLES, payload: res.data });
-    }
-    fetchRoles();
-  }, []);
+  // useEffect(() => {
+  //   async function fetchRoles() {
+  //     const res = await apiCaller("Role", "GET", null);
+  //     dispatch({ type: FETCH_ROLES, payload: res.data });
+  //   }
+  //   fetchRoles();
+  // }, []);
 
   useEffect(() => {
     async function fetch() {
@@ -78,7 +78,7 @@ function ManageUser() {
 
   return (
     <UserList
-      stateList={roles}
+      stateList={stateList}
       totalPages={userPage.totalPages}
       totalItems={userPage.totalItems}
       pageNumber={pageNumber}

@@ -2,7 +2,6 @@
     padding: 10px 0px;
     background-color: #CF2338;
     color: #fff;
-    font-size: 16px;
     font-weight: bold;
 }
 
@@ -15,17 +14,20 @@
     background: transparent;
     border: none;
     outline: none;
+    font-size: 16px;
 }
 
 .header-right button:hover {
     background: transparent;
 }
 
-.header-logo{
+.header-logo {
     color: #fff;
     text-decoration: none;
+    font-size: 18px;
 }
 
-.header-logo:hover{
-    color: black;
+.header-logo:hover {
+    text-decoration: none;
+    color: #fff;
 }

@@ -18,49 +18,61 @@ import {
 import { Table } from "reactstrap";
 import "./UserList.css";
 import UserPagination from "../../Pagination/UserPagination";
+import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
+import Filter from "../../Filter";
+const initSort = {
+  StaffCode: { propertyName: "StaffCode", desc: true },
+  FullName: { propertyName: "FullName", desc: true },
+  JoinedDate: { propertyName: "JoinedDate", desc: true },
+  Type: { propertyName: "Type", desc: true },
+}
 function UserList(props) {
   const { stateList } = props;
   const { roles } = stateList;
+  console.log(roles);
   const { paging, setPaging } = props;
   const [tempPaging, setTempPaging] = useState(paging);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setTempPaging({ ...tempPaging, [name]: value });
   };
+  const [optionSort, setOptionSort] = useState(initSort);
 
-  const type = roles.map((role, index) => {
-    return <option value={role.name}>{role.name}</option>;
-  });
+  // const type = roles.map((role, index) => {
+  //   return <option value={role.name}>{role.name}</option>;
+  // });
+
+  const handleClickSort = (nameProp, e) => {
+    e.preventDefault()
+
+    if (nameProp in optionSort) {
+      optionSort[nameProp].desc = !optionSort[nameProp].desc
+      setPaging({ ...paging, propertyName: optionSort[nameProp].propertyName, Desc: optionSort[nameProp].desc })
+    }
+  }
+  const handleFilterState = (option, e) => {
+    if (option != null)
+      setPaging({ ...paging, Type: option.map((a, index) => a.value).join(',') })
+    else
+      setPaging({ ...paging, Type: '' })
+  }
 
   return (
     <div>
       <h5 className="right-title">User List</h5>
       <Row className="right-bar">
         <Col md={3}>
-          <InputGroup>
-            <select
-              className="form-control"
-              name="type"
-              value={tempPaging.type}
-              onChange={handleChange}
-            >
-              <option value={""}>Select Type</option>
-              {type}
-            </select>
-            <InputGroupText
-              className="right__icon"
-              onClick={() => {
-                setPaging(tempPaging);
-              }}
-            >
-              <AiFillFilter />
-            </InputGroupText>
-          </InputGroup>
+          <Filter
+            style={{ width: '200px' }}
+            options={stateList}
+            displayValue="name"
+            handleFilter={handleFilterState}
+            placeholder="State" />
         </Col>
         <Col md={3}>
           <InputGroup>
             <Input
-              placeholder="Search Name"
+              placeholder="Search"
               name="name"
               value={tempPaging.name}
               onChange={handleChange}
@@ -85,13 +97,22 @@ function UserList(props) {
       </Row>
       <Table className="table_border_spacing table">
         <thead>
-          <tr>
-            <th>Staff Code</th>
-            <th>Full Name</th>
+
+          <tr style={{ cursor: 'pointer' }}>
+            <th onClick={(e) => { handleClickSort("StaffCode", e) }}>Staff Code
+              {optionSort.StaffCode.desc ? <AiFillCaretDown /> : <AiFillCaretUp />}
+            </th>
+            <th onClick={(e) => { handleClickSort("FullName", e) }} >Full Name
+              {optionSort.FullName.desc ? <AiFillCaretDown /> : <AiFillCaretUp />}
+            </th>
             <th>Username</th>
-            <th>Joined Date</th>
-            <th>Type</th>
-            <th></th>
+            <th onClick={(e) => { handleClickSort("JoinedDate", e) }}>Joined Date
+              {optionSort.JoinedDate.desc ? <AiFillCaretDown /> : <AiFillCaretUp />}
+            </th>
+            <th className='scale-col-12' onClick={(e) => { handleClickSort("Type", e) }}>Type
+              {optionSort.Type.desc ? <AiFillCaretDown /> : <AiFillCaretUp />}
+            </th>
+            <th className="header_tools"></th>
           </tr>
         </thead>
         <tbody>

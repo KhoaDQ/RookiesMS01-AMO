@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.0.31423.177
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31605.320
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rookie.AMO.Identity", "Rookie.AMO.Identity\Rookie.AMO.Identity.csproj", "{93B0AF10-3882-4052-9247-72640F223B5D}"
 EndProject
@@ -25,6 +25,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rookie.AMO.Tests", "Rookie.AMO.Tests\Rookie.AMO.Tests.csproj", "{82B4060B-4CB2-4128-ADB8-CE7946F271E0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rookie.AMO.UnitTests", "Rookie.AMO.UnitTests\Rookie.AMO.UnitTests.csproj", "{47490BFC-BDBF-4B0C-9BB8-4FB84185B880}"
+	ProjectSection(ProjectDependencies) = postProject
+		{93B0AF10-3882-4052-9247-72640F223B5D} = {93B0AF10-3882-4052-9247-72640F223B5D}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
