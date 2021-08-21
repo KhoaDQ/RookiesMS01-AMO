@@ -44,7 +44,7 @@ function ManageUser() {
 
     if (userPage.items) {
       if (createdUser.id != null) {
-        var index = userPage.items.findIndex(x => x.id === createdUser.id);
+        var index = userPage.items.findIndex((x) => x.id === createdUser.id);
         if (index === -1) {
           userPage.items.pop();
         }

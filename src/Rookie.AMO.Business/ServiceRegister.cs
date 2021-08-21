@@ -21,6 +21,7 @@ namespace Rookie.AMO.Business
             services.AddTransient<IReportViewerService, ReportViewerService>();
             services.AddTransient<IAssignmentService, AssignmentService>();
             services.AddTransient<IRequestService, RequestService>();
+            services.AddTransient<IExportProvider,ExcelExportProvider>();
 
         }
     }

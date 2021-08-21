@@ -12,8 +12,9 @@ import {
 import { Fragment } from "react";
 import React from "react";
 import "../../Asset/style.css";
-
+import handleExport from "../../../pages/Report/index";
 function ReportList(props) {
+  //let { handleExport } = props;
   const listArray = [
     "Category",
     "Total",
@@ -31,7 +32,9 @@ function ReportList(props) {
       <h5 className="right-title">Report</h5>
       <Row from className="text-right right-bar">
         <Col md={12}>
-          <Button color="danger">Export</Button>
+          <Button type="button" color="danger" onClick={props.handleExport}>
+            Export
+          </Button>
         </Col>
       </Row>
       <Table className="table_border_spacing">
