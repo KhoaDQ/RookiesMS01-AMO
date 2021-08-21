@@ -52,7 +52,7 @@ function AssignmentItem(props) {
                 handleModelShow={handleModelShowFunction}
                 isModalOpen={isModalOpen}
             ></PopupDetailAssignment>
-        </>
+        </Fragment>
     )
 }
 
