@@ -15,6 +15,6 @@ namespace Rookie.AMO.Identity.Business.Interfaces
         Task UpdateUserAsync(Guid id, UserUpdateRequest request);
         Task DisableUserAsync(Guid userId);
         Task EnableUserAsync(Guid userId);
-        Task<PagedResponseModel<UserDto>> PagedQueryAsync(string name, string type, int page, int limit);
+        Task<PagedResponseModel<UserDto>> PagedQueryAsync(string name, string type, int page, int limit,string propertyName, bool desc);
     }
 }

@@ -22,6 +22,6 @@ namespace Rookie.AMO.Web.DataProviders
         [Put(Endpoints.User + "/{id}")]
         Task<IActionResult> UpdateUserAsync(Guid id, UserUpdateRequest user);
         [Get(Endpoints.User + "/find")]
-        Task<PagedResponseModel<UserDto>> PagedQueryAsync(string name, string type, int page, int limit, [Header("Authorization")] string auth);
+        Task<PagedResponseModel<UserDto>> PagedQueryAsync(string name, string type, int page, int limit, string propertyName, bool desc, [Header("Authorization")] string auth);
     }
 }

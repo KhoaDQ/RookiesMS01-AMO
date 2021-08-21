@@ -3,8 +3,8 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import "./Popup.css";
 
 const PopupDelete = (props) => {
-  let { handleDelete } = props
-
+  let {handleDelete} = props
+  
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {

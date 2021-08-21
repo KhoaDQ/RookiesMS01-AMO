@@ -34,8 +34,8 @@ namespace Rookie.AMO.Identity.Quickstart.Account
 
         [HttpGet("find")]
         public async Task<PagedResponseModel<UserDto>> PagedQueryAsync
-            (string name, string type, int page, int limit)
-            => await _userService.PagedQueryAsync(name, type, page, limit);
+            (string name, string type, int page, int limit, string propertyName, bool desc)
+            => await _userService.PagedQueryAsync(name, type, page, limit,propertyName,desc);
 
         [HttpPost]
         public async Task<ActionResult<UserDto>> CreateUserAsync(UserRequest user)

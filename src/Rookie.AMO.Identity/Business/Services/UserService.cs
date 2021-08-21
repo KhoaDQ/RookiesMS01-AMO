@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Rookie.AMO.Business.Extensions;
 using Rookie.AMO.Contracts;
 using Rookie.AMO.Contracts.Constants;
 using Rookie.AMO.Contracts.Dtos.User;
@@ -94,15 +95,45 @@ namespace Rookie.AMO.Identity.Business.Services
             return _mapper.Map<UserDto>(await _userManager.FindByIdAsync(userId.ToString()));
         }
 
-        public async Task<PagedResponseModel<UserDto>> PagedQueryAsync(string name, string type, int page, int limit)
+        public async Task<PagedResponseModel<UserDto>> PagedQueryAsync(string name, string type, int page, int limit, string propertyName, bool desc)
         {
             var query = _userManager.Users
                                 .Where(x => String.IsNullOrEmpty(type)
                                 || x.Type.ToLower().Contains(type.ToLower()))
                                 .Where(x => String.IsNullOrEmpty(name)
-                                || x.FullName.ToLower().Contains(name.ToLower()))
+                                || x.FullName.ToLower().Contains(name.ToLower())
+                                || x.CodeStaff.Contains(name.ToLower()))
                                 .OrderBy(x => x.CodeStaff);
-
+            switch (propertyName)
+            {
+                case "StaffCode":
+                    if (desc)
+                        query = query.OrderByDescending(a => a.CodeStaff);
+                    else
+                        query = query.OrderBy(a => a.CodeStaff);
+                    break;
+                case "FullName":
+                    if (desc)
+                        query = query.OrderByDescending(a => a.FullName);
+                    else
+                        query = query.OrderBy(a => a.FullName);
+                    break;
+                case "JoinedDate":
+                    if (desc)
+                        query = query.OrderByDescending(a => a.JoinedDate);
+                    else
+                        query = query.OrderBy(a => a.JoinedDate);
+                    break;
+                case "Type":
+                    if (desc)
+                        query = query.OrderByDescending(a => a.Type);
+                    else
+                        query = query.OrderBy(a => a.Type);
+                    break;
+                default:
+                    query = (IOrderedQueryable<User>)query.OrderByPropertyName(propertyName, desc);
+                    break;
+            }
             var assets = await query
                 .AsNoTracking()
                 .PaginateAsync(page, limit);

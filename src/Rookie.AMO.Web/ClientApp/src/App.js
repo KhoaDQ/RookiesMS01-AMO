@@ -10,9 +10,10 @@ import PopupRedirect from "./components/Popup/PopupRedirect";
 import { useState } from "react";
 import { useEffect } from "react";
 
-function App() {
+function App(props) {
   const { user } = useSelector((state) => state.oidc);
   const [redirect, setRedirect] = useState(false);
+  console.log(props.match);
 
   useEffect(() => {
     setRedirect(user == null);
@@ -27,7 +28,9 @@ function App() {
             <Col xs="6" sm="2">
               <LeftBar />
             </Col>
-            <Col sm="10">{showContentMenus(routes, user)}</Col>
+            <Col xs="2" sm="1">
+            </Col>
+            <Col sm="9">{showContentMenus(routes, user)}</Col>
           </Row>
         </Container>
         <PopupRedirect
@@ -52,7 +55,7 @@ const showContentMenus = (routes, user) => {
             exact={route.exact}
             component={route.main}
           />
-      );
+        );
       }
     });
   }

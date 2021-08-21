@@ -124,7 +124,7 @@ function AssetList(props){
       </Row>
       <Table className="table_border_spacing">
         <thead>
-          <tr>
+          <tr style={{ cursor: 'pointer' }}>
             <th onClick={(e) =>{handleClickSort("Code",e)}}>Asset Code
             {optionSort.Code.desc?<AiFillCaretDown/>:<AiFillCaretUp/>}
             </th>
