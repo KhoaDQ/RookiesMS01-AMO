@@ -30,5 +30,12 @@ th:hover{
 .table_history_container{
     margin-left: -10px;
     margin-right: 10px;
-
+}
+.table_border_spacing .newRow td:not(:last-child){
+    background-color: rgba(108, 117, 125, 1);
+    color: white;
+}
+.table_border_spacing .newRow:hover td:not(:last-child){
+    background-color: #dee2e6;
+    color: black;
 }

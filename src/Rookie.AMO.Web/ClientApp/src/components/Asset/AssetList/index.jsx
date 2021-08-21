@@ -73,10 +73,13 @@ function AssetList(props){
 
   const handleFilterCat = (option, e) => {
     resetPage();
-    if (option != null)
-      setFilterPage({...filterPage, Category: option.map((a, index) => a.value).join(",")});
-    else 
+    
+    if (option != null){
+      setFilterPage({...filterPage, Category: option.map((a, index) => a.id).join(",")});
+    }
+    else{ 
       setFilterPage({...filterPage, Category: ""});
+    }
   };
 
   return(
@@ -86,6 +89,7 @@ function AssetList(props){
         <Col md={3}>
           <Filter
             options = {props.stateList}
+            defaultOption = {props.stateList.filter(s=> s.value == 'Available' || s.value == 'NotAvailable' || s.value == 'Assigned')}
             displayValue = "name"
             placeholder="State"
             handleFilter = {handleFilterState}/>
@@ -120,7 +124,7 @@ function AssetList(props){
       </Row>
       <Table className="table_border_spacing">
         <thead>
-          <tr>
+          <tr style={{ cursor: 'pointer' }}>
             <th onClick={(e) =>{handleClickSort("Code",e)}}>Asset Code
             {optionSort.Code.desc?<AiFillCaretDown/>:<AiFillCaretUp/>}
             </th>

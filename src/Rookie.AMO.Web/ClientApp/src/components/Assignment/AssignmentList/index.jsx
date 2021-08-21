@@ -38,7 +38,6 @@ function AssignmentList(props) {
 
     if (nameProp in optionSort) {
       optionSort[nameProp].desc = !optionSort[nameProp].desc
-      // props.handleSort(e, optionSort[nameProp])
       console.log(optionSort[nameProp].propertyName, '-', optionSort[nameProp].desc);
       setFilters({ ...filters, OrderProperty: optionSort[nameProp].propertyName, Desc: optionSort[nameProp].desc })
 
@@ -51,18 +50,11 @@ function AssignmentList(props) {
   const handleFilterDate = (e) => {
     setFilters({ ...filters, AssignedDate: filterDate })
   }
-
-  const handleSort = (e, option) => {
-    setOptionSort({ propertyName: option.propertyName, desc: option.desc.toString() })
-    // setIsReLoad(1)
-  }
-
   const handleFilterState = (option, e) => {
     if (option != null)
       setFilters({ ...filters, State: option.map((a, index) => a.value).join(',') })
     else
       setFilters({ ...filters, State: '' })
-    // setIsReLoad(1)
   }
   return (
     <div>
@@ -81,6 +73,7 @@ function AssignmentList(props) {
             <input
               type="date"
               className="form-control "
+              placeholder='dd/mm/yyyy'
               id="AssignedDate"
               name="AssignedDate"
               value={filterDate}
