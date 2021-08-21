@@ -5,7 +5,6 @@ import * as action from "../../actions/ManageUser/ActionType";
 import apiCaller from "../../apis/callApi";
 import UserItem from "../../components/User/UserItem";
 import UserList from "../../components/User/UserList";
-import { FETCH_ROLES } from "../../actions/ManageUser/ActionType";
 import PopupDelete from "../../components/Popup/PopupDelete";
 const stateList = [
   { name: "Admin", value: "Admin" },
@@ -22,18 +21,9 @@ function ManageUser() {
     desc: false,
   });
 
-  // const roles = useSelector((state) => state.getAllRoles);
   const userPage = useSelector((state) => state.UserReducer);
   const { createdUser } = useSelector((state) => state.createUser);
   const dispatch = useDispatch();
-
-  // useEffect(() => {
-  //   async function fetchRoles() {
-  //     const res = await apiCaller("Role", "GET", null);
-  //     dispatch({ type: FETCH_ROLES, payload: res.data });
-  //   }
-  //   fetchRoles();
-  // }, []);
 
   useEffect(() => {
     async function fetch() {

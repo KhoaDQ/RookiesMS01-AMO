@@ -38,16 +38,11 @@ function UserList(props) {
   };
   const [optionSort, setOptionSort] = useState(initSort);
 
-  // const type = roles.map((role, index) => {
-  //   return <option value={role.name}>{role.name}</option>;
-  // });
-
   const handleClickSort = (nameProp, e) => {
     e.preventDefault()
-
     if (nameProp in optionSort) {
-      optionSort[nameProp].desc = !optionSort[nameProp].desc
       setPaging({ ...paging, propertyName: optionSort[nameProp].propertyName, Desc: optionSort[nameProp].desc })
+      optionSort[nameProp].desc = !optionSort[nameProp].desc
     }
   }
   const handleFilterState = (option, e) => {
