@@ -1,34 +1,34 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState, Fragment } from "react";
 import { IoMdCreate } from "@react-icons/all-files/io/IoMdCreate";
 import { IoIosCloseCircleOutline } from "@react-icons/all-files/io/IoIosCloseCircleOutline";
 import { Link } from "react-router-dom";
-import { format } from 'date-fns';
+import { format } from "date-fns";
 import "../style.css";
-import axios from 'axios';
 import { MdSettingsBackupRestore } from '@react-icons/all-files/md/MdSettingsBackupRestore';
-import PopupDetail from '../../Popup/PopupDetail';
+import PopupDetailAssignment from '../../Popup/PopupDetailAssignment';
 function AssignmentItem(props) {
-    let { assignment, index } = props
-    const [isModalOpen, setIsModalOpen] = useState(false);
+  let { assignment, index } = props;
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-    function handleShowInfoAssignment() {
-        setIsModalOpen(true);
-    }
+  function handleShowInfoAssignment() {
+    setIsModalOpen(true);
+  }
 
-    const handleModelShowFunction = (content) => {
-        setIsModalOpen(content);
-    };
+  const handleModelShowFunction = (content) => {
+    setIsModalOpen(content);
+  };
 
-    let value = new Date(assignment.assignedDate)
-    const dateString = format(value, 'dd/MM/yyyy')
-    return (
-        <>
-            <tr onClick={handleShowInfoAssignment}>
-                <td hover >{index + 1}</td>
-                <td>{assignment.assetCode}</td>
-                <td>{assignment.assetName}</td>
-                <td>{assignment.assignedTo}</td>
-                <td>{assignment.assignedBy}</td>
+  let value = new Date(assignment.assignedDate);
+  const dateString = format(value, "dd/MM/yyyy");
+
+  return (
+    <Fragment>
+      <tr onClick={handleShowInfoAssignment}>
+        <td hover>{index + 1}</td>
+        <td>{assignment.assetCode}</td>
+        <td>{assignment.assetName}</td>
+        <td>{assignment.assignedTo}</td>
+        <td>{assignment.assignedBy}</td>
 
                 <td>{dateString}</td>
                 <td>{assignment.state}</td>
@@ -46,14 +46,14 @@ function AssignmentItem(props) {
                     </span>
                 </td>
             </tr>
-            <PopupDetail
-                title="Detailed User Information"
-                content={assignment}
+            <PopupDetailAssignment
+                title="Detailed Assignment Information"
+                assignment={assignment}
                 handleModelShow={handleModelShowFunction}
                 isModalOpen={isModalOpen}
-            ></PopupDetail>
-        </>
+            ></PopupDetailAssignment>
+        </Fragment>
     )
 }
 
-export default AssignmentItem
+export default AssignmentItem;

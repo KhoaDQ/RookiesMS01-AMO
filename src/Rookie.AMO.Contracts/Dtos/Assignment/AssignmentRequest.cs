@@ -14,7 +14,6 @@ namespace Rookie.AMO.Contracts.Dtos.Assignment
         public DateTime AssignedDate { get; set; }
         public string Note { get; set; }
         public string AssignedTo { get; set; }
-
         public string AssignedBy { get; set; }
 
     }

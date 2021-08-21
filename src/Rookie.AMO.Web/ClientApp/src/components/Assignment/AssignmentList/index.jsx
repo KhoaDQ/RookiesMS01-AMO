@@ -1,28 +1,20 @@
-import React, { useState, useEffect } from "react";
-import { Table } from "reactstrap";
-import { AiOutlineSearch } from "@react-icons/all-files/ai/AiOutlineSearch";
+import { AiFillCalendar } from "@react-icons/all-files/ai/AiFillCalendar";
 import { AiFillCaretDown } from "@react-icons/all-files/ai/AiFillCaretDown";
 import { AiFillCaretUp } from "@react-icons/all-files/ai/AiFillCaretUp";
+import { AiOutlineSearch } from "@react-icons/all-files/ai/AiOutlineSearch";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import {
-  Col,
-  Row,
-  Button,
-  InputGroupText,
-  InputGroupAddon,
-  Input,
-  InputGroup,
+  Button, Col, Input,
+  InputGroup, InputGroupAddon, InputGroupText, Row, Table
 } from "reactstrap";
-import "../style.css";
 import Filter from "../../Filter";
-import AssignmentPagination from "../../Pagination/AssignmentPagination";
-import { AiFillCalendar } from "@react-icons/all-files/ai/AiFillCalendar";
-import ReactPaginate from "react-paginate";
+import "../style.css";
 
 function AssignmentList(props) {
   const initSort = {
-    AssetCode: { propertyName: "Code", desc: true },
-    AssetName: { propertyName: "Name", desc: true },
+    AssetCode: { propertyName: "AssetCode", desc: true },
+    AssetName: { propertyName: "AssetName", desc: true },
     AssignedTo: { propertyName: "AssignedTo", desc: true },
     AssignedBy: { propertyName: "AssignedBy", desc: true },
     AssignedDate: { propertyName: "AssignedDate", desc: true },
@@ -46,7 +38,9 @@ function AssignmentList(props) {
 
     if (nameProp in optionSort) {
       optionSort[nameProp].desc = !optionSort[nameProp].desc
-      props.handleSort(e, optionSort[nameProp])
+      console.log(optionSort[nameProp].propertyName, '-', optionSort[nameProp].desc);
+      setFilters({ ...filters, OrderProperty: optionSort[nameProp].propertyName, Desc: optionSort[nameProp].desc })
+
     }
   }
 
@@ -56,18 +50,11 @@ function AssignmentList(props) {
   const handleFilterDate = (e) => {
     setFilters({ ...filters, AssignedDate: filterDate })
   }
-
-  const handleSort = (e, option) => {
-    setOptionSort({ propertyName: option.propertyName, desc: option.desc.toString() })
-    // setIsReLoad(1)
-  }
-
   const handleFilterState = (option, e) => {
     if (option != null)
       setFilters({ ...filters, State: option.map((a, index) => a.value).join(',') })
     else
       setFilters({ ...filters, State: '' })
-    // setIsReLoad(1)
   }
   return (
     <div>
@@ -86,6 +73,7 @@ function AssignmentList(props) {
             <input
               type="date"
               className="form-control "
+              placeholder='dd/mm/yyyy'
               id="AssignedDate"
               name="AssignedDate"
               value={filterDate}
@@ -119,7 +107,7 @@ function AssignmentList(props) {
 
       <Table className="table_border_spacing">
         <thead>
-          <tr style={{cursor:'pointer'}}>
+          <tr style={{ cursor: 'pointer' }}>
             <th className='scale-col-5'>No.</th>
             <th onClick={(e) => { handleClickSort("AssetCode", e) }}>Asset Code
               {optionSort.AssetCode.desc ? <AiFillCaretDown /> : <AiFillCaretUp />}
@@ -147,11 +135,7 @@ function AssignmentList(props) {
             <span style={{ width: '200px', display: 'block', margin: '0 auto' }} className="rowNotify"> No assets are found! </span>}
         </tbody>
       </Table>
-      <AssignmentPagination
-        filters={filters}
-        setFilters={setFilters}
-        paging={paging}
-      />
+
     </div>
 
   );

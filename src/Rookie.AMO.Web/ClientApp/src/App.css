@@ -3,7 +3,7 @@
 }
 
 .container-fluid {
-  max-width: 1420px;
+  max-width: 1450px;
 }
 
 .text-right {
@@ -49,4 +49,22 @@
 
 .height {
   height: 150px;
+}
+
+.error-message {
+  font-size: 9.5px;
+  color: red;
+  margin-bottom: 0px;
+}
+
+.form-create-user {
+  max-width: 500px;
+  margin-right: auto;
+  font-size: 13px;
+}
+
+.red-boundary {
+  border: red solid 1px;
+  border-radius: 5px;
+  box-shadow: 1px 1px red;
 }

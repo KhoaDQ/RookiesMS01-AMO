@@ -1,18 +1,16 @@
 import { createUserManager, loadingUser, loadUser } from 'redux-oidc';
 import store from '../store';
-
-const localhost = 'https://localhost:5011/';
-const identity = 'https://localhost:5001/';
+import * as Config  from '../constants/config'
 
 const userManagerConfig = {
     client_id: 'rookieamo',
     client_secret: 'rookieamosecret',
-    redirect_uri: `${localhost}callback`,
-    post_logout_redirect_uri: `${localhost}`,
+    redirect_uri: `${Config.BASE_URL_AZURE}callback`,
+    post_logout_redirect_uri: `${Config.BASE_URL_AZURE}`,
     response_type: 'id_token token',
     scope: 'openid profile identity api',
-    authority: `${identity}`,
-    silent_redirect_uri: `${localhost}silent_renew.html`,
+    authority: `${Config.IDENTITY_URL_AZURE}`,
+    silent_redirect_uri: `${Config.BASE_URL_AZURE}silent_renew.html`,
     automaticSilentRenew: true,
     filterProtocolClaims: true,
     loadUserInfo: true,

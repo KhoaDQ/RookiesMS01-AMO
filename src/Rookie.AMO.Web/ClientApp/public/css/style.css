@@ -3,10 +3,18 @@ h5.right-title {
     font-weight: bold;
 }
 
+.hover_logo:hover {
+    text-decoration: none;
+}
+
 .icon-nash {
     font-size: 20px;
     cursor: pointer;
     margin-right: 1rem;
+}
+
+.icon-nash:last-child {
+    margin-right: 0;
 }
 
 .icon-nash--red {
@@ -33,7 +41,6 @@ span.right__icon.input-group-text {
 
 .detail-item:hover {
     cursor: pointer;
-    background-color: lightslategray;
 }
 
 select {
@@ -58,4 +65,78 @@ table th {
 
 li {
     font-size: 14px;
+}
+
+/* request */
+
+.smallText {
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.smallText .icon-nash {
+    font-size: 15px;
+}
+
+.smallText .icon-nash--red-dis {
+    color: rgb(253, 159, 159);
+}
+
+.smallText .icon-nash--black-dis {
+    color: rgb(148, 148, 148);
+}
+
+.smallText .icon-nash--black-dis:hover, .smallText .icon-nash--red-dis:hover {
+    cursor: default;
+}
+
+.request_list .header_tools {
+    width: 10%;
+}
+
+/* common */
+
+.table_border_spacing {
+    table-layout: fixed;
+    border-spacing: 10px 0px;
+    border-collapse: separate;
+}
+
+th:hover {
+    background-color: #dee2e6;
+}
+
+.header_no {
+    width: 5%;
+}
+
+.header_tools {
+    width: 13%;
+}
+
+.header_name {
+    width: 40%;
+}
+
+.rowNotify {
+    border-bottom: none;
+}
+
+.table_border_spacing tr:hover td:not(:last-child) {
+    background-color: #dee2e6;
+}
+
+.table_history_assigned {
+    font-size: 13px;
+    margin-top: 0;
+    width: max-content;
+}
+
+.table_history_assigned th {
+    padding: 0;
+}
+
+.table_history_container {
+    margin-left: -10px;
+    margin-right: 10px;
 }

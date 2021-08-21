@@ -22,7 +22,7 @@ const PopupDetailAsset = (props) => {
 
   return (
     <div className="popupdetail_asset popupdetail popup">
-      <div class={"modal " + (isModalOpen ? "modal__open" : "modal__close")}>
+      <div className={"modal " + (isModalOpen ? "modal__open" : "modal__close")}>
         <div className="modal__overlay"></div>
 
         <div className="modal__body">

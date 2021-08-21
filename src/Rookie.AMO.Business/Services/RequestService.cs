@@ -34,15 +34,25 @@ namespace Rookie.AMO.Business.Services
             request.State = StateList.Completed;
             request.ReturnedDate = DateTime.Now;
             request.AcceptedBy = adminUsername;
-            request.AdminId = adminId;
+            request.AdminID = adminId;
 
-            var asset = await _context.Assets.FindAsync(request.AssetId);
+            var asset = await _context.Assets.FindAsync(request.AssetID);
             asset.State = StateList.Available;
 
-            var assignment = _context.Assignments.Where(x => x.AssetID == request.AssetId).FirstOrDefault();
+            var assignment = (from a in _context.Assignments
+                              where a.AssetID == request.AssetID
+                              select a).FirstOrDefault();
+
             if (assignment != null)
                 _context.Assignments.Remove(assignment);
 
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(Guid id)
+        {
+            var request = _context.Requests.FirstOrDefault(x => (x.Id == id));
+            _context.Requests.Remove(request);
             await _context.SaveChangesAsync();
         }
 

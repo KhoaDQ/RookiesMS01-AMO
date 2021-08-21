@@ -8,11 +8,11 @@ function AssetItem(props) {
     let { asset, index, stateList } = props
 
     return (
-        <tr onClick = {(e)=>{props.handleDetail(asset,e)}}>
-            <td hover >{asset.code}</td>
+        <tr onClick = {(e)=>{props.handleDetail(asset,e)}} className = {index == -1 ? "newRow": ""}>
+            <td >{asset.code}</td>
             <td>{asset.name}</td>
             <td>{asset.categoryName}</td>
-            <td>{stateList.filter((e) => e.value == asset.state)[0].name}</td>
+            <td>{asset.state}</td>
             <td onClick={e => e.stopPropagation()}>
                 <span className="icon-nash icon-nash--black">
                 <Link to={ `/edit-assets/${asset.id}`}>

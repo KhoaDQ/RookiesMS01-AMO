@@ -8,14 +8,15 @@ namespace Rookie.AMO.DataAccessor.Enums
 {
     public enum StateList
     {
-        Assigned = 1,
-        Available = 2,
-        NotAvailable = 3,
-        WaitingRecycle = 4,
-        Recycled = 5,
-        WaitingAccept = 6,
-        Accepted = 7,
-        WaitingReturn = 8,
-        Completed = 9
+        Accepted = 1,
+        Assigned = 2,
+        Available = 3,
+        Completed = 4,
+        NotAvailable = 5,
+        Recycled = 6,
+        WaitingAccept = 7,
+        WaitingRecycle = 8,
+        WaitingReturn = 9,
+        
     }
 }

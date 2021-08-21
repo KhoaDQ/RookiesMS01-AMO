@@ -16,53 +16,62 @@ const routes = [
   {
     path: "/",
     exact: true,
-    main: () => <Home />,
+    main: ({ match, history }) => <Home match={match} history={history} />,
+    allowedRole: ["Admin", "Staff"],
   },
   {
     path: "/callback",
     exact: false,
     main: () => <Callback />,
+    allowedRole: [],
   },
   {
     path: "/manage-user",
     exact: false,
-    main: () => <ManageUser />,
+    main: ({ match, history }) => <ManageUser match={match} history={history} />,
+    allowedRole: ["Admin"],
   },
-
   {
     path: "/manage-asset",
     exact: false,
-    main: () => <ManageAsset />,
+    main: ({ match, history }) => <ManageAsset match={match} history={history} />,
+    allowedRole: ["Admin"],
   },
   {
     path: "/manage-assignment",
     exact: false,
-    main: () => <ManageAssignment />,
+    main: ({ match, history }) => <ManageAssignment match={match} history={history} />,
+    allowedRole: ["Admin"],
   },
   {
     path: "/report",
     exact: false,
-    main: () => <Report />,
+    main: ({ match, history }) => <Report match={match} history={history} />,
+    allowedRole: ["Admin"],
   },
   {
     path: "/request-return",
     exact: false,
-    main: () => <Request />,
+    main: ({ match, history }) => <Request match={match} history={history} />,
+    allowedRole: ["Admin"],
   },
   {
     path: "/create-user",
     exact: false,
-    main: () => <CreateUser />,
+    main: ({ match, history }) => <CreateUser match={match} history={history} />,
+    allowedRole: ["Admin"],
   },
   {
     path: "/edit-user/:id",
     exact: false,
     main: ({ history, match }) => <EditUser history={history} match={match} />,
+    allowedRole: ["Admin"],
   },
   {
     path: "/createassets",
     exact: false,
-    main: () => <CreateAssets />,
+    main: ({ match, history }) => <CreateAssets match={match} history={history} />,
+    allowedRole: ["Admin"],
   },
   {
     path: "/edit-assets/:id",
@@ -70,21 +79,25 @@ const routes = [
     main: ({ history, match }) => (
       <EditAssets history={history} match={match} />
     ),
+    allowedRole: ["Admin"],
   },
   {
     path: "/create-assignment",
     exact: false,
-    main: () => <CreateAssignment />,
+    main: ({ match, history }) => <CreateAssignment match={match} history={history} />,
+    allowedRole: ["Admin"],
   },
   {
     path: "/edit-assignments",
     exact: false,
-    main: () => <EditAssignment />,
+    main: ({ match, history }) => <EditAssignment match={match} history={history} />,
+    allowedRole: ["Admin"],
   },
   {
     path: "",
     exact: false,
-    // main: () => <NotFoundPage />
+    // main: (match,history) => <NotFoundPage match={match} history={history} />,
+    allowedRole: [""],
   },
 ];
 

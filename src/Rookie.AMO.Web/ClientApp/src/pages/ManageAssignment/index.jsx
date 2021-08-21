@@ -1,13 +1,13 @@
+import queryString from "query-string";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import * as action from '../../actions/ManagerAssignment/ActionType';
 import apiCaller from '../../apis/callApi';
 import AssignmentItem from "../../components/Assignment/AssignmentItem/";
 import AssignmentList from "../../components/Assignment/AssignmentList";
-import queryString from "query-string";
+import AssignmentPagination from "../../components/Pagination/AssignmentPagination";
+import { format } from 'date-fns';
 
-// import PopupDelete from "../../components/Popup/PopupDelete";
-// import PopupDetailAssignment from "../../components/Popup/PopupDetailAssignment";
 const stateList = [
   { name: "Accepted", value: "Accepted" },
   { name: "Waiting for Acceptance", value: "WaitingAccept" }
@@ -19,8 +19,8 @@ function ManageAssignment() {
     KeySearch: '',
     Page: 1,
     State: '',
-    Limit: 10,
-    Desc: false,
+    Limit: 19,
+    Desc: true,
     OrderProperty: 'AssetCode'
   })
 
@@ -30,95 +30,6 @@ function ManageAssignment() {
     totalPages: 1,
   })
   const assignments = useSelector(state => state.AssignmentReducer);
-
-  // const [optionSort, setOptionSort] = useState({ propertyName: "", desc: 'false' })
-
-  // // const [isLoading, setIsLoading] = useState(true)
-  // // const [isReLoad, setIsReLoad] = useState(1)
-
-  // //Popup detail assignment
-  // const [assignmentDetail, setAssignmentDetail] = useState()
-  // const [isDetailOpen, setIsDetailOpen] = useState(true)
-
-  // //Popup delete assignment
-  // const [idAssignmentDelete, setIdAssignmentDelete] = useState("");
-  // const [isDeleteOpen, setIsDeleteOpen] = useState(false)
-  // const [isDelete, setIsDelete] = useState(0)
-
-  // DeleteAssignment(idAssignmentDelete, isDelete, setIsReLoad, setIsDelete)
-
-  // const resetPage = () => {
-  //   setFilters({ ...filters, pageNumber: 1 })
-  //   // setIsReLoad(1)
-  // }
-
-  // const handleSort = (e, option) => {
-  //   setOptionSort({ propertyName: option.propertyName, desc: option.desc.toString() })
-  //   // setIsReLoad(1)
-  // }
-
-  // const handleSearch = (text, e) => {
-  //   resetPage()
-  //   setFilters({ ...filters, searchText: text })
-
-  //   // setIsReLoad(1)
-  // }
-  // const handleFilterState = (option, e) => {
-  //   if (option != null)
-  //     setFilters({ ...filters, stateFilter: option.map((a, index) => a.value).join(',') })
-  //   else
-  //     setFilters({ ...filters, stateFilter: '' })
-  //   resetPage()
-  //   // setIsReLoad(1)
-  // }
-
-  
-
-  //Popup detail assignment
-  // const handleDetail = (assignment, e) => {
-  //   <PopupDetail
-  //           title="Detailed Assignment Information"
-  //           content={assignment}
-  //           handleModelShow={handleModelShowFunction}
-  //           isModalOpen={isModalOpen}
-  //         ></PopupDetail>
-  //   setAssignmentDetail(assignment)
-  //   setIsDetailOpen(true)
-  // }
-
-  // const handleModelShow = (isDetailOpen) => {
-  //   setIsDetailOpen(isDetailOpen)
-  // }
-
-  // //Popup delete assignment
-  // const handleDeleteOpen = (id, e) => {
-  //   console.log("delete open")
-  //   setIdAssignmentDelete(id)
-  //   handleDeleteShow(true)
-  // };
-
-  // const handleDeleteShow = (isDeleteOpen) => {
-  //   setIsDeleteOpen(isDeleteOpen)
-  // }
-
-  // const handleDelete = (e) => {
-  //   setIsDelete(1)
-  //   handleDeleteShow(false)
-  // };
-
-  // function deletePopup(handleDelete, handleDeleteShow) {
-  //   if (1)
-  //     return (
-  //       <PopupDelete isModalOpen={isDeleteOpen} handleDelete={handleDelete} handleModelShow={handleDeleteShow}></PopupDelete>
-  //     )
-  // }
-
-  // function detailAssignment(assignmentDetail, isDetailOpen) {
-  //   if (assignmentDetail)
-  //     return (
-  //       <PopupDetailAssignment assignment={assignmentDetail} isModalOpen={isDetailOpen} handleModelShow={handleModelShow} />
-  //     )
-  // }
   useEffect(() => {
     fetchAssignment()
   }, [filters])
@@ -128,7 +39,6 @@ function ManageAssignment() {
     let endpoint = `Assignment/find?${paramsString}`;
     // console.log(endpoint);
     const res = await apiCaller(endpoint, 'GET', null);
-    // console.log(res);
     setPaging(
       {
         currentPage: res.data.currentPage,
@@ -136,6 +46,7 @@ function ManageAssignment() {
         totalPages: res.data.totalPages
       }
     )
+
     dispatch({ type: action.FETCH_ASSIGNMENTS, payload: res.data.items });
   }
 
@@ -149,8 +60,6 @@ function ManageAssignment() {
               key={index}
               assignment={assignment}
               index={index}
-            // stateList={stateList}
-            // handleDeleteOpen = {handleDeleteOpen}
             />
           )
         })
@@ -172,8 +81,11 @@ function ManageAssignment() {
       >
         {showAssignments(assignments)}
       </AssignmentList>
-      {/* {detailAssignment(assignmentDetail, isDetailOpen)}
-      {deletePopup(handleDelete, handleDeleteShow)} */}
+      <AssignmentPagination
+        filters={filters}
+        setFilters={setFilters}
+        paging={paging}
+      />
     </div>
   );
 }

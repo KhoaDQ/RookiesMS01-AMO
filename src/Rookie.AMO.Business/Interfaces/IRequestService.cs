@@ -12,5 +12,6 @@ namespace Rookie.AMO.Business.Interfaces
     {
         Task<PagedResponseModel<RequestDto>> PagedQueryAsync(FilterRequestsModel filter);
         Task CompleteAsync(Guid id, string adminUsername, Guid adminId);
+        Task DeleteAsync(Guid id);
     }
 }
