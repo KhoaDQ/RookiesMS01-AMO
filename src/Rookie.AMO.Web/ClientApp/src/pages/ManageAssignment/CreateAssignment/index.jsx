@@ -1,15 +1,9 @@
-import React from "react";
-import {
-  Button,
-  Row,
-  Form,
-  Col,
-  FormGroup,
-  Label,
-  Input,
-  FormText,
-} from "reactstrap";
+import React, { useEffect, useState } from 'react';
+import { Row, Form, Col, FormGroup, Label, Input, FormText } from 'reactstrap';
+import ModalPickUser from '../../../components/Popup/ModalPickUser';
+import { Button, ButtonToolbar } from 'react-bootstrap';
 const CreateAssignment = () => {
+  const [isModalShow, setIsModalShow] = useState(0);
   return (
     <div>
       <h5 className="right-title">Create New Assignment</h5>
@@ -20,6 +14,18 @@ const CreateAssignment = () => {
           </label>
           <div className="col-sm-10" className="resize">
             <input type="text" className="form-control" id="inputUser" />
+            <ButtonToolbar>
+              <Button variant="primary" onClick={() => setIsModalShow(1)}>
+                Pick
+              </Button>
+
+              <ModalPickUser
+                show={isModalShow}
+                onHide={() => {
+                  setIsModalShow(0);
+                }}
+              />
+            </ButtonToolbar>
           </div>
         </div>
         <br></br>
