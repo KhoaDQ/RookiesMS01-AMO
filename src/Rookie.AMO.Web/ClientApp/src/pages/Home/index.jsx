@@ -12,6 +12,7 @@ import { IoMdCheckmark } from "@react-icons/all-files/io/IoMdCheckmark";
 import { IoIosCloseCircleOutline } from "@react-icons/all-files/io/IoIosCloseCircleOutline";
 import { MdSettingsBackupRestore } from "@react-icons/all-files/md/MdSettingsBackupRestore";
 import PopupDetail from "../../components/Popup/PopupDetail";
+import "./home.css";
 
 function Home() {
   const dispatch = useDispatch();
@@ -19,15 +20,17 @@ function Home() {
   const assignments = useSelector((state) => state.AssignmentReducer);
 
   async function fetchAssignment() {
-    let endpoint = `assignment/user/${user.profile.id}`;
+    let endpoint = `assignment/user/${user.profile.sub}`;
     const res = await callApi(endpoint, "GET", null);
 
     dispatch({ type: GET_ASSIGNMENT_BY_ID, payload: res.data });
   }
 
   useEffect(() => {
-    fetchAssignment();
-  }, [])
+    if (user != null) {
+      fetchAssignment();
+    }
+  }, [user])
 
   const initSort = {
     assetCode: { propertyName: "assetCode", desc: true },
@@ -115,7 +118,7 @@ function Home() {
               State
               {optionSort.state.desc ? <AiFillCaretDown /> : <AiFillCaretUp />}
             </th>
-            <th className="header_tools"></th>
+            <th id="tools" className="header_tools"></th>
           </tr>
         </thead>
         <tbody>

@@ -197,7 +197,7 @@ namespace Rookie.AMO.Identity.Business.Services
             }
 
             var theSameUsernameLoginList = _userManager.Users
-                .Where(x => x.FirstName.ToLower() == firstName && x.LastName.ToLower() == lastName)
+                .Where(x => x.UserName.StartsWith(userNameLogin.ToString()))
                 .OrderByDescending(x => Convert.ToInt32(x.UserName.Replace(userNameLogin.ToString(), "")));
 
             if (!theSameUsernameLoginList.Any())
