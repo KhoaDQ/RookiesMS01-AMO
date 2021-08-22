@@ -26,6 +26,8 @@ function ModalPickUser(props) {
     type: '',
     page: 1,
     limit: 3,
+    propertyName: "StaffCode",
+    desc: false,
   });
 
   const userPage = useSelector((state) => state.UserReducer);
@@ -44,6 +46,7 @@ function ModalPickUser(props) {
 
   const showUsers = () => {
     let result = null;
+    if(userPage != undefined)
     if (userPage.items) {
       result = userPage.items.map((user, index) => {
         return <UserItemPick key={index} user={user} index={index} />;
