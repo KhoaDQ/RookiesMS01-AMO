@@ -133,7 +133,7 @@ function DeleteAssignment(id, isDelete, setIsDelete,triggerFetchAssignment) {
 
   useEffect(() => {
     async function deleteAssignment(id) {
-      const res = await apiCaller("Assigment/" + id, "Delete", null);
+      const res = await apiCaller("Assignment/" + id, "Delete", null);
       dispatch({ type: action.DELETE_ASSIGNMENT, payload: id });
     }
     if (isDelete && id != "") {
