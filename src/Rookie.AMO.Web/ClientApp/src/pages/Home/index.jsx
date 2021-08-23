@@ -13,6 +13,7 @@ import { IoIosCloseCircleOutline } from "@react-icons/all-files/io/IoIosCloseCir
 import { MdSettingsBackupRestore } from "@react-icons/all-files/md/MdSettingsBackupRestore";
 import PopupDetail from "../../components/Popup/PopupDetail";
 import "./home.css";
+import { format } from 'date-fns';
 
 function Home() {
   const dispatch = useDispatch();
@@ -154,7 +155,7 @@ function showAssignments(assignments, showDetail) {
           <td>{assignment.assetCode}</td>
           <td>{assignment.assetName}</td>
           <td>{assignment.category}</td>
-          <td>{assignment.assignedDate}</td>
+              <td>{format(assignment.assignedDate, 'dd/MM/yyyy')}</td>
           <td>{assignment.state}</td>
           <td>
             <span className="icon-nash icon-nash--black">
