@@ -137,5 +137,13 @@ namespace Rookie.AMO.Business.Services
             };
         }
 
+
+        public async Task AcceptRespond(Guid id)
+        {
+            var assignments = await _context.Assignments.FindAsync(id);
+
+            assignments.State = StateList.Accepted;
+            await _context.SaveChangesAsync();
+        }
     }
 }
