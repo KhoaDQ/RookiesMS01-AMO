@@ -147,7 +147,7 @@ namespace Rookie.AMO.Identity.Business.Services
             };
         }
 
-        public async Task UpdateUserAsync(Guid id, UserUpdateRequest request)
+        public async Task<string> UpdateUserAsync(Guid id, UserUpdateRequest request)
         {
             var user = await _userManager.FindByIdAsync(id.ToString());
             var claims = await _userManager.GetClaimsAsync(user);
@@ -188,7 +188,12 @@ namespace Rookie.AMO.Identity.Business.Services
             user.JoinedDate = request.JoinedDate;
             user.DateOfBirth = request.DateOfBirth;
 
-            await _userManager.UpdateAsync(user);
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+            {
+                return "false";
+            }
+            return "true";
         }
 
         private string AutoGenerateStaffCode()
