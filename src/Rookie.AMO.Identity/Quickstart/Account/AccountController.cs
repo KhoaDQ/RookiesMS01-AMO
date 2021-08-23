@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Rookie.AMO.Identity.Areas.Identity.Pages.Account.Manage;
 using Rookie.AMO.Identity.DataAccessor.Data;
 using Rookie.AMO.Identity.DataAccessor.Entities;
 using System;
@@ -237,6 +238,12 @@ namespace IdentityServerHost.Quickstart.UI
 
         [HttpGet]
         public IActionResult AccessDenied()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult ChangePassword()
         {
             return View();
         }
