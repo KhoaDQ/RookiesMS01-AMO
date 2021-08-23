@@ -14,6 +14,7 @@ import apiCaller from '../../../apis/callApi';
 import * as action from '../../../actions/ManageUser/ActionType';
 import { GetAllRolesAction } from '../../../actions/ManageUser/GetAllRolesAction';
 import PopupInfor from '../../../components/Popup/PopupInfor';
+import '../../../assets/css/Base.css';
 
 const EditUser = (props) => {
   const dispatch = useDispatch();
@@ -65,7 +66,8 @@ const EditUser = (props) => {
     ? new Date(currentUser.dateOfBirth)
     : new Date();
   theEarliestJoinedDate.setFullYear(theEarliestJoinedDate.getFullYear() + 18);
-
+  theEarliestJoinedDate.setDate(theEarliestJoinedDate.getDate() + 1);
+  console.log(theEarliestJoinedDate);
   const schema = yup.object().shape({
     dateOfBirth: yup.date().max(theDateOf18YearsAgo, UserUnder18),
     joinedDate: yup
@@ -90,13 +92,13 @@ const EditUser = (props) => {
   return (
     <div className="row">
       <div className="col-8">
-        <h5 className="right-title">Edit User</h5>
+        <h5 className="right-title mb-5">Edit User</h5>
         <form onSubmit={handleSubmit(submitForm)}>
           <div className="form-group row">
-            <label htmlFor="FirstNameEditUser" className="col-2 col-form-label">
+            <label htmlFor="FirstNameEditUser" className="col-3 col-form-label">
               First Name
             </label>
-            <div className="col-10 resize">
+            <div className="col-9 resize">
               <input
                 type="text"
                 className="form-control"
@@ -113,11 +115,11 @@ const EditUser = (props) => {
           <div className="form-group row">
             <label
               htmlFor="LastNameEditUser"
-              className="col-sm-2 col-form-label"
+              className="col-sm-3 col-form-label"
             >
               Last Name
             </label>
-            <div className="col-sm-10 resize">
+            <div className="col-sm-9 resize">
               <input
                 type="text"
                 className="form-control"
@@ -134,11 +136,11 @@ const EditUser = (props) => {
           <div className="form-group row">
             <label
               htmlFor="DateofBirthEditUser"
-              className="col-sm-2 col-form-label"
+              className="col-sm-3 col-form-label"
             >
               Date of Birth
             </label>
-            <div className="col-sm-10 resize">
+            <div className="col-sm-9 resize">
               <input
                 type="date"
                 {...register('dateOfBirth', {
@@ -154,14 +156,16 @@ const EditUser = (props) => {
                 placeholder="DateofBirth"
                 onChange={handleInputChange}
               />
-              {errors.dateOfBirth && <p>{errors.dateOfBirth.message}</p>}
+              {errors.dateOfBirth && (
+                <p className="error-message">{errors.dateOfBirth.message}</p>
+              )}
             </div>
           </div>
           <br></br>
           <fieldset className="form-group" id="gender">
             <div className="row">
-              <legend className="col-form-label col-sm-2 pt-0">Gender</legend>
-              <div className="col-sm-10">
+              <legend className="col-form-label col-sm-3 pt-0">Gender</legend>
+              <div className="col-sm-9">
                 <div>
                   <div className="form-check form-check-inline">
                     <input
@@ -203,11 +207,11 @@ const EditUser = (props) => {
           <div className="form-group row">
             <label
               htmlFor="JoinedDateEditUser"
-              className="col-sm-2 col-form-label"
+              className="col-sm-3 col-form-label"
             >
               Joined Date
             </label>
-            <div className="col-sm-10 resize">
+            <div className="col-sm-9 resize">
               <input
                 {...register('joinedDate', {
                   value: moment(currentUser.joinedDate).format('YYYY-MM-DD'),
@@ -220,24 +224,28 @@ const EditUser = (props) => {
                 placeholder="JoinedDate"
                 onChange={handleInputChange}
               />
-              {errors.joinedDate && <p>{errors.joinedDate.message}</p>}
+              {errors.joinedDate && (
+                <p className="error-message">{errors.joinedDate.message}</p>
+              )}
             </div>
           </div>
           <br></br>
           <div className="form-group row">
-            <label htmlFor="TypeEditUser" className="col-sm-2 col-form-label">
+            <label htmlFor="TypeEditUser" className="col-sm-3 col-form-label">
               Type
             </label>
-            <div className="col-sm-10 resize">
-              <select
-                name="type"
-                className="custom-select custom-select-lg mb-3"
-                className="form-control"
-                value={currentUser.type}
-                onChange={handleInputChange}
-              >
-                {roleOptions}
-              </select>
+            <div className="col-sm-9 resize">
+              <div class="selectParent">
+                <select
+                  name="type"
+                  className="custom-select custom-select-lg mb-3"
+                  className="form-control"
+                  value={currentUser.type}
+                  onChange={handleInputChange}
+                >
+                  {roleOptions}
+                </select>
+              </div>
             </div>
           </div>
           <br></br>
