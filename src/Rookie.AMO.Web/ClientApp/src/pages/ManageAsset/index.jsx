@@ -117,13 +117,19 @@ function ManageAsset() {
       if (assets != null) {
         if (assets.length > 0) {
 
-          if(assetChange != undefined)
+          if(assetChange != undefined){
+            let a = assets.findIndex(a=>a.id = assetChange.id)
+            if(a>-1)
+              assets.splice(a,1)
+            console.log(a)
             assets.splice(0,0,assetChange);
+          }
             
           let stateAsset = null   
           result = assets.map((asset, index) => {
             if(index == 0 && assetChange != undefined)
               index = -1
+
             stateAsset = stateList.find(({value}) => value == asset.state)
             if(stateAsset!=undefined)
               asset.state = stateAsset.name
