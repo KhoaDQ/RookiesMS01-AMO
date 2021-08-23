@@ -24,13 +24,13 @@ namespace Rookie.AMO.Web.Controllers
 
         [HttpGet]
         public Task<IEnumerable<UserDto>> GetAllUserAsync()
-            =>  _userService.GetAllUsersAsync();
+            => _userService.GetAllUsersAsync();
         [HttpGet("{userId}")]
         public Task<UserDto> GetByIdAsync(Guid userId)
             => _userService.GetByIdAsync(userId);
         [HttpGet("find")]
-        public Task<PagedResponseModel<UserDto>> PagedQueryUserAsync(string name, string type, int page, int limit,string propertyName,bool desc)
-            => _userService.PagedQueryAsync(name, type, page, limit,propertyName,desc, HttpContext.Request.Headers["Authorization"]);
+        public Task<PagedResponseModel<UserDto>> PagedQueryUserAsync(string name, string type, int page, int limit, string propertyName, bool desc)
+            => _userService.PagedQueryAsync(name, type, page, limit, propertyName, desc, HttpContext.Request.Headers["Authorization"]);
         [HttpDelete("{userId}")]
         public Task<IActionResult> DisableUserAsync(Guid userId)
             => _userService.DisableUserAsync(userId);
@@ -38,7 +38,14 @@ namespace Rookie.AMO.Web.Controllers
         public Task<UserDto> CreateUserAsync(UserRequest user)
             => _userService.CreateUserAsync(user);
         [HttpPut("{userId}")]
-        public Task<IActionResult> UpdateUserAsync(Guid userId, [FromBody] UserUpdateRequest user)
-            => _userService.UpdateUserAsync(userId, user);
+        public async Task<IActionResult> UpdateUserAsync(Guid userId, [FromBody] UserUpdateRequest user)
+        {
+            var result = await _userService.UpdateUserAsync(userId, user);
+            if (result == "false")
+            {
+                return BadRequest();
+            }
+            return Ok();
+        }
     }
 }

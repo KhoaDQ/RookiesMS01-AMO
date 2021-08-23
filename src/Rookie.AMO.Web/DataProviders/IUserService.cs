@@ -20,7 +20,7 @@ namespace Rookie.AMO.Web.DataProviders
         [Delete(Endpoints.User)]
         Task<IActionResult> DisableUserAsync(Guid userId);
         [Put(Endpoints.User + "/{id}")]
-        Task<IActionResult> UpdateUserAsync(Guid id, UserUpdateRequest user);
+        Task<string> UpdateUserAsync(Guid id, UserUpdateRequest user);
         [Get(Endpoints.User + "/find")]
         Task<PagedResponseModel<UserDto>> PagedQueryAsync(string name, string type, int page, int limit, string propertyName, bool desc, [Header("Authorization")] string auth);
     }
