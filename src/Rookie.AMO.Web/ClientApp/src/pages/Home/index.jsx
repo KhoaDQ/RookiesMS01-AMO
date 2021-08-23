@@ -155,7 +155,7 @@ function showAssignments(assignments, showDetail) {
           <td>{assignment.assetCode}</td>
           <td>{assignment.assetName}</td>
           <td>{assignment.category}</td>
-              <td>{format(assignment.assignedDate, 'dd/MM/yyyy')}</td>
+          <td>{format(new Date(assignment.assignedDate), 'dd/MM/yyyy')}</td>
           <td>{assignment.state}</td>
           <td>
             <span className="icon-nash icon-nash--black">
