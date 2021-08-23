@@ -46,7 +46,7 @@ export default function Filter(props) {
         <Row>
             <Multiselect
             options={
-              ([{name: "All",value: ""}]).concat(options)
+              (selectAllOption).concat(options)
             }
             displayValue={displayValue}
             showCheckbox={true}
@@ -55,6 +55,7 @@ export default function Filter(props) {
             onSelect={handleSelect}
             onRemove={handleUnSelect}
             selectedValues={optionSelect}
+            avoidHighlightFirstOption={true}
             />      
             <InputGroupAddon addonType="append" onClick = {(e)=>handleFilter(optionSelect,e)}>
               <InputGroupText className="right__icon filter_button">
