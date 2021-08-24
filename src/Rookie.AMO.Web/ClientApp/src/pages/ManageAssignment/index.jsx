@@ -79,18 +79,16 @@ function ManageAssignment() {
     setIsModalOpen(content);
   };
 
-  
-
-  // Delete assignment
-  const triggerFetchAssignment = () => setIsReload(t=>!t);
-  DeleteAssignment(idAssignmentDelete, isDelete, setIsDelete, triggerFetchAssignment);
-
   // Popup delete assignment
   const [idAssignmentDelete, setIdAssignmentDelete] = useState("");
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [isDelete, setIsDelete] = useState(0);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Delete assignment
+  const triggerFetchAssignment = () => setIsReload(t=>!t);
+  DeleteAssignment(idAssignmentDelete, isDelete, setIsDelete, triggerFetchAssignment);
 
   //Popup delete assignment
   const handleDeleteOpen = (id, e) => {
