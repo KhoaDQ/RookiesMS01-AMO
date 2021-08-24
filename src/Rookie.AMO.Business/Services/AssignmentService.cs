@@ -78,8 +78,8 @@ namespace Rookie.AMO.Business.Services
         public async Task<IEnumerable<AssignmentDto>> GetByUserIdAsync(Guid userId)
         {
             var assignments = await _baseRepository.GetAllAsync();
-            var assignmentsByUser = assignments.Where(x => x.UserID == userId && x.AssignedDate <= DateTime.Now);
-            return _mapper.Map<IEnumerable<AssignmentDto>>(assignments);
+            var assignmentsByUser = assignments.Where(x => x.UserID == userId && DateTime.Compare(x.AssignedDate.Date, DateTime.Now.Date) <= 0);
+            return _mapper.Map<IEnumerable<AssignmentDto>>(assignmentsByUser);
         }
 
         public async Task<PagedResponseModel<AssignmentDto>> PagedQueryAsync(FilterAssignmentsModel filter)

@@ -151,6 +151,10 @@ namespace IdentityServerHost.Quickstart.UI
                             return this.LoadingPage("Redirect", model.ReturnUrl);
                         }
 
+                        if (user.ChangePasswordTimes == 0)
+                        {
+                            return RedirectToAction("ChangePassword", "Manage", new { returnUrl = model.ReturnUrl});
+                        }
                         // we can trust model.ReturnUrl since GetAuthorizationContextAsync returned non-null
                         return Redirect(model.ReturnUrl);
                     }
@@ -237,6 +241,12 @@ namespace IdentityServerHost.Quickstart.UI
 
         [HttpGet]
         public IActionResult AccessDenied()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult ChangePassword()
         {
             return View();
         }

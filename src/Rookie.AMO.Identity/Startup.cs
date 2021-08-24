@@ -57,10 +57,9 @@ namespace Rookie.AMO.Identity
                 ops.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
                 ops.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
                 ops.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-            }); ;
+            });
 
-
-            services.AddAuthentication(options =>
+            /*services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -74,7 +73,7 @@ namespace Rookie.AMO.Identity
                          RoleClaimType = IdentityModel.JwtClaimTypes.Role,
                          ValidateAudience = false
                      };
-                 });
+                 });*/
 
             services.AddSingleton<IAuthorizationHandler, IdentityScopeHandler>();
             services.AddAuthorization(options =>
@@ -112,12 +111,13 @@ namespace Rookie.AMO.Identity
 
             app.UseRouting();
             
-            app.UseAuthentication();
-
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllerRoute(
+                    name: "defaulArea",
+                    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=home}/{action=Index}/{id?}");
