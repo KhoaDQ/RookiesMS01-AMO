@@ -83,7 +83,7 @@ const EditAssignment = (props) => {
 
     async function fetchAsset() {
       const res = await apiCaller("Asset", "GET", null);
-
+      
       if (res.status === 200) {
         dispatch({
           type: "FETCH_ASSET",
@@ -137,7 +137,7 @@ const EditAssignment = (props) => {
       if (res.data) {
         dispatch({ type: action.CREATE_ASSIGNMENT, payload: res.data });
 
-        history.push("/");
+        history.push("/manage-assignment");
       }
     }
 
