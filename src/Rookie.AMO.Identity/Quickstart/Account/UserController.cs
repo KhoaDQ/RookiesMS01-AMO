@@ -35,7 +35,7 @@ namespace Rookie.AMO.Identity.Quickstart.Account
         [HttpGet("find")]
         public async Task<PagedResponseModel<UserDto>> PagedQueryAsync
             (string name, string type, int page, int limit, string propertyName, bool desc)
-            => await _userService.PagedQueryAsync(name, type, page, limit,propertyName,desc);
+            => await _userService.PagedQueryAsync(name, type, page, limit, propertyName, desc);
 
         [HttpPost]
         public async Task<ActionResult<UserDto>> CreateUserAsync(UserRequest user)
@@ -53,9 +53,10 @@ namespace Rookie.AMO.Identity.Quickstart.Account
         }
 
         [HttpPut("{id}")]
-        public async Task Update(Guid id, [FromBody] UserUpdateRequest request)
+        public async Task<string> Update(Guid id, [FromBody] UserUpdateRequest request)
         {
-            await _userService.UpdateUserAsync(id, request);
+            var result = await _userService.UpdateUserAsync(id, request);
+            return result;
         }
     }
 }

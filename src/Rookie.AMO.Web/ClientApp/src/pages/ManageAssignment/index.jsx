@@ -6,6 +6,8 @@ import apiCaller from '../../apis/callApi';
 import AssignmentItem from "../../components/Assignment/AssignmentItem/";
 import AssignmentList from "../../components/Assignment/AssignmentList";
 import AssignmentPagination from "../../components/Pagination/AssignmentPagination";
+import PopupDeleteAssignment from "../../components/Popup/PopupDeleteAssignment";
+import PopupInfor from '../../components/Popup/PopupInfor';
 import { format } from 'date-fns';
 
 const stateList = [
@@ -60,6 +62,7 @@ function ManageAssignment() {
               key={index}
               assignment={assignment}
               index={index}
+              handleDeleteOpen={handleDeleteOpen}
             />
           )
         })
@@ -70,6 +73,49 @@ function ManageAssignment() {
 
   console.log(filters);
 
+  const [isReload,setIsReload] = useState(0)
+
+  const handleModelShowFunction = (content) => {
+    setIsModalOpen(content);
+  };
+
+  // Popup delete assignment
+  const [idAssignmentDelete, setIdAssignmentDelete] = useState("");
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [isDelete, setIsDelete] = useState(0);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Delete assignment
+  const triggerFetchAssignment = () => setIsReload(t=>!t);
+  DeleteAssignment(idAssignmentDelete, isDelete, setIsDelete, triggerFetchAssignment);
+
+  //Popup delete assignment
+  const handleDeleteOpen = (id, e) => {
+    setIdAssignmentDelete(id);
+    handleDeleteShow(true);
+  };
+
+  const handleDeleteShow = (isDeleteOpen) => {
+    setIsDeleteOpen(isDeleteOpen);
+  };
+
+  const handleDelete = (e) => {
+    setIsDelete(1);
+    handleDeleteShow(false);
+    setIsModalOpen(true);
+  };
+
+  function deletePopup() {
+      return (
+        <PopupDeleteAssignment
+          isModalOpen={isDeleteOpen}
+          handleDelete={handleDelete}
+          handleModelShow={handleDeleteShow}
+        ></PopupDeleteAssignment>
+      );
+  }
+  
   return (
     <div className="Assignment">
 
@@ -86,8 +132,32 @@ function ManageAssignment() {
         setFilters={setFilters}
         paging={paging}
       />
+        {deletePopup(handleDelete, handleDeleteShow)}
+        <PopupInfor
+        title="Information"
+        content="Delete assignment successfully"
+        handleModelShow={handleModelShowFunction}
+        isModalOpen={isModalOpen}
+        pathReturn="/manage-assignment"
+      ></PopupInfor>
     </div>
   );
+}
+function DeleteAssignment(id, isDelete, setIsDelete,triggerFetchAssignment) {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    async function deleteAssignment(id) {
+      const res = await apiCaller("Assignment/" + id, "Delete", null);
+      dispatch({ type: action.DELETE_ASSIGNMENT, payload: id });
+    }
+    if (isDelete && id != "") {
+      deleteAssignment(id).then(()=>{
+        triggerFetchAssignment();
+        setIsDelete(0);
+      });
+    }
+  }, [isDelete]);
 }
 
 export default ManageAssignment;

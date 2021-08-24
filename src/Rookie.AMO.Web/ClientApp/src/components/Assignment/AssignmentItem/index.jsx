@@ -6,6 +6,7 @@ import { format } from "date-fns";
 import "../style.css";
 import { MdSettingsBackupRestore } from '@react-icons/all-files/md/MdSettingsBackupRestore';
 import PopupDetailAssignment from '../../Popup/PopupDetailAssignment';
+import PopupDeleteAssignment from '../../Popup/PopupDeleteAssignment';
 function AssignmentItem(props) {
   let { assignment, index } = props;
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -52,6 +53,7 @@ function AssignmentItem(props) {
                 handleModelShow={handleModelShowFunction}
                 isModalOpen={isModalOpen}
             ></PopupDetailAssignment>
+            
         </Fragment>
     )
 }

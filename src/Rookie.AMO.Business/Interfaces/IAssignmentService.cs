@@ -23,5 +23,7 @@ namespace Rookie.AMO.Business.Interfaces
         Task DeleteAsync(Guid id);
 
         Task<AssignmentDto> UpdateAsync(Guid id, AssignmentUpdateRequest request);
+
+        Task AcceptRespond(Guid id);
     }
 }
