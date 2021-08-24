@@ -43,7 +43,7 @@ function AssignmentItem(props) {
                         <IoIosCloseCircleOutline onClick={(e) => { props.handleDeleteOpen(assignment.id, e) }} />
                     </span>
                     <span className="icon-nash icon-nash--blue">
-                        <MdSettingsBackupRestore />
+                        <MdSettingsBackupRestore onClick={()=>props.handleRequest(assignment)}/>
                     </span>
                 </td>
             </tr>

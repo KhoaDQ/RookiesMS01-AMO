@@ -9,6 +9,7 @@ import AssignmentPagination from "../../components/Pagination/AssignmentPaginati
 import PopupDeleteAssignment from "../../components/Popup/PopupDeleteAssignment";
 import PopupInfor from '../../components/Popup/PopupInfor';
 import { format } from 'date-fns';
+import CreateRequest from "../Request/CreateRequest.jsx";
 
 const stateList = [
   { name: "Accepted", value: "Accepted" },
@@ -35,6 +36,10 @@ function ManageAssignment() {
   useEffect(() => {
     fetchAssignment()
   }, [filters])
+
+  // return request
+  const { user } = useSelector((state) => state.oidc);
+  const handleRequest = CreateRequest(user.profile.sub,user.profile.userName);
 
   async function fetchAssignment() {
     const paramsString = queryString.stringify(filters);
@@ -63,6 +68,7 @@ function ManageAssignment() {
               assignment={assignment}
               index={index}
               handleDeleteOpen={handleDeleteOpen}
+              handleRequest = {handleRequest}
             />
           )
         })
@@ -115,7 +121,7 @@ function ManageAssignment() {
         ></PopupDeleteAssignment>
       );
   }
-  
+
   return (
     <div className="Assignment">
 
