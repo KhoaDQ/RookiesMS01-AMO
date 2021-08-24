@@ -18,14 +18,39 @@ import '../../../assets/css/Base.css';
 
 const EditUser = (props) => {
   const dispatch = useDispatch();
+  const userId = props.match.params.id;
+  const userEdit = useSelector((state) => state.EditUserReducer);
   const [currentUser, setCurrentUser] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { roles } = useSelector((state) => state.getAllRoles);
-  const result = FetchUser(props.match.params.id);
+
+  async function fetch() {
+    let enpoint = `user/${userId}`;
+    const res = await apiCaller(enpoint, 'GET', null);
+    dispatch({ type: action.GETBYID_USER, payload: res.data });
+  }
+
+  async function FetchCurrentUser(id, user) {
+    try {
+      let enpoint = `user/${id}`;
+      const res = await apiCaller(enpoint, 'PUT', user);
+      if (res.status === 200) {
+        setIsModalOpen(true);
+        dispatch({ type: action.UPDATE_USER, payload: user });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    fetch();
+  }, []);
+
   useEffect(() => {
     dispatch(GetAllRolesAction());
-    setCurrentUser(result);
-  }, [result]);
+    setCurrentUser(userEdit);
+  }, [userEdit]);
 
   const options = roles.map((role, index) => (
     <option value={role.name} key={index}>
@@ -51,7 +76,6 @@ const EditUser = (props) => {
 
   const submitForm = (data) => {
     FetchCurrentUser(props.match.params.id, currentUser);
-    setIsModalOpen(true);
   };
 
   const handleModelShowFunction = (content) => {
@@ -235,7 +259,7 @@ const EditUser = (props) => {
               Type
             </label>
             <div className="col-sm-9 resize">
-              <div class="selectParent">
+              <div className="selectParent">
                 <select
                   name="type"
                   className="custom-select custom-select-lg mb-3"
@@ -287,29 +311,5 @@ const EditUser = (props) => {
     </div>
   );
 };
-
-function FetchUser(id) {
-  const dispatch = useDispatch();
-  useEffect(() => {
-    async function fetch() {
-      let enpoint = `user/${id}`;
-      console.log(enpoint);
-      const res = await apiCaller(enpoint, 'GET', null);
-      dispatch({ type: action.GETBYID_USER, payload: res.data });
-    }
-    fetch();
-  }, []);
-  const result = useSelector((state) => state.EditUserReducer);
-  return result;
-}
-
-function FetchCurrentUser(id, user) {
-  async function fetch() {
-    let enpoint = `user/${id}`;
-    const res = await apiCaller(enpoint, 'PUT', user);
-    return res;
-  }
-  return fetch();
-}
 
 export default EditUser;
