@@ -265,7 +265,8 @@ const EditUser = (props) => {
                   currentUser.gender &&
                   currentUser.type &&
                   currentUser.dateOfBirth &&
-                  currentUser.joinedDate
+                  currentUser.joinedDate &&
+                  currentUser.type != '0'
                 )
               }
               className="btn btn-outline-danger margin color"
