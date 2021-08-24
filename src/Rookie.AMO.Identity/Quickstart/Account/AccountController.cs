@@ -15,7 +15,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Rookie.AMO.Identity.Areas.Identity.Pages.Account.Manage;
 using Rookie.AMO.Identity.DataAccessor.Data;
 using Rookie.AMO.Identity.DataAccessor.Entities;
 using System;
@@ -152,6 +151,10 @@ namespace IdentityServerHost.Quickstart.UI
                             return this.LoadingPage("Redirect", model.ReturnUrl);
                         }
 
+                        if (user.ChangePasswordTimes == 0)
+                        {
+                            return RedirectToAction("ChangePassword", "Manage", new { returnUrl = model.ReturnUrl});
+                        }
                         // we can trust model.ReturnUrl since GetAuthorizationContextAsync returned non-null
                         return Redirect(model.ReturnUrl);
                     }

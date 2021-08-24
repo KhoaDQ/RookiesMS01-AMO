@@ -53,11 +53,9 @@ namespace Rookie.AMO.Identity.Quickstart.Account
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(Guid id, [FromBody] UserUpdateRequest request)
+        public async Task Update(Guid id, [FromBody] UserUpdateRequest request)
         {
             await _userService.UpdateUserAsync(id, request);
-
-            return Ok("Update successfully");
         }
     }
 }
