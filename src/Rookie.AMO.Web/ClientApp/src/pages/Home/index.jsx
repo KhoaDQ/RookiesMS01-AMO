@@ -63,7 +63,8 @@ function Home() {
   };
 
   // return request
-  const handleRequest = CreateRequest(user.profile.sub,user.profile.userName);
+  const {handleRequestOpen,showPopupRequest} = CreateRequest(user.profile.sub,user.profile.userName);
+
   return (
     <div className="home">
       <h5 className="right-title">My Assignment</h5>
@@ -131,7 +132,7 @@ function Home() {
         </thead>
         <tbody>
           {assignments.length > 0 ? (
-            showAssignments(assignments, showDetail, handleRequest)
+            showAssignments(assignments, showDetail, handleRequestOpen)
           ) : (
             <tr
               style={{ width: "200px", display: "block", margin: "0 auto" }}
@@ -149,11 +150,12 @@ function Home() {
         handleModelShow={setOpenDetailModal}
         isModalOpen={openDetailModal}
       ></PopupDetail>
+      {showPopupRequest()}
     </div>
   );
 }
 
-function showAssignments(assignments, showDetail, handleRequest) {
+function showAssignments(assignments, showDetail, handleRequestOpen) {
   let result = [];
   if (assignments != null || assignments.length > 0) {
     result = assignments.map((assignment, index) => {
@@ -173,7 +175,7 @@ function showAssignments(assignments, showDetail, handleRequest) {
             <span className="icon-nash icon-nash--red">
               <IoIosCloseCircleOutline />
             </span>
-            <span className="icon-nash icon-nash--blue" onClick = {()=>handleRequest(assignment)}>
+            <span className="icon-nash icon-nash--blue" onClick = {()=>handleRequestOpen(assignment)}>
               <MdSettingsBackupRestore />
             </span>
           </td>

@@ -39,7 +39,7 @@ function ManageAssignment() {
 
   // return request
   const { user } = useSelector((state) => state.oidc);
-  const handleRequest = CreateRequest(user.profile.sub,user.profile.userName);
+  const {handleRequestOpen,showPopupRequest} = CreateRequest(user.profile.sub,user.profile.userName);
 
   async function fetchAssignment() {
     const paramsString = queryString.stringify(filters);
@@ -68,7 +68,7 @@ function ManageAssignment() {
               assignment={assignment}
               index={index}
               handleDeleteOpen={handleDeleteOpen}
-              handleRequest = {handleRequest}
+              handleRequestOpen = {handleRequestOpen}
             />
           )
         })
@@ -146,6 +146,7 @@ function ManageAssignment() {
         isModalOpen={isModalOpen}
         pathReturn="/manage-assignment"
       ></PopupInfor>
+      {showPopupRequest()}
     </div>
   );
 }

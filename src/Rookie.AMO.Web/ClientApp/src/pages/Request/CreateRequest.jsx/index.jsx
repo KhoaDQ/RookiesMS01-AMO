@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { RETURN_REQUEST } from "../../../actions/ManagerRequest/ActionType";
 import callApi from "../../../apis/callApi";
+import PopupReturnRequest from "../../../components/Popup/PopupReturnRequest";
 
 export default function CreateRequest(userID, requestBy) {
 
@@ -13,6 +14,9 @@ export default function CreateRequest(userID, requestBy) {
     RequestedBy: "",
   }
   const [request,setRequest] = useState(initRequest);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [assignment, setAssignment] = useState({});
+
   const dispatch = useDispatch();
   useEffect(() => {
     async function returnRequest(request) {
@@ -27,17 +31,31 @@ export default function CreateRequest(userID, requestBy) {
       returnRequest(request).then((res)=>{console.log(res)})
   },[request])
 
-  const handleRequest = (assignment) =>{
-    if(assignment!==undefined){
-      if(assignment.state === "Accepted" && userID!=undefined){
-        setRequest({
-          ...request,
-          AssignmentID: assignment.id,
-          UserID: userID,
-          RequestedBy: requestBy,
-        })
-      }
-    }
+  const handleRequestOpen = (assignment) =>{
+    setIsModalOpen(true);
+    setAssignment(assignment)
   }
-  return handleRequest;
+  const handleRequest = () =>{
+    if(assignment!==undefined){
+        if(assignment.state === "Accepted" && userID!=undefined){
+          setRequest({
+            ...request,
+            AssignmentID: assignment.id,
+            UserID: userID,
+            RequestedBy: requestBy,
+          });
+          setIsModalOpen(false);
+        }
+      }
+  }
+
+  function showPopupRequest(){
+    return(
+        <PopupReturnRequest
+            handleRequest = {handleRequest}
+            isModalOpen = {isModalOpen}
+        />
+    )
+  }
+  return ({handleRequestOpen,showPopupRequest});
 }
