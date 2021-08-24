@@ -1,8 +1,13 @@
 /* Edit user */
-input[type='date']::-webkit-calendar-picker-indicator {
+.form-group input[type='date']::-webkit-calendar-picker-indicator {
   background: url(https://image.flaticon.com/icons/png/128/3247/3247279.png)
     no-repeat;
   background-size: 100%;
+  opacity: 0.4;
+}
+
+input[type='date']::-webkit-calendar-picker-indicator {
+  background: none;
 }
 
 .selectParent {
@@ -17,6 +22,6 @@ input[type='date']::-webkit-calendar-picker-indicator {
   appearance: none;
   padding: 2px 2px 2px 2px;
   background: transparent
-    url("data:image/svg+xml;utf8,<svg fill='black' height='35' viewBox='0 0 24 24' width='40' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>")
+    url("data:image/svg+xml;utf8,<svg fill='black' height='35' opacity='0.4' viewBox='0 0 24 24' width='40' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>")
     no-repeat 430px;
 }
