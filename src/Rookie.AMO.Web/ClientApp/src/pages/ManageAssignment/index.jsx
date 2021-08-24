@@ -7,6 +7,7 @@ import AssignmentItem from "../../components/Assignment/AssignmentItem/";
 import AssignmentList from "../../components/Assignment/AssignmentList";
 import AssignmentPagination from "../../components/Pagination/AssignmentPagination";
 import PopupDeleteAssignment from "../../components/Popup/PopupDeleteAssignment";
+import PopupInfor from '../../components/Popup/PopupInfor';
 import { format } from 'date-fns';
 
 const stateList = [
@@ -74,10 +75,16 @@ function ManageAssignment() {
 
   const [isReload,setIsReload] = useState(0)
 
+  const handleModelShowFunction = (content) => {
+    setIsModalOpen(content);
+  };
+
   // Popup delete assignment
   const [idAssignmentDelete, setIdAssignmentDelete] = useState("");
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [isDelete, setIsDelete] = useState(0);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Delete assignment
   const triggerFetchAssignment = () => setIsReload(t=>!t);
@@ -96,6 +103,7 @@ function ManageAssignment() {
   const handleDelete = (e) => {
     setIsDelete(1);
     handleDeleteShow(false);
+    setIsModalOpen(true);
   };
 
   function deletePopup() {
@@ -125,6 +133,13 @@ function ManageAssignment() {
         paging={paging}
       />
         {deletePopup(handleDelete, handleDeleteShow)}
+        <PopupInfor
+        title="Information"
+        content="Delete assignment successfully"
+        handleModelShow={handleModelShowFunction}
+        isModalOpen={isModalOpen}
+        pathReturn="/manage-assignment"
+      ></PopupInfor>
     </div>
   );
 }
