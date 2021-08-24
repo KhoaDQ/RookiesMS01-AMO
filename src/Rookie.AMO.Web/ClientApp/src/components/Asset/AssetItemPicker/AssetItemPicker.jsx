@@ -1,17 +1,17 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment } from "react";
 function UserItemPick(props) {
-  let { user, setUser, currentUser } = props;
+  let { asset, setCurrentAsset, currentAsset } = props;
 
-  console.log(user.id === currentUser.id);
+  //console.log(asset.id === currentAsset.id);
 
   const onChange = () => {
-    setUser(user);
+    setCurrentAsset(asset);
   };
 
   return (
     <Fragment>
       <tr
-        key={user.codeStaff}
+        key={asset.id}
         //onClick={handleShowInfoUser}
         className="detail-item"
       >
@@ -19,15 +19,13 @@ function UserItemPick(props) {
           <input
             type="radio"
             name="select"
-            checked={user.id === currentUser.id}
+            checked={asset.id === currentAsset.id}
             onChange={onChange}
           />
         </td>
-        <td>{user.codeStaff} FFFFFF</td>
-        <td>
-          {user.firstName} {user.lastName}
-        </td>
-        <td>{user.type}</td>
+        <td>{asset.name}</td>
+        <td>{asset.categoryName}</td>
+        <td>{asset.state}</td>
       </tr>
     </Fragment>
   );

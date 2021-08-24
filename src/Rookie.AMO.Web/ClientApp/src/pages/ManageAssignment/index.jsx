@@ -32,10 +32,12 @@ function ManageAssignment() {
     totalItems: 18,
     totalPages: 1,
   })
+
+  const [isReload,setIsReload] = useState(0)
   const assignments = useSelector(state => state.AssignmentReducer);
   useEffect(() => {
     fetchAssignment()
-  }, [filters])
+  }, [filters,isReload])
 
   // return request
   const { user } = useSelector((state) => state.oidc);
@@ -61,7 +63,11 @@ function ManageAssignment() {
     let result = null
     if (assignments != null) {
       if (assignments.length > 0) {
+        let stateAssign = null
         result = assignments.map((assignment, index) => {
+          stateAssign = stateList.find(s=>s.value === assignment.state )
+          if(stateAssign!=undefined)
+            assignment.state = stateAssign.name
           return (
             <AssignmentItem
               key={index}
@@ -77,9 +83,7 @@ function ManageAssignment() {
     return result
   }
 
-  console.log(filters);
 
-  const [isReload,setIsReload] = useState(0)
 
   const handleModelShowFunction = (content) => {
     setIsModalOpen(content);

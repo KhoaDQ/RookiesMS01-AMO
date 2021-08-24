@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import "./Popup.css";
 
 const PopupReturnRequest = (props) => {
-  let {handleRequest} = props
   
   const [isModalOpen, setIsModalOpen] = useState(props.isModalOpen);
 
@@ -12,7 +11,6 @@ const PopupReturnRequest = (props) => {
 
   const handleCancel = () => {
     setIsModalOpen(false);
-    props.handleModelShow(!isModalOpen);
   };
 
   return (
@@ -30,8 +28,8 @@ const PopupReturnRequest = (props) => {
                 Do you want to create a returning request for this asset?
               </p>
               <div className="auth-form__action">
-                <button onClick={handleRequest} className="btn-accept">Yes</button>
-                <button onClick={handleCancel} className="btn-cancel">
+                <button onClick={()=>{props.handleRequest()}} className="btn-accept">Yes</button>
+                <button onClick={()=>{handleCancel()}} className="btn-cancel">
                   No
                 </button>
               </div>
