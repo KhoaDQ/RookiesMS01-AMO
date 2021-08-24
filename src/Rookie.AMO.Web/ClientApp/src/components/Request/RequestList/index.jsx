@@ -138,7 +138,12 @@ function RequestList(props) {
             props.children
           ) : (
             <tr>
-              <td className="rowNotify">No Request for Returning are found!</td>
+              <span
+                style={{ width: '300px', display: 'block', margin: '0 auto' }}
+                className="rowNotify"
+              >
+                No Request for Returning are found!
+              </span>
             </tr>
           )}
         </tbody>
