@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./Popup.css";
 
-const PopupDelete = (props) => {
-  let {handleDelete} = props
+const PopupReturnRequest = (props) => {
+  let {handleRequest} = props
   
   const [isModalOpen, setIsModalOpen] = useState(props.isModalOpen);
 
@@ -27,12 +27,12 @@ const PopupDelete = (props) => {
 
             <div className="auth-form__body">
               <p className="auth-form__heading">
-                Do you want to delete this asset?
+                Do you want to create a returning request for this asset?
               </p>
               <div className="auth-form__action">
-                <button onClick={handleDelete} className="btn-accept">Delete</button>
+                <button onClick={handleRequest} className="btn-accept">Yes</button>
                 <button onClick={handleCancel} className="btn-cancel">
-                  Cancel
+                  No
                 </button>
               </div>
             </div>
@@ -43,4 +43,4 @@ const PopupDelete = (props) => {
   );
 };
 
-export default PopupDelete;
+export default PopupReturnRequest;

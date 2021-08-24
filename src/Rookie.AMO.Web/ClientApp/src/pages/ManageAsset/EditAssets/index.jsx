@@ -6,7 +6,6 @@ import { useHistory } from "react-router-dom";
 
 const EditAssets = (props) => {
   const history = useHistory();
-  console.log(props.match.params.id);
   const dispatch = useDispatch();
   const EditAsset = useSelector((state) => state.EditAsset);
   const CategoryReducer = useSelector((state) => state.CategoryReducer);
@@ -35,8 +34,6 @@ const EditAssets = (props) => {
     }
     fetchCategory();
   }, []);
-  console.log(CategoryReducer);
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setState({ ...state, [name]: value });
@@ -51,14 +48,12 @@ const EditAssets = (props) => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(state);
     async function EditAsset() {
       const res = await apiCaller(
         `Asset/${props.match.params.id}`,
         "PUT",
         state
       );
-      console.log(res);
       dispatch({ type: action.UPDATE_ASSETS, payload: res.data });
 
       history.push("/manage-asset");
@@ -162,7 +157,7 @@ const EditAssets = (props) => {
                   id="gridRadios1"
                   value="Available"
                   defaultValue="option1"
-                  defaultChecked={state.state == "Available"}
+                  defaultChecked={state.state === "Available"}
                   onChange={(e) => {
                     handleRadioChange(e);
                   }}
@@ -244,7 +239,6 @@ function FetchAsset(id) {
   useEffect(() => {
     async function fetch() {
       let enpoint = `Asset/${id}`;
-      console.log(enpoint);
       const res = await apiCaller(enpoint, "GET", null);
       dispatch({ type: action.GET_ASSET_BY_ID, payload: res.data });
     }
