@@ -1,5 +1,6 @@
 ﻿using Rookie.AMO.Contracts.Constants;
 using Rookie.AMO.Contracts.Dtos.Asset;
+using Rookie.AMO.DataAccessor.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,22 +28,7 @@ namespace Rookie.AMO.UnitTests.API.Validators.TestData
                 new object[] { new Guid("4cb7a099-94e7-4e23-a4cb-535e15b21330") },
             };
         }
-        public static IEnumerable<object[]> InvalidIds()
-        {
-            return new object[][]
-            {
-                new object[]
-                {
-                    new Guid("B41E8F49-DBCB-42C3-946F-F26C5B815BED"),
-                    string.Format(ErrorTypes.Common.NumberGreaterThanError, nameof(AssetDto.Id),""),
-                },
-                new object[]
-                {
-                   new Guid("B41E8F49-DBCB-42C3-946F-F26C5B815BED"),
-                    string.Format(ErrorTypes.Common.NumberGreaterThanError, nameof(AssetDto.Id),""),
-                },
-            };
-        }
+        
         public static IEnumerable<object[]> InvalidCodes()
         {
             return new object[][]
@@ -58,5 +44,30 @@ namespace Rookie.AMO.UnitTests.API.Validators.TestData
                 },
             };
         }
+        public static List<Category> GetCategories()
+        {
+            return new List<Category>()
+            {
+                new Category()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Laptop",
+                    Code = "LA"
+                },
+                new Category()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Monitor",
+                    Code = "MO"
+                },
+                new Category()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Personal Computer",
+                    Code = "PC"
+                }
+            };
+        }
+
     }
 }

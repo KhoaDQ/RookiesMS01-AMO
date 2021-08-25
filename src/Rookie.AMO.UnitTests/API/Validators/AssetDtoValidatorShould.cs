@@ -42,12 +42,7 @@ namespace Rookie.AMO.UnitTests.API.Validators
                 .For(m => m.Id = id)
                 .ShouldNotHaveErrorsFor(m => m.Id);
 
-        [Theory]
-        [MemberData(nameof(AssetTestData.InvalidIds), MemberType = typeof(AssetTestData))]
-        public void HaveErrorWhenIdsIsinvalid(Guid id, string errorMessage) =>
-          _testRunner
-              .For(m => m.Id = id)
-              .ShouldHaveErrorsFor(m => m.Id, errorMessage);
+        
         [Theory]
         [MemberData(nameof(AssetTestData.InvalidCodes), MemberType = typeof(AssetTestData))]
         public void HaveErrorWhenCodeIsInvalid(string code, string errorMessage) =>
