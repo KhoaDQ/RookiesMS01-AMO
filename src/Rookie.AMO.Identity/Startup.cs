@@ -1,5 +1,7 @@
 using FluentValidation.AspNetCore;
+using IdentityModel;
 using IdentityServer4.Configuration;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -56,14 +58,13 @@ namespace Rookie.AMO.Identity
                 ops.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
                 ops.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
                 ops.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-            }); ;
+            });
 
-            services.AddSingleton<IAuthorizationHandler, IdentityScopeHandler>();
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("IDENTITY_SCOPE_POLICY", policy =>
+                options.AddPolicy("ADMIN_POLICY", policy =>
                 {
-                    policy.Requirements.Add(new IdentityScopeRequirement());
+                    policy.RequireAuthenticatedUser();
                 });
             });
 

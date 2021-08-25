@@ -9,7 +9,7 @@ namespace Rookie.AMO.Web.Extensions
 {
     public static class CookiesExtension
     {
-        public static string ToStringAsync(this IRequestCookieCollection cookieCollection)
+        public static string GetString(this IRequestCookieCollection cookieCollection)
         {
             var cookies = new StringBuilder();
             foreach (var cookie in cookieCollection)

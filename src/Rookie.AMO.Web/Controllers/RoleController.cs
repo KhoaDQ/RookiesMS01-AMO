@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Rookie.AMO.Web.Extensions;
 
 namespace Rookie.AMO.Web.Controllers
 {
@@ -26,8 +27,8 @@ namespace Rookie.AMO.Web.Controllers
         [HttpGet]
         public async Task<IEnumerable<RoleDto>> GetAllRolesAsync()
         {
-            
-            return await _roleService.GetAllRolesAsync(cookies.ToString());
+            var cookie = HttpContext.Request.Cookies.GetString();
+            return await _roleService.GetAllRolesAsync(cookie);
         }
     }
 }
