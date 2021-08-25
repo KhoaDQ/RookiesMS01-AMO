@@ -38,7 +38,6 @@ export default function CreateRequest(userID, requestBy) {
   const handleRequest = () =>{
     if(assignment!==undefined){
         if(assignment.state === "Accepted" && userID!=undefined){
-          console.log('a')
           setRequest({
             ...request,
             AssignmentID: assignment.id,
@@ -47,7 +46,7 @@ export default function CreateRequest(userID, requestBy) {
           });
         }
       }
-      setIsModalOpen(false);
+    setIsModalOpen(false);
   }
 
   function showPopupRequest(){
@@ -55,6 +54,7 @@ export default function CreateRequest(userID, requestBy) {
         <PopupReturnRequest
             handleRequest = {handleRequest}
             isModalOpen = {isModalOpen}
+            setIsModalOpen = {setIsModalOpen}
         />
     )
   }

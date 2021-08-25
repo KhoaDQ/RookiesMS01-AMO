@@ -140,8 +140,6 @@ function ManageAsset() {
 
       if (assets != null) {
         if (assets.length > 0) {
-          console.log(filterPage)
-          console.log(initFilterPage)
           if (assetChange != undefined && queryString.stringify(filterPage) === queryString.stringify(initFilterPage)) {
             let a = assets.findIndex((a) => (a.id === assetChange.id));
             if (a > -1){

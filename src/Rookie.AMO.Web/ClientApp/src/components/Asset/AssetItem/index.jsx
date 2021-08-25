@@ -4,8 +4,8 @@ import { IoIosCloseCircleOutline } from "@react-icons/all-files/io/IoIosCloseCir
 import { Link } from "react-router-dom";
 import "../style.css";
 function AssetItem(props) {
-    let { asset, index } = props
-
+    let { asset, index } = props;
+    let isDisable = (asset.state ==="Assigned");
     return (
         <tr onClick = {(e)=>{props.handleDetail(asset,e)}} className = {index === -1 ? "newRow": ""}>
             <td >{asset.code}</td>
@@ -14,12 +14,12 @@ function AssetItem(props) {
             <td>{asset.state}</td>
             <td onClick={e => e.stopPropagation()}>
                 <span className="icon-nash icon-nash--black">
-                <Link to={ `/edit-assets/${asset.id}`}>
-                        <IoMdCreate />
+                <Link to={isDisable?undefined:`/edit-assets/${asset.id}`}>
+                        <IoMdCreate className = {isDisable?"assetDisable":""}/>
                     </Link>
                 </span>
                 <span className="icon-nash icon-nash--red">
-                    <IoIosCloseCircleOutline onClick={(e) => {props.handleDeleteOpen(asset.id,e)}}/>
+                    <IoIosCloseCircleOutline className = {isDisable?"assetDisable":""} onClick={isDisable?undefined:(e) => {props.handleDeleteOpen(asset.id,e)}}/>
                 </span>
             </td>
         </tr>
