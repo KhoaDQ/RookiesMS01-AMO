@@ -140,8 +140,6 @@ namespace Rookie.AMO.Identity.Quickstart.Manage
                 {
                     AddErrors(update);
                 }
-
-                return View(model);
             }
             return RedirectToAction(nameof(Index), new { Message = ManageMessageId.Error });
         }
