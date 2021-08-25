@@ -3,6 +3,7 @@ using IdentityServer4.Services;
 using IdentityServer4.Stores;
 using IdentityServerHost.Quickstart.UI;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Rookie.AMO.Identity.DataAccessor.Entities;
@@ -13,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace Rookie.AMO.Identity.Quickstart.Manage
 {
+    [Authorize]
     public class ManageController : Controller
     {
         private readonly UserManager<User> _userManager;
@@ -104,7 +106,7 @@ namespace Rookie.AMO.Identity.Quickstart.Manage
                 else
                 {
                     // since we don't have a valid context, then we just go back to the home page
-                    return Redirect("~/");
+                    return Redirect(model.ReturnUrl);
                 }
             }
 
@@ -138,6 +140,8 @@ namespace Rookie.AMO.Identity.Quickstart.Manage
                 {
                     AddErrors(update);
                 }
+
+                return View(model);
             }
             return RedirectToAction(nameof(Index), new { Message = ManageMessageId.Error });
         }

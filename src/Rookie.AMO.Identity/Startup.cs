@@ -1,6 +1,7 @@
 using FluentValidation.AspNetCore;
+using IdentityModel;
 using IdentityServer4.Configuration;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -59,28 +60,11 @@ namespace Rookie.AMO.Identity
                 ops.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
             });
 
-            /*services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
-                 {
-                     options.Authority = Configuration["IdentityServerHost"];
-                     options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
-                     {
-                         NameClaimType = IdentityModel.JwtClaimTypes.Name,
-                         RoleClaimType = IdentityModel.JwtClaimTypes.Role,
-                         ValidateAudience = false
-                     };
-                 });*/
-
-            services.AddSingleton<IAuthorizationHandler, IdentityScopeHandler>();
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("IDENTITY_SCOPE_POLICY", policy =>
+                options.AddPolicy("ADMIN_POLICY", policy =>
                 {
-                    policy.Requirements.Add(new IdentityScopeRequirement());
+                    policy.RequireAuthenticatedUser();
                 });
             });
 
@@ -111,13 +95,12 @@ namespace Rookie.AMO.Identity
 
             app.UseRouting();
             
+            app.UseAuthentication();
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                    name: "defaulArea",
-                    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=home}/{action=Index}/{id?}");
