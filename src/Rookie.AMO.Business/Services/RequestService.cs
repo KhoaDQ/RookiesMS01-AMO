@@ -50,7 +50,7 @@ namespace Rookie.AMO.Business.Services
         public async Task<IEnumerable<RequestHistoryDto>> GetByIdAssetAsync(Guid assetId)
         {
             var query = await _baseRepository.GetAllAsync();
-            var history = query.Where(x => x.AssetID == assetId && x.ReturnedDate.HasValue);
+            var history = query.Where(x => x.AssetID == assetId);
 
             return _mapper.Map<List<RequestHistoryDto>>(history);
         }

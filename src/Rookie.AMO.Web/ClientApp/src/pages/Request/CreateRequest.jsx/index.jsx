@@ -25,10 +25,9 @@ export default function CreateRequest(userID, requestBy) {
     }
 
     let { AssignmentID, UserID, RequestedBy } = request;
+
     if (AssignmentID !== '' && UserID !== '' && RequestedBy !== '')
-      returnRequest(request).then((res) => {
-        console.log(res);
-      });
+      returnRequest(request);
   }, [request]);
 
   const handleRequestOpen = (assignment) => {
@@ -38,7 +37,6 @@ export default function CreateRequest(userID, requestBy) {
   const handleRequest = () => {
     if (assignment !== undefined) {
       if (assignment.state === 'Accepted' && userID != undefined) {
-        console.log('a');
         setRequest({
           ...request,
           AssignmentID: assignment.id,
@@ -55,6 +53,7 @@ export default function CreateRequest(userID, requestBy) {
       <PopupReturnRequest
         handleRequest={handleRequest}
         isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
       />
     );
   }

@@ -29,8 +29,10 @@ function ModalPickUser(props) {
     limit: 3,
     propertyName: 'StaffCode',
     desc: false,
+    keySearch:""
   });
 
+  const [searchText,setSearchText] = useState("")
   const userPage = useSelector((state) => state.UserReducer);
   const dispatch = useDispatch();
 
@@ -50,9 +52,10 @@ function ModalPickUser(props) {
     fetch();
   }, [paging]);
 
+  const { setState,setNameUser } = props;
   useEffect(() => {
     if (currentUser) {
-      const { setState } = props;
+      
       if (setState) {
         setState((state) => {
           return {
@@ -60,6 +63,7 @@ function ModalPickUser(props) {
             assignTo: currentUser?.id,
           };
         });
+        setNameUser(currentUser?.userName)
       }
     }
   }, [currentUser]);
@@ -99,12 +103,13 @@ function ModalPickUser(props) {
             <Col md={6}>
               <InputGroup>
                 <Input
+                  value={searchText}
                   placeholder="Search Name"
                   name="name"
-                  //onChange={handleChange}
+                  onChange={(e) => {setSearchText(e.target.value);}}
                 />
                 <InputGroupAddon addonType="append">
-                  <InputGroupText className="right__icon">
+                  <InputGroupText className="right__icon" /*onClick = {}*/ >
                     <AiOutlineSearch />
                   </InputGroupText>
                 </InputGroupAddon>

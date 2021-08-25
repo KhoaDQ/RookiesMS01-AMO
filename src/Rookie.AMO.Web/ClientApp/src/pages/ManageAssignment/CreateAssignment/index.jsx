@@ -42,6 +42,8 @@ const CreateAssignment = () => {
     assignDate: moment().toDate(),
     note: '',
   });
+  const [nameAsset, setNameAsset] = useState('');
+  const [nameUser, setNameUser] = useState('');
 
   const disableButton =
     form.asset !== '' && form.assignTo && form.assignDate && form.note !== '';
@@ -50,61 +52,6 @@ const CreateAssignment = () => {
 
   const dispatch = useDispatch();
   dispatch({ type: ac.CHANGE_INDEX, payload: '/create-assignment' });
-  const AssetReducer = useSelector((state) => state.AssetReducer);
-  const UserReducer = useSelector((state) => state.UserReducer);
-
-  const [assets, setAssets] = useState([]);
-  const [users, setUsers] = useState([]);
-
-  useEffect(() => {
-    async function fetchUser() {
-      const res = await apiCaller('User', 'GET', null);
-      if (res.data) {
-        dispatch({
-          type: 'FETCH_USER',
-          payload: res.data,
-        });
-        setUsers(res.data);
-      } else {
-        return alert('You not permision to get data.');
-      }
-    }
-
-    async function fetchAsset() {
-      const res = await apiCaller('Asset', 'GET', null);
-
-      if (res.status === 200) {
-        dispatch({
-          type: 'FETCH_ASSET',
-          payload: res.data,
-        });
-
-        setAssets(res.data);
-      }
-    }
-
-    fetchUser();
-    fetchAsset();
-  }, []);
-
-  //console.log("asset", AssetReducer);
-
-  const listUser =
-    users &&
-    users.length > 0 &&
-    users.map((user, index) => {
-      return (
-        <option value={user.id}>{user.firstName + ' ' + user.lastName}</option>
-      );
-    });
-
-  const listAsset =
-    assets &&
-    assets.length > 0 &&
-    assets.map((asset, index) => {
-      return <option value={asset.id}>{asset.name}</option>;
-    });
-
   const {
     register,
     handleSubmit,
@@ -115,7 +62,6 @@ const CreateAssignment = () => {
 
   const onSubmit = (e) => {
     // e.preventDefault();
-    console.log(users);
     async function CreateAssignment() {
       const res = await apiCaller('Assignment', 'POST', {
         AdminID: admin.profile.sub,
@@ -123,7 +69,7 @@ const CreateAssignment = () => {
         AssetID: form.asset,
         AssignedDate: moment(form.assignDate).toDate(),
         Note: form.note,
-        AssignedTo: users.find((user) => user.id === form.assignTo).userName,
+        AssignedTo: nameUser,
         AssignedBy: admin.profile.userName,
       });
 
@@ -142,18 +88,6 @@ const CreateAssignment = () => {
     }
   };
 
-  const findNameAsset = (assetId) => {
-    const asset = assets.find((asset) => asset.id === assetId);
-
-    return asset?.name || '';
-  };
-
-  const findNameUser = (userId) => {
-    const user = users.find((user) => user.id === userId);
-
-    return user?.firstName + ' ' + user?.lastName || '';
-  };
-
   return (
     <div>
       <h5 className="right-title">Create New Assignment</h5>
@@ -164,21 +98,8 @@ const CreateAssignment = () => {
             User
           </label>
           <div className="col-sm-10" className="resize">
-            {/* <select
-              className="custom-select custom-select-lg mb-3"
-              className="form-control"
-              value={form.assignTo}
-              name="assignTo"
-              onChange={(e) => setForm({ ...form, assignTo: e.target.value })}
-              required={true}
-            >
-              <option value={0} defaultChecked>
-                Select User
-              </option>
-              {listUser}
-            </select> */}
             <InputGroup>
-              <Input value={findNameUser(form.assignTo)} />
+              <Input value={nameUser} />
               <InputGroupAddon
                 addonType="append"
                 onClick={() => setIsModalShow(1)}
@@ -186,6 +107,7 @@ const CreateAssignment = () => {
                 <Button color="secondary">To the Right!</Button>
               </InputGroupAddon>
               <ModalPickUser
+                setNameUser={setNameUser}
                 setState={setForm}
                 show={isModalShow}
                 onHide={() => {
@@ -204,21 +126,8 @@ const CreateAssignment = () => {
             Asset
           </label>
           <div className="col-sm-10" className="resize">
-            {/* <select
-              className="custom-select custom-select-lg mb-3"
-              className="form-control"
-              value={form.asset}
-              name="asset"
-              onChange={(e) => setForm({ ...form, asset: e.target.value })}
-              required={true}
-            >
-              <option value={0} defaultChecked>
-                Select Asset
-              </option>
-              {listAsset}
-            </select> */}
             <InputGroup>
-              <Input value={findNameAsset(form.asset)} />
+              <Input value={nameAsset} />
               <InputGroupAddon
                 addonType="append"
                 onClick={() => setIsModalAsset(1)}
@@ -226,8 +135,8 @@ const CreateAssignment = () => {
                 <Button color="secondary">To the Right!</Button>
               </InputGroupAddon>
               <ModalPickAsset
+                setNameAsset={setNameAsset}
                 setState={setForm}
-                assets={assets}
                 show={isModalAsset}
                 onHide={() => {
                   setIsModalAsset(0);
