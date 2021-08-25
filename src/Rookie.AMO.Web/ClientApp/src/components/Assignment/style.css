@@ -1,47 +1,64 @@
+.icon-nash--blue-dis {
+  color: rgb(205, 185, 250);
+}
+
+.icon-nash--red-dis {
+  color: rgb(253, 159, 159);
+}
+
+.icon-nash--black-dis {
+  color: rgb(148, 148, 148);
+}
+
+.icon-nash--blue-dis:hover,
+.icon-nash--black-dis:hover,
+.icon-nash--red-dis:hover {
+  cursor: not-allowed;
+}
+
 .table_border_spacing {
-    table-layout: fixed;
-    border-spacing: 10px 0px;
-    border-collapse: separate;
+  table-layout: fixed;
+  border-spacing: 10px 0px;
+  border-collapse: separate;
 }
 
 th:hover {
-    background-color: #dee2e6;
+  background-color: #dee2e6;
 }
 
 .header_tools {
-    width: 13%;
+  width: 13%;
 }
 
 .header_name {
-    width: 40%;
+  width: 40%;
 }
 
 .rowNotify {
-    border-bottom: none;
+  border-bottom: none;
 }
 
 .table_border_spacing tr:hover td:not(:last-child) {
-    background-color: #dee2e6;
+  background-color: #dee2e6;
 }
 
 .table_history_assigned {
-    font-size: 13px;
-    margin-top: 0;
-    width: max-content;
+  font-size: 13px;
+  margin-top: 0;
+  width: max-content;
 }
 
 .table_history_assigned th {
-    padding: 0;
+  padding: 0;
 }
 
 .table_history_container {
-    margin-left: -10px;
-    margin-right: 10px;
+  margin-left: -10px;
+  margin-right: 10px;
 }
 
 .multiSelectContainer {
-    position: relative;
-    text-align: left;
-    width: 90%!important;
+  position: relative;
+  text-align: left;
+  width: 90% !important;
 }
-
