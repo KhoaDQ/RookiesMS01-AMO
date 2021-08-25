@@ -19,13 +19,15 @@ namespace Rookie.AMO.Business.Services
     {
         private readonly IBaseRepository<Request> _baseRepository;
         private readonly IBaseRepository<Assignment> _assignmentRepository;
+        private readonly IBaseRepository<MappingRequest> _mappingRepository;
         private readonly IMapper _mapper;
         private readonly ApplicationDbContext _context;
 
-        public RequestService(IBaseRepository<Request> baseRepository,IBaseRepository<Assignment> assignmentRepository, IMapper mapper, ApplicationDbContext context)
+        public RequestService(IBaseRepository<Request> baseRepository,IBaseRepository<Assignment> assignmentRepository, IBaseRepository<MappingRequest> mappingRepository, IMapper mapper, ApplicationDbContext context)
         {
             _baseRepository = baseRepository;
             _assignmentRepository = assignmentRepository;
+            _mappingRepository = mappingRepository;
             _mapper = mapper;
             _context = context;
         }
@@ -44,6 +46,13 @@ namespace Rookie.AMO.Business.Services
             request.AssignedTo = assignment.AssignedTo;
 
             var item = await _baseRepository.AddAsync(request);
+
+            var mapping = new MappingRequest();
+            mapping.AssignmentId = assignment.Id;
+            mapping.RequestId = item.Id;
+            await _mappingRepository.AddAsync(mapping);
+
+            
             return _mapper.Map<RequestDto>(item);
         }
 
@@ -66,7 +75,7 @@ namespace Rookie.AMO.Business.Services
 
             var asset = await _context.Assets.FindAsync(request.AssetID);
             asset.State = StateList.Available;
-
+            
             var assignment = (from a in _context.Assignments
                               where a.AssetID == request.AssetID
                               select a).FirstOrDefault();

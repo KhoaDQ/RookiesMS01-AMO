@@ -28,5 +28,7 @@ namespace Rookie.AMO.Contracts.Dtos.Assignment
 
         public Guid AssetID { get; set; }
         public Guid UserID { get; set; }
+
+        public bool IsReturnRequest { get; set; }
     }
 }

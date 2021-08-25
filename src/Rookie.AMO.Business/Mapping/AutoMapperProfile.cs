@@ -45,7 +45,9 @@ namespace Rookie.AMO.Business
                                                   .ForMember(dest => dest.AssetName, opt => opt
                                                             .MapFrom(s => s.Asset.Name))
                                                   .ForMember(u => u.Specification, opt => opt.MapFrom(s => s.Asset.Specification))
-                                                  .ForMember(u => u.Category, opt => opt.MapFrom(s => s.Asset.Category.Name));
+                                                  .ForMember(u => u.Category, opt => opt.MapFrom(s => s.Asset.Category.Name))
+                                                  .ForMember(u => u.IsReturnRequest, opt => opt.MapFrom(s => s.MappingRequest != null)); ;
+
                                                 
             CreateMap<Request, RequestDto>().ForMember(u => u.State, options => options.MapFrom(input => EnumConverExtension.GetNameString<StateList>(input.State)))
                                                   .ForMember(dest => dest.AssetCode, opt => opt
