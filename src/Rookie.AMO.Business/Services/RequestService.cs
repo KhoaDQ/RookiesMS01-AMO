@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EnsureThat;
 using Rookie.AMO.Business.Extensions;
 using Rookie.AMO.Business.Interfaces;
 using Rookie.AMO.Contracts;
@@ -17,14 +18,31 @@ namespace Rookie.AMO.Business.Services
     public class RequestService : IRequestService
     {
         private readonly IBaseRepository<Request> _baseRepository;
+        private readonly IBaseRepository<Assignment> _assignmentRepository;
         private readonly IMapper _mapper;
         private readonly ApplicationDbContext _context;
 
-        public RequestService(IBaseRepository<Request> baseRepository, IMapper mapper, ApplicationDbContext context)
+        public RequestService(IBaseRepository<Request> baseRepository,IBaseRepository<Assignment> assignmentRepository, IMapper mapper, ApplicationDbContext context)
         {
             _baseRepository = baseRepository;
+            _assignmentRepository = assignmentRepository;
             _mapper = mapper;
             _context = context;
+        }
+
+        public async Task<RequestDto> AddAsync(RequestAddRequest requestAddRequest)
+        {
+            Ensure.Any.IsNotNull(requestAddRequest, nameof(requestAddRequest));
+            var request = _mapper.Map<Request>(requestAddRequest);
+
+            var assignment = await _assignmentRepository.GetByIdAsync(requestAddRequest.AssignmentID);
+
+            request.AssetID = assignment.AssetID;
+            request.AssignedDate = assignment.AssignedDate;
+            request.State = StateList.WaitingReturn;
+
+            var item = await _baseRepository.AddAsync(request);
+            return _mapper.Map<RequestDto>(item);
         }
 
         public async Task CompleteAsync(Guid id, string adminUsername, Guid adminId)

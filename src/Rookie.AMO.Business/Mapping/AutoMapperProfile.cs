@@ -30,6 +30,7 @@ namespace Rookie.AMO.Business
             CreateMap<AssignmentRequest, Assignment>();
 
             CreateMap<RequestDto, Request>().ForMember(u => u.State, options => options.MapFrom(input => EnumConverExtension.GetValueInt<StateList>(input.State)));
+            CreateMap<RequestAddRequest, Request>();
 
         }
 

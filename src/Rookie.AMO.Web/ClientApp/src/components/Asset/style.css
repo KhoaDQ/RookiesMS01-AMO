@@ -15,6 +15,7 @@ th:hover{
 }
 .rowNotify{
     border-bottom: none;
+    white-space: nowrap;
 }
 .table_border_spacing tr:hover td:not(:last-child){
     background-color: #dee2e6;

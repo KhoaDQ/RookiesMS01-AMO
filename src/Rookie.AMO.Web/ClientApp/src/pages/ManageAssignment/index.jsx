@@ -9,6 +9,7 @@ import AssignmentPagination from "../../components/Pagination/AssignmentPaginati
 import PopupDeleteAssignment from "../../components/Popup/PopupDeleteAssignment";
 import PopupInfor from '../../components/Popup/PopupInfor';
 import { format } from 'date-fns';
+import CreateRequest from "../Request/CreateRequest.jsx";
 
 const stateList = [
   { name: "Accepted", value: "Accepted" },
@@ -31,10 +32,16 @@ function ManageAssignment() {
     totalItems: 18,
     totalPages: 1,
   })
+
+  const [isReload,setIsReload] = useState(0)
   const assignments = useSelector(state => state.AssignmentReducer);
   useEffect(() => {
     fetchAssignment()
-  }, [filters])
+  }, [filters,isReload])
+
+  // return request
+  const { user } = useSelector((state) => state.oidc);
+  const {handleRequestOpen,showPopupRequest} = CreateRequest(user.profile.sub,user.profile.userName);
 
   async function fetchAssignment() {
     const paramsString = queryString.stringify(filters);
@@ -56,13 +63,18 @@ function ManageAssignment() {
     let result = null
     if (assignments != null) {
       if (assignments.length > 0) {
+        let stateAssign = null
         result = assignments.map((assignment, index) => {
+          stateAssign = stateList.find(s=>s.value === assignment.state )
+          if(stateAssign!=undefined)
+            assignment.state = stateAssign.name
           return (
             <AssignmentItem
               key={index}
               assignment={assignment}
               index={index}
               handleDeleteOpen={handleDeleteOpen}
+              handleRequestOpen = {handleRequestOpen}
             />
           )
         })
@@ -71,9 +83,7 @@ function ManageAssignment() {
     return result
   }
 
-  console.log(filters);
 
-  const [isReload,setIsReload] = useState(0)
 
   const handleModelShowFunction = (content) => {
     setIsModalOpen(content);
@@ -115,7 +125,7 @@ function ManageAssignment() {
         ></PopupDeleteAssignment>
       );
   }
-  
+
   return (
     <div className="Assignment">
 
@@ -140,6 +150,7 @@ function ManageAssignment() {
         isModalOpen={isModalOpen}
         pathReturn="/manage-assignment"
       ></PopupInfor>
+      {showPopupRequest()}
     </div>
   );
 }

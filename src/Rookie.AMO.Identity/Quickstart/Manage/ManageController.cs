@@ -68,7 +68,7 @@ namespace Rookie.AMO.Identity.Quickstart.Manage
 
         // GET: /Manage/ChangePassword
         [HttpGet]
-        public async Task<IActionResult> ChangePassword([FromQuery]string returnUrl = "")
+        public async Task<IActionResult> ChangePassword([FromQuery] string returnUrl = "")
         {
             var vm = await BuildChangePasswordViewModelAsync(returnUrl);
 

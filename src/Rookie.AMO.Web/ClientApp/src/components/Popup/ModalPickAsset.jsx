@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as action from "../../actions/ManageUser/ActionType";
 import apiCaller from "../../apis/callApi";
-import UserItemPick from "../../components/User/UserItemPick";
+import AssetItemPicker from "../Asset/AssetItemPicker/AssetItemPicker";
 import { AiOutlineSearch } from "@react-icons/all-files/ai/AiOutlineSearch";
 import "../User/UserList/UserList.css";
 import UserPagination from "../Pagination/UserPagination";
@@ -15,70 +15,82 @@ import {
   InputGroupAddon,
   Input,
   InputGroup,
+  CustomInput,
 } from "reactstrap";
 import { Modal, Button } from "react-bootstrap";
 
-function ModalPickUser(props) {
+function ModalPickAsset(props) {
+  const { assets } = props;
   const [pageNumber, setPageNumber] = useState(1);
-  const [currentUser, setCurrentUser] = useState(null);
 
   const [paging, setPaging] = useState({
     name: "",
     type: "",
     page: 1,
     limit: 3,
-    propertyName: 'StaffCode',
-    desc: false,
   });
 
   const userPage = useSelector((state) => state.UserReducer);
   const dispatch = useDispatch();
+  const [currentAsset, setCurrentAsset] = useState(null);
 
   useEffect(() => {
-    async function fetch() {
-      const paramsString = queryString.stringify(paging);
-      console.log(paramsString);
-      let endpoint = `User/find?${paramsString}`;
-      const res = await apiCaller(endpoint, "GET", null);
-
-      if (res.status === 200) {
-        dispatch({ type: action.FETCH_USERS, payload: res.data });
-
-        setCurrentUser(res.data.items?.[0]);
-      }
+    if (assets) {
+      setCurrentAsset(assets?.[0]);
     }
-    fetch();
-  }, [paging]);
+  }, [assets]);
 
   useEffect(() => {
-    if (currentUser) {
+    if (currentAsset) {
       const { setState } = props;
       if (setState) {
         setState((state) => {
           return {
             ...state,
-            assignTo: currentUser?.id,
+            asset: currentAsset?.id,
           };
         });
       }
     }
-  }, [currentUser]);
+  }, [currentAsset]);
 
-  const showUsers = () => {
+  // useEffect(() => {
+  //   async function fetch() {
+  //     const paramsString = queryString.stringify(paging);
+  //     console.log(paramsString);
+  //     let endpoint = `User/find?${paramsString}`;
+  //     const res = await apiCaller(endpoint, "GET", null);
+  //     dispatch({ type: action.FETCH_USERS, payload: res.data });
+  //   }
+  //   fetch();
+  // }, [paging]);
+
+  const showAssets = () => {
+    // let result = null;
+    // if (userPage.items) {
+    //   result = userPage.items.map((user, index) => {
+    //     return <UserItemPick key={index} user={user} index={index} />;
+    //   });
+    // }
+    // return result;
+
     let result = null;
-    if (userPage.items) {
-      result = userPage.items.map((user, index) => {
+
+    if (assets) {
+      console.log(assets);
+      result = assets.map((asset, index) => {
         return (
-          <UserItemPick
+          <AssetItemPicker
             key={index}
-            user={user}
+            asset={asset}
             index={index}
-            currentUser={currentUser}
-            setUser={setCurrentUser}
+            currentAsset={currentAsset}
+            setCurrentAsset={setCurrentAsset}
           />
         );
       });
     }
+
     return result;
   };
 
@@ -93,7 +105,7 @@ function ModalPickUser(props) {
         <Modal.Body>
           <Row className="right-bar">
             <Col md={3}>
-              <h5 className="right-title">User List</h5>
+              <h5 className="right-title">Asset List</h5>
             </Col>
             <Col md={3}></Col>
             <Col md={6}>
@@ -115,19 +127,22 @@ function ModalPickUser(props) {
             <thead>
               <tr>
                 <th>Choose</th>
-                <th>Staff Code</th>
-                <th>Full Name</th>
-                <th>Type</th>
+                <th>Asset Code</th>
+                <th>Asset Name</th>
+                <th>Category</th>
+                <th>State</th>
               </tr>
             </thead>
+
             <tbody>
-              {userPage.totalItems > 0 ? (
+              {/* {userPage.totalItems > 0 ? (
                 showUsers()
               ) : paging.name != "" ? (
                 <span>No users are found!</span>
               ) : (
                 <span>...Loading</span>
-              )}
+              )} */}
+              {showAssets()}
             </tbody>
           </Table>
           {userPage.totalPages > 0 ? (
@@ -154,4 +169,4 @@ function ModalPickUser(props) {
   );
 }
 
-export default ModalPickUser;
+export default ModalPickAsset;

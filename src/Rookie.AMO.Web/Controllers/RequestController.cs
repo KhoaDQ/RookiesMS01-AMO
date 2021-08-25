@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using EnsureThat;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Rookie.AMO.Business.Interfaces;
 using Rookie.AMO.Contracts;
+using Rookie.AMO.Contracts.Constants;
 using Rookie.AMO.Contracts.Dtos.Request;
 using System;
 using System.Collections.Generic;
@@ -18,6 +20,14 @@ namespace Rookie.AMO.Web.Controllers
         public RequestController(IRequestService requestService)
         {
             _requestService = requestService;
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<RequestDto>> CreateAsync([FromBody] RequestAddRequest requestAddRequest)
+        {
+            Ensure.Any.IsNotNull(requestAddRequest, nameof(requestAddRequest));
+            var  request = await _requestService.AddAsync(requestAddRequest);
+            return Created(Endpoints.Request, request);
         }
 
         [HttpGet("find")]
