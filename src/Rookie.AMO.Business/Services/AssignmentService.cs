@@ -140,9 +140,11 @@ namespace Rookie.AMO.Business.Services
 
         public async Task<int> AcceptRespond(Guid id)
         {
-            var assignments = await _context.Assignments.FindAsync(id);
+            var assignment = await _context.Assignments.FindAsync(id);
+            var asset = await _context.Assets.FindAsync(assignment.AssetID);
 
-            assignments.State = StateList.Accepted;
+            asset.State = StateList.Assigned;
+            assignment.State = StateList.Accepted;
             return await _context.SaveChangesAsync();
         }
     }
