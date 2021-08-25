@@ -59,7 +59,7 @@ namespace Rookie.AMO.UnitTests.Business
         {
             var entity = new Category()
             {
-                Desc = "code",
+                Code = "code",
                 Id = Guid.NewGuid(),
                 Name = "Name"
             };
@@ -84,7 +84,7 @@ namespace Rookie.AMO.UnitTests.Business
         {
             var category = new Category()
             {
-                Desc = "code",
+                Code = "code",
                 Id = Guid.NewGuid(),
                 Name = "name"
             };
