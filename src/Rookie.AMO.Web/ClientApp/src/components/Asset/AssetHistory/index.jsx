@@ -11,7 +11,7 @@ export default function AssetHistory(props){
                     <td>{Moment(history.assignedDate).format('D/MM/yy')}</td>
                     <td>{history.assignedTo}</td>
                     <td>{history.assignedBy}</td>
-                    <td>{Moment(history.returnedDate).format('D/MM/yy')}</td>
+                    <td>{history.returnedDate=== '0001-01-01T00:00:00'?"":Moment(history.returnedDate).format('D/MM/yy')}</td>
                 </tr>
             )
         })

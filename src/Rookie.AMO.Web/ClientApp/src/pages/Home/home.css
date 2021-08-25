@@ -1,3 +1,6 @@
 #tools {
     width: 18%;
 }
+.returnDisable{
+    opacity: 0.5;
+}
