@@ -16,7 +16,7 @@ const CreateAssets = () => {
   const CategoryReducer = useSelector((state) => state.CategoryReducer);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [errorOpen, setErrorOpen] = useState(false);
   const initAsset = {
     Name: "",
     CategoryId: 0,
@@ -177,6 +177,7 @@ const CreateAssets = () => {
               id="InstalledDate"
               name="InstalledDate"
               value={newAsset.InstalledDate}
+              max="9999-12-19"
               onChange={handleInputChange}
             />
           </div>
@@ -233,7 +234,7 @@ const CreateAssets = () => {
           Save
         </button>
         <button type="button" class="btn btn-outline-danger color1">
-          <Link to="/manage-user">Cancel</Link>
+          <Link to="/manage-asset">Cancel</Link>
         </button>
       </form>
       <PopupInfor
@@ -242,6 +243,12 @@ const CreateAssets = () => {
         handleModelShow={(content) => setIsModalOpen(content)}
         isModalOpen={isModalOpen}
         pathReturn="/manage-asset"
+      ></PopupInfor>
+      <PopupInfor
+        title="Error"
+        content="Create asset fail"
+        handleModelShow={(content) => setErrorOpen(content)}
+        isModalOpen={errorOpen}
       ></PopupInfor>
     </div>
   );
