@@ -1,7 +1,12 @@
-import React, { Fragment, useState } from 'react';
-
+import React, { Fragment, useState } from "react";
 function UserItemPick(props) {
-  let { user } = props;
+  let { user, setUser, currentUser } = props;
+
+  console.log(user.id === currentUser.id);
+
+  const onChange = () => {
+    setUser(user);
+  };
 
   return (
     <Fragment>
@@ -11,9 +16,14 @@ function UserItemPick(props) {
         className="detail-item"
       >
         <td>
-          <input type="radio" name="select"></input>
+          <input
+            type="radio"
+            name="select"
+            checked={user.id === currentUser.id}
+            onChange={onChange}
+          />
         </td>
-        <td>{user.codeStaff}</td>
+        <td>{user.codeStaff} FFFFFF</td>
         <td>
           {user.firstName} {user.lastName}
         </td>
@@ -22,5 +32,4 @@ function UserItemPick(props) {
     </Fragment>
   );
 }
-
 export default UserItemPick;

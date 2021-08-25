@@ -12,16 +12,17 @@ namespace Rookie.AMO.Web.DataProviders
     public interface IUserService
     {
         [Get(Endpoints.User)]
-        Task<IEnumerable<UserDto>> GetAllUsersAsync();
+        Task<IEnumerable<UserDto>> GetAllUsersAsync([Header("Cookie")] string cookie);
         [Get(Endpoints.User + "/{userId}")]
-        Task<UserDto> GetByIdAsync(Guid userId);
+        Task<UserDto> GetByIdAsync(Guid userId, [Header("Cookie")] string cookie);
         [Post(Endpoints.User)]
-        Task<UserDto> CreateUserAsync(UserRequest user);
+        Task<UserDto> CreateUserAsync(UserRequest user, [Header("Cookie")] string cookie);
         [Delete(Endpoints.User)]
-        Task<IActionResult> DisableUserAsync(Guid userId);
+        Task<IActionResult> DisableUserAsync(Guid userId, [Header("Cookie")] string cookie);
         [Put(Endpoints.User + "/{id}")]
-        Task<IActionResult> UpdateUserAsync(Guid id, UserUpdateRequest user);
+        Task<string> UpdateUserAsync(Guid id, UserUpdateRequest user, [Header("Cookie")] string cookie);
         [Get(Endpoints.User + "/find")]
-        Task<PagedResponseModel<UserDto>> PagedQueryAsync(string name, string type, int page, int limit, string propertyName, bool desc, [Header("Authorization")] string auth);
+        Task<PagedResponseModel<UserDto>> PagedQueryAsync(string name, string type, int page,
+            int limit, string propertyName, bool desc, [Header("Cookie")] string cookie);
     }
 }

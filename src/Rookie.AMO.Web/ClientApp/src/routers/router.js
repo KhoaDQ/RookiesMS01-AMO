@@ -88,7 +88,7 @@ const routes = [
     allowedRole: ["Admin"],
   },
   {
-    path: "/edit-assignments",
+    path: "/edit-assignments/:id",
     exact: false,
     main: ({ match, history }) => <EditAssignment match={match} history={history} />,
     allowedRole: ["Admin"],

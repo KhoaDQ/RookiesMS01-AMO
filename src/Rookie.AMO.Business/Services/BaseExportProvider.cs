@@ -15,7 +15,7 @@ namespace Rookie.AMO.Business.Services
         protected IList _type;
         protected IWorkbook _workbook;
         protected ISheet _sheet;
-        private const string DefaultSheetName = "Sheet1";
+       
 
         
 

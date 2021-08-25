@@ -12,7 +12,7 @@ namespace Rookie.AMO.Identity.Quickstart.Account
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Policy = "IDENTITY_SCOPE_POLICY")]
+    [Authorize(Policy = "ADMIN_POLICY")]
     public class RoleController : ControllerBase
     {
         private readonly IRoleService _roleService;
@@ -23,6 +23,8 @@ namespace Rookie.AMO.Identity.Quickstart.Account
 
         [HttpGet]
         public async Task<IEnumerable<RoleDto>> GetRolesAsync()
-            => await _roleService.GetAllRolesAsync();
+        {
+            return await _roleService.GetAllRolesAsync();
+        }
     }
 }

@@ -13,7 +13,13 @@ import { IoIosCloseCircleOutline } from "@react-icons/all-files/io/IoIosCloseCir
 import { MdSettingsBackupRestore } from "@react-icons/all-files/md/MdSettingsBackupRestore";
 import PopupDetail from "../../components/Popup/PopupDetail";
 import "./home.css";
+import { format } from 'date-fns';
+import CreateRequest from "../Request/CreateRequest.jsx";
 
+const stateList = {
+  Accepted: "Accepted",
+  WaitingAccept:"Waiting for Acceptance"
+}
 function Home() {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.oidc);
@@ -22,7 +28,6 @@ function Home() {
   async function fetchAssignment() {
     let endpoint = `assignment/user/${user.profile.sub}`;
     const res = await callApi(endpoint, "GET", null);
-
     dispatch({ type: GET_ASSIGNMENT_BY_ID, payload: res.data });
   }
 
@@ -52,9 +57,13 @@ function Home() {
   const [openDetailModal, setOpenDetailModal] = useState(false);
   const [clickedAssignment, setClickedAssignment] = useState({});
   const showDetail = (assignment) => {
+    assignment.state = stateList[assignment.state];
     setClickedAssignment(assignment);
     setOpenDetailModal(true);
   };
+
+  // return request
+  const {handleRequestOpen,showPopupRequest} = CreateRequest(user.profile.sub,user.profile.userName);
 
   return (
     <div className="home">
@@ -123,15 +132,15 @@ function Home() {
         </thead>
         <tbody>
           {assignments.length > 0 ? (
-            showAssignments(assignments, showDetail)
+            showAssignments(assignments, showDetail, handleRequestOpen)
           ) : (
-            <span
+            <tr
               style={{ width: "200px", display: "block", margin: "0 auto" }}
               className="rowNotify"
             >
               {" "}
               No assignments are found!{" "}
-            </span>
+            </tr>
           )}
         </tbody>
       </Table>
@@ -141,32 +150,34 @@ function Home() {
         handleModelShow={setOpenDetailModal}
         isModalOpen={openDetailModal}
       ></PopupDetail>
+      {showPopupRequest()}
     </div>
   );
 }
 
-function showAssignments(assignments, showDetail) {
+function showAssignments(assignments, showDetail, handleRequestOpen) {
   let result = [];
   if (assignments != null || assignments.length > 0) {
     result = assignments.map((assignment, index) => {
+      console.log(assignment.isReturnRequest)
       return (
         <tr key={assignment.id} onClick={() => showDetail(assignment)}>
           <td>{assignment.assetCode}</td>
           <td>{assignment.assetName}</td>
           <td>{assignment.category}</td>
-          <td>{assignment.assignedDate}</td>
-          <td>{assignment.state}</td>
-          <td>
+          <td>{format(new Date(assignment.assignedDate), 'dd/MM/yyyy')}</td>
+          <td>{stateList[assignment.state]}</td>
+          <td onClick={e => e.stopPropagation()}>
             <span className="icon-nash icon-nash--black">
               <Link>
                 <IoMdCheckmark />
               </Link>
             </span>
             <span className="icon-nash icon-nash--red">
-              <IoIosCloseCircleOutline />
+              <IoIosCloseCircleOutline className={assignment.isReturnRequest?"returnDisable":""}/>
             </span>
-            <span className="icon-nash icon-nash--blue">
-              <MdSettingsBackupRestore />
+            <span className="icon-nash icon-nash--blue" onClick = {assignment.state === 'Accepted' && !assignment.isReturnRequest?()=>handleRequestOpen(assignment):undefined}>
+              <MdSettingsBackupRestore className={assignment.state === 'Accepted' && !assignment.isReturnRequest?"":"returnDisable"}/>
             </span>
           </td>
         </tr>

@@ -1,26 +1,46 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import apiCaller from "../../../apis/callApi";
 import * as action from "../../../actions/ManagerAsset/ActionType";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
+import moment from "moment";
 
 const EditAssets = (props) => {
   const history = useHistory();
-  console.log(props.match.params.id);
   const dispatch = useDispatch();
   const EditAsset = useSelector((state) => state.EditAsset);
   const CategoryReducer = useSelector((state) => state.CategoryReducer);
   const [state, setState] = useState({
-    // Name: "",
-    // CategoryId: "",
-    // Specification: "",
-    // InstalledDate: "",
-    // State: "",
+    Name: "",
+    CategoryId: "",
+    Specification: "",
+    InstalledDate: moment().toDate(),
+    State: "NotAvailable",
   });
+
+  const stateList = [
+    { name: "Assigned", value: "Assigned" },
+    { name: "Available", value: "Available" },
+    { name: "Not available", value: "NotAvailable" },
+    { name: "Waiting for recycling", value: "WaitingRecycle" },
+    { name: "Recycled", value: "Recycled" },
+  ];
 
   const initAsset = FetchAsset(props.match.params.id);
   useEffect(() => {
-    setState(initAsset);
+    if (initAsset) {
+      setState({
+        Name: initAsset.name || "",
+        CategoryId: initAsset.categoryId,
+        Specification: initAsset.specification,
+        InstalledDate: initAsset.installedDate,
+        State: initAsset.state,
+      });
+    }
   }, [initAsset]);
 
   useEffect(() => {
@@ -35,7 +55,6 @@ const EditAssets = (props) => {
     }
     fetchCategory();
   }, []);
-  console.log(CategoryReducer);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -49,18 +68,17 @@ const EditAssets = (props) => {
     const { name, value } = e.target;
     setState({ ...state, [name]: value });
   };
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(state);
+  const handleOnSubmit = (e) => {
+    // e.preventDefault();
     async function EditAsset() {
       const res = await apiCaller(
         `Asset/${props.match.params.id}`,
         "PUT",
         state
       );
-      console.log(res);
-      dispatch({ type: action.UPDATE_ASSETS, payload: res.data });
-
+      if (res.status === 200) {
+      dispatch({ type: action.UPDATE_ASSETS, payload: res.data});
+      }
       history.push("/manage-asset");
     }
 
@@ -75,23 +93,59 @@ const EditAssets = (props) => {
     return <option value={category.id}>{category.name}</option>;
   });
 
+  const disabledButton = (state) => {
+    if (!state.Name || !state.CategoryId || !state.Specification) return true;
+    if (
+      state.Name === "" ||
+      state.CategoryId === "" ||
+      state.Specification == ""
+    )
+      return true;
+    return false;
+  };
+
+  const schema = yup.object().shape({
+    Name: yup
+      .string()
+      .max(100, "Maximum 100 characters")
+      .required()
+      .matches(
+        /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
+        "Allow only characters A-Z,a-z, 0-9, Space"
+      ),
+
+    Specification: yup.string().max(100, "Maximum 100 characters"),
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+
   return (
     <div>
-      <h5 className="right-title">Edit Assets</h5>
-      <form onSubmit={handleSubmit}>
+      <h5 className="right-title">Edit Asset</h5>
+      <form onSubmit={handleSubmit(handleOnSubmit)}>
         <div className="form-group row">
           <label htmlFor="nameAssets" className="col-sm-2 col-form-label">
             Name
           </label>
           <div className="col-sm-10" className="resize">
             <input
+              {...register("Name")}
               type="text"
               className="form-control"
               id="Name"
-              name="name"
-              value={state.name}
+              name="Name"
+              value={state.Name}
               onChange={handleInputChange}
             />
+            {errors.Name && (
+              <p className="text-danger">{errors.Name.message}</p>
+            )}
           </div>
         </div>
         <br></br>
@@ -101,11 +155,12 @@ const EditAssets = (props) => {
           </label>
           <div className="col-sm-10" className="resize">
             <select
-              className="custom-select custom-select-lg mb-3"
-              className="form-control"
-              value={state.categoryId}
+              className="form-control custom-select custom-select-lg mb-3"
+              // className="form-control"
+              value={state.CategoryId}
               name="categoryId"
               onChange={handleChange}
+              //disabled
             >
               <option value={0} defaultChecked>
                 Select Category
@@ -124,13 +179,17 @@ const EditAssets = (props) => {
           </label>
           <div className="col-sm-10" className="resize">
             <input
+              {...register("Specification")}
               type="text"
               className="form-control height"
-              id="Specification"
-              name="specification"
-              value={state.specification}
+              id="specification"
+              name="Specification"
+              value={state.Specification}
               onChange={handleInputChange}
             />
+            {errors.Specification && (
+              <p className="text-danger">{errors.Specification.message}</p>
+            )}
           </div>
         </div>
         <br></br>
@@ -144,8 +203,15 @@ const EditAssets = (props) => {
               className="form-control "
               id="InstalledDate"
               name="installedDate"
-              value={state.installedDate}
-              onChange={handleInputChange}
+              onChange={(e) => {
+                const value = e.target?.value;
+
+                setState({
+                  ...state,
+                  InstalledDate: value,
+                });
+              }}
+              value={moment(state.InstalledDate).format("YYYY-MM-DD")}
             />
           </div>
         </div>
@@ -162,7 +228,8 @@ const EditAssets = (props) => {
                   id="gridRadios1"
                   value="Available"
                   defaultValue="option1"
-                  defaultChecked={state.state == "Available"}
+                  defaultChecked={true}
+                  value={state.state === "Available"}
                   onChange={(e) => {
                     handleRadioChange(e);
                   }}
@@ -179,7 +246,7 @@ const EditAssets = (props) => {
                   id="gridRadios2"
                   value="NotAvailable"
                   defaultValue="option2"
-                  defaultChecked={state.state === "NotAvailable"}
+                  checked={state.state === "NotAvailable"}
                   onChange={(e) => {
                     handleRadioChange(e);
                   }}
@@ -196,7 +263,7 @@ const EditAssets = (props) => {
                   id="gridRadios3"
                   value="WaitingRecycle"
                   defaultValue="option3"
-                  defaultChecked={state.state === "WaitingRecycle"}
+                  checked={state.state === "WaitingRecycle"}
                   onChange={(e) => {
                     handleRadioChange(e);
                   }}
@@ -226,11 +293,15 @@ const EditAssets = (props) => {
           </div>
         </fieldset>
         <br></br>
-        <button type="submit" class="btn btn-outline-danger margin color">
+        <button
+          type="submit"
+          class="btn btn-outline-danger margin color"
+          disabled={disabledButton(state)}
+        >
           Save
         </button>
         <button type="button" class="btn btn-outline-danger color1">
-          Cancel
+          <Link to="/manage-asset">Cancel</Link>
         </button>
       </form>
     </div>
@@ -244,14 +315,13 @@ function FetchAsset(id) {
   useEffect(() => {
     async function fetch() {
       let enpoint = `Asset/${id}`;
-      console.log(enpoint);
       const res = await apiCaller(enpoint, "GET", null);
       dispatch({ type: action.GET_ASSET_BY_ID, payload: res.data });
     }
     fetch();
   }, []);
 
-  const result = useSelector((state) => state.EditAsset);
+  const result = useSelector((state) => state.AssetReducer.assetById);
   return result;
 }
 

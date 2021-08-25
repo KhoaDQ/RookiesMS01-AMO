@@ -18,7 +18,7 @@ namespace Rookie.AMO.Contracts.Dtos.Report
 
         public int NotAvailable { get; set; }
 
-        public int WaitingForRecycling { get; set; }
+        public int WaitingRecycle { get; set; }
 
         public int Recycled { get; set; }
     }

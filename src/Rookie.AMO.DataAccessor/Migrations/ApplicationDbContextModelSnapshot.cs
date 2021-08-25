@@ -136,6 +136,29 @@ namespace Rookie.AMO.DataAccessor.Migrations
                     b.ToTable("Category");
                 });
 
+            modelBuilder.Entity("Rookie.AMO.DataAccessor.Entities.MappingRequest", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("AssignmentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("RequestId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AssignmentId")
+                        .IsUnique()
+                        .HasFilter("[AssignmentId] IS NOT NULL");
+
+                    b.HasIndex("RequestId");
+
+                    b.ToTable("MappingRequests");
+                });
+
             modelBuilder.Entity("Rookie.AMO.DataAccessor.Entities.Request", b =>
                 {
                     b.Property<Guid>("Id")
@@ -151,8 +174,16 @@ namespace Rookie.AMO.DataAccessor.Migrations
                     b.Property<Guid>("AssetID")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("AssignedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("AssignedDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("AssignedTo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Note")
                         .HasMaxLength(1000)
@@ -200,6 +231,21 @@ namespace Rookie.AMO.DataAccessor.Migrations
                     b.Navigation("Asset");
                 });
 
+            modelBuilder.Entity("Rookie.AMO.DataAccessor.Entities.MappingRequest", b =>
+                {
+                    b.HasOne("Rookie.AMO.DataAccessor.Entities.Assignment", "Assignment")
+                        .WithOne("MappingRequest")
+                        .HasForeignKey("Rookie.AMO.DataAccessor.Entities.MappingRequest", "AssignmentId");
+
+                    b.HasOne("Rookie.AMO.DataAccessor.Entities.Request", "Request")
+                        .WithMany()
+                        .HasForeignKey("RequestId");
+
+                    b.Navigation("Assignment");
+
+                    b.Navigation("Request");
+                });
+
             modelBuilder.Entity("Rookie.AMO.DataAccessor.Entities.Request", b =>
                 {
                     b.HasOne("Rookie.AMO.DataAccessor.Entities.Asset", "Asset")
@@ -209,6 +255,11 @@ namespace Rookie.AMO.DataAccessor.Migrations
                         .IsRequired();
 
                     b.Navigation("Asset");
+                });
+
+            modelBuilder.Entity("Rookie.AMO.DataAccessor.Entities.Assignment", b =>
+                {
+                    b.Navigation("MappingRequest");
                 });
 
             modelBuilder.Entity("Rookie.AMO.DataAccessor.Entities.Category", b =>

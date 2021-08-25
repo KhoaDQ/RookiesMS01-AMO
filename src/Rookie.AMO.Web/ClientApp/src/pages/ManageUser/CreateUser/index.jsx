@@ -1,21 +1,21 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { CreateUserAction } from "../../../actions/ManageUser/CreateUserAction";
-import { GetAllRolesAction } from "../../../actions/ManageUser/GetAllRolesAction";
-import * as yup from "yup";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { CreateUserAction } from '../../../actions/ManageUser/CreateUserAction';
+import { GetAllRolesAction } from '../../../actions/ManageUser/GetAllRolesAction';
+import * as yup from 'yup';
 import {
   JoinedDateIsNotLaterThanDOB,
   JoinedDateIsNotSaturdayOrSunday,
   TheCharacterIsInvalid,
   UserUnder18,
-} from "../../../constants/UserConstants";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import PopupInfor from "../../../components/Popup/PopupInfor";
+} from '../../../constants/UserConstants';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import PopupInfor from '../../../components/Popup/PopupInfor';
 
 const CreateUser = () => {
   const dispatch = useDispatch();
@@ -37,13 +37,13 @@ const CreateUser = () => {
   const roleOptions = [choseAType, ...options];
 
   const initUser = {
-    firstName: "",
-    lastName: "",
-    dateOfBirth: "",
-    joinedDate: "",
-    gender: "Female",
+    firstName: '',
+    lastName: '',
+    dateOfBirth: '',
+    joinedDate: '',
+    gender: 'Female',
     type: 0,
-    location: "",
+    location: '',
   };
 
   const [newUser, setNewUser] = useState(initUser);
@@ -55,7 +55,7 @@ const CreateUser = () => {
     initUser.type === newUser.type;
 
   const onSubmit = (e) => {
-    setNewUser({ ...newUser, location: user ? user.profile.location : "" });
+    setNewUser({ ...newUser, location: user ? user.profile.location : '' });
     const error = () => setErrorOpen(true);
     const success = () => setModalOpen(true);
     dispatch(CreateUserAction(newUser, error, success));
@@ -71,7 +71,7 @@ const CreateUser = () => {
   }, []);
 
   useEffect(() => {
-    setNewUser({ ...newUser, location: user ? user.profile.location : "" });
+    setNewUser({ ...newUser, location: user ? user.profile.location : '' });
   }, [user]);
 
   const theDateOf18YearsAgo = new Date();
@@ -82,7 +82,7 @@ const CreateUser = () => {
     ? new Date(newUser.dateOfBirth)
     : new Date();
   theEarliestJoinedDate.setFullYear(theEarliestJoinedDate.getFullYear() + 18);
-
+  console.log(theEarliestJoinedDate);
   const schema = yup.object().shape({
     firstName: yup.string().matches(/^[A-Za-z]+$/, TheCharacterIsInvalid),
     lastName: yup.string().matches(/^[^\s][A-Za-z\s]+$/, TheCharacterIsInvalid),
@@ -93,7 +93,7 @@ const CreateUser = () => {
       .date()
       .min(theEarliestJoinedDate, JoinedDateIsNotLaterThanDOB)
       .test(
-        "NotWeekend",
+        'NotWeekend',
         JoinedDateIsNotSaturdayOrSunday,
         (value) => value.getDay() !== 6 && value.getDay() !== 0
       ),
@@ -105,7 +105,7 @@ const CreateUser = () => {
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
-    mode: "onChange",
+    mode: 'onChange',
   });
 
   return (
@@ -118,14 +118,14 @@ const CreateUser = () => {
           </label>
           <div className="col-sm-10 resize">
             <input
-              {...register("firstName")}
+              {...register('firstName')}
               type="text"
               className="form-control"
               id="firstName"
               name="firstName"
               value={newUser.firstName}
               onChange={handleInputChange}
-              maxlength="100"
+              maxLength="100"
             />
             {errors.firstName && (
               <p className="error-message">{errors.firstName.message}</p>
@@ -138,14 +138,14 @@ const CreateUser = () => {
           </label>
           <div className="col-sm-10 resize">
             <input
-              {...register("lastName")}
+              {...register('lastName')}
               type="text"
               className="form-control"
               id="lastName"
               name="lastName"
               value={newUser.lastName}
               onChange={handleInputChange}
-              maxlength="100"
+              maxLength="100"
             />
             {errors.lastName && (
               <p className="error-message">{errors.lastName.message}</p>
@@ -157,9 +157,9 @@ const CreateUser = () => {
             Date of Birth
           </label>
           <div className="col-sm-10 resize">
-            <div className={errors.dateOfBirth ? "red-boundary" : ""}>
+            <div className={errors.dateOfBirth ? 'red-boundary' : ''}>
               <input
-                {...register("dateOfBirth")}
+                {...register('dateOfBirth')}
                 type="date"
                 className="form-control"
                 id="dateOfBirth"
@@ -186,7 +186,7 @@ const CreateUser = () => {
                     name="gender"
                     id="female"
                     value="Female"
-                    checked={newUser.gender === "Female"}
+                    checked={newUser.gender === 'Female'}
                     onChange={handleInputChange}
                   />
                   <label className="form-check-label" htmlFor="female">
@@ -200,7 +200,7 @@ const CreateUser = () => {
                     name="gender"
                     id="male"
                     value="Male"
-                    checked={newUser.gender === "Male"}
+                    checked={newUser.gender === 'Male'}
                     onChange={handleInputChange}
                   />
                   <label className="form-check-label" htmlFor="male">
@@ -216,9 +216,9 @@ const CreateUser = () => {
             Joined Date
           </label>
           <div className="col-sm-10 resize">
-            <div className={errors.dateOfBirth ? "red-boundary" : ""}>
+            <div className={errors.dateOfBirth ? 'red-boundary' : ''}>
               <input
-                {...register("joinedDate")}
+                {...register('joinedDate')}
                 type="date"
                 className="form-control"
                 id="joinedDate"
@@ -239,7 +239,7 @@ const CreateUser = () => {
           </label>
           <div className="col-sm-10 resize">
             <select
-              {...register("type")}
+              {...register('type')}
               id="type"
               name="type"
               className="custom-select custom-select-lg mb-3 form-control"

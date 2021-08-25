@@ -1,33 +1,22 @@
 import React, { useState } from "react";
-import { useDispatch, useSelector, connect } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
-import { useHistory } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 import apiCaller from "../../../apis/callApi";
 import * as action from "../../../actions/ManagerAsset/ActionType";
 import PopupInfor from "../../../components/Popup/PopupInfor";
 
-import {
-  Button,
-  Row,
-  Form,
-  Col,
-  FormGroup,
-  Label,
-  Input,
-  FormText,
-} from "reactstrap";
 const CreateAssets = () => {
   const dispatch = useDispatch();
   const AssetReducer = useSelector((state) => state.AssetReducer);
   const CategoryReducer = useSelector((state) => state.CategoryReducer);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [errorOpen, setErrorOpen] = useState(false);
   const initAsset = {
     Name: "",
     CategoryId: 0,
@@ -60,7 +49,6 @@ const CreateAssets = () => {
   useEffect(() => {
     async function fetchCategory() {
       const res = await apiCaller("Category", "GET", null);
-      console.log(res);
       dispatch({
         type: "FETCH_CATEGORY",
         payload: res.data,
@@ -68,27 +56,20 @@ const CreateAssets = () => {
     }
     fetchCategory();
   }, []);
-  console.log(CategoryReducer);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setNewAsset({ ...newAsset, [name]: value });
-    console.log(value);
-    console.log(disableButton);
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewAsset({ ...newAsset, [name]: value });
-    console.log(value);
   };
 
   const handleRadioChange = (e) => {
     const { name, value } = e.target;
-
     setNewAsset({ ...newAsset, [name]: value });
-    console.log(value);
-    console.log(disableButton);
   };
 
   const {
@@ -121,7 +102,6 @@ const CreateAssets = () => {
   const listCategory = CategoryReducer.map((category, index) => {
     return <option value={category.id}>{category.name}</option>;
   });
-  console.log(listCategory);
   return (
     <div>
       <h5 className="right-title">Create New Assets</h5>
@@ -197,6 +177,7 @@ const CreateAssets = () => {
               id="InstalledDate"
               name="InstalledDate"
               value={newAsset.InstalledDate}
+              max="9999-12-19"
               onChange={handleInputChange}
             />
           </div>
@@ -253,7 +234,7 @@ const CreateAssets = () => {
           Save
         </button>
         <button type="button" class="btn btn-outline-danger color1">
-          <Link to="/manage-user">Cancel</Link>
+          <Link to="/manage-asset">Cancel</Link>
         </button>
       </form>
       <PopupInfor
@@ -262,6 +243,12 @@ const CreateAssets = () => {
         handleModelShow={(content) => setIsModalOpen(content)}
         isModalOpen={isModalOpen}
         pathReturn="/manage-asset"
+      ></PopupInfor>
+      <PopupInfor
+        title="Error"
+        content="Create asset fail"
+        handleModelShow={(content) => setErrorOpen(content)}
+        isModalOpen={errorOpen}
       ></PopupInfor>
     </div>
   );

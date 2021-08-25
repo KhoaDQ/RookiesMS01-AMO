@@ -1,12 +1,12 @@
-import queryString from 'query-string';
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import * as action from '../../actions/ManageUser/ActionType';
-import apiCaller from '../../apis/callApi';
-import UserItemPick from '../../components/User/UserItemPick';
-import { AiOutlineSearch } from '@react-icons/all-files/ai/AiOutlineSearch';
-import '../User/UserList/UserList.css';
-import UserPagination from '../Pagination/UserPagination';
+import queryString from "query-string";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import * as action from "../../actions/ManageUser/ActionType";
+import apiCaller from "../../apis/callApi";
+import UserItemPick from "../../components/User/UserItemPick";
+import { AiOutlineSearch } from "@react-icons/all-files/ai/AiOutlineSearch";
+import "../User/UserList/UserList.css";
+import UserPagination from "../Pagination/UserPagination";
 import {
   Table,
   Col,
@@ -15,19 +15,24 @@ import {
   InputGroupAddon,
   Input,
   InputGroup,
-} from 'reactstrap';
-import { Modal, Button } from 'react-bootstrap';
+} from "reactstrap";
+import { Modal, Button } from "react-bootstrap";
 
 function ModalPickUser(props) {
   const [pageNumber, setPageNumber] = useState(1);
+  const [currentUser, setCurrentUser] = useState(null);
 
   const [paging, setPaging] = useState({
-    name: '',
-    type: '',
+    name: "",
+    type: "",
     page: 1,
     limit: 3,
+    propertyName: 'StaffCode',
+    desc: false,
+    keySearch:""
   });
 
+  const [searchText,setSearchText] = useState("")
   const userPage = useSelector((state) => state.UserReducer);
   const dispatch = useDispatch();
 
@@ -36,17 +41,46 @@ function ModalPickUser(props) {
       const paramsString = queryString.stringify(paging);
       console.log(paramsString);
       let endpoint = `User/find?${paramsString}`;
-      const res = await apiCaller(endpoint, 'GET', null);
-      dispatch({ type: action.FETCH_USERS, payload: res.data });
+      const res = await apiCaller(endpoint, "GET", null);
+
+      if (res.status === 200) {
+        dispatch({ type: action.FETCH_USERS, payload: res.data });
+
+        setCurrentUser(res.data.items?.[0]);
+      }
     }
     fetch();
   }, [paging]);
+
+  const { setState,setNameUser } = props;
+  useEffect(() => {
+    if (currentUser) {
+      
+      if (setState) {
+        setState((state) => {
+          return {
+            ...state,
+            assignTo: currentUser?.id,
+          };
+        });
+        setNameUser(currentUser?.userName)
+      }
+    }
+  }, [currentUser]);
 
   const showUsers = () => {
     let result = null;
     if (userPage.items) {
       result = userPage.items.map((user, index) => {
-        return <UserItemPick key={index} user={user} index={index} />;
+        return (
+          <UserItemPick
+            key={index}
+            user={user}
+            index={index}
+            currentUser={currentUser}
+            setUser={setCurrentUser}
+          />
+        );
       });
     }
     return result;
@@ -69,12 +103,13 @@ function ModalPickUser(props) {
             <Col md={6}>
               <InputGroup>
                 <Input
+                  value={searchText}
                   placeholder="Search Name"
                   name="name"
-                  //onChange={handleChange}
+                  onChange={(e) => {setSearchText(e.target.value);}}
                 />
                 <InputGroupAddon addonType="append">
-                  <InputGroupText className="right__icon">
+                  <InputGroupText className="right__icon" /*onClick = {}*/ >
                     <AiOutlineSearch />
                   </InputGroupText>
                 </InputGroupAddon>
@@ -93,7 +128,7 @@ function ModalPickUser(props) {
             <tbody>
               {userPage.totalItems > 0 ? (
                 showUsers()
-              ) : paging.name != '' ? (
+              ) : paging.name != "" ? (
                 <span>No users are found!</span>
               ) : (
                 <span>...Loading</span>
@@ -112,7 +147,7 @@ function ModalPickUser(props) {
           ) : null}
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="danger" type="submit">
+          <Button variant="danger" type="submit" onClick={props.onHide}>
             Save
           </Button>
           <Button variant="light" onClick={props.onHide}>

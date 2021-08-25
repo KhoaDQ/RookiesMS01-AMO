@@ -5,7 +5,6 @@ import {
     InputGroupText,
     InputGroupAddon,
     InputGroup,
-    Col,
     Row
   } from "reactstrap";
 import "./style.css";
@@ -15,18 +14,16 @@ export default function Filter(props) {
 
     var selectAllOption = [{name: "All",value: ""}]
 
-    let [optionSelect,setOptionSelect] = useState(defaultOption!=undefined?defaultOption:selectAllOption)
-    
-    
+    let [optionSelect,setOptionSelect] = useState(defaultOption !== undefined?defaultOption:selectAllOption)
 
     const handleSelect=(e)=>{
-      if(optionSelect!=undefined){
-        var newSelect = e.filter(o1 => !optionSelect.some(o2 => o2 == o1))
+      if(optionSelect !== undefined){
+        var newSelect = e.filter(o1 => !optionSelect.some(o2 => o2===o1))
         if(JSON.stringify(newSelect[0]) === JSON.stringify(selectAllOption[0])){
           setOptionSelect(newSelect) 
         }
         else{
-          if(e.some(o => o.name == 'All'))
+          if(e.some(o => o.name === 'All'))
             e.shift()
           setOptionSelect(e) 
         }
@@ -36,17 +33,17 @@ export default function Filter(props) {
 
     const handleUnSelect=(e)=>{
         console.log(e)
-        if(e.length == 0)
+        if(e.length===0)
           setOptionSelect(selectAllOption)
         else
           setOptionSelect(e)
     }
     return(
-        <InputGroup className="filter_container">
+        <InputGroup className="filter_container" >
         <Row>
             <Multiselect
             options={
-              ([{name: "All",value: ""}]).concat(options)
+              (selectAllOption).concat(options)
             }
             displayValue={displayValue}
             showCheckbox={true}
@@ -55,6 +52,7 @@ export default function Filter(props) {
             onSelect={handleSelect}
             onRemove={handleUnSelect}
             selectedValues={optionSelect}
+            avoidHighlightFirstOption={true}
             />      
             <InputGroupAddon addonType="append" onClick = {(e)=>handleFilter(optionSelect,e)}>
               <InputGroupText className="right__icon filter_button">
