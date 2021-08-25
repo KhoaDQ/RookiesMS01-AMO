@@ -65,7 +65,7 @@ function ManageAssignment() {
       if (assignments.length > 0) {
         let stateAssign = null
         result = assignments.map((assignment, index) => {
-          stateAssign = stateList.find(s=>s.value === assignment.state )
+          stateAssign = stateList.find(s=>s.value === assignment.state)
           if(stateAssign!=undefined)
             assignment.state = stateAssign.name
           return (
