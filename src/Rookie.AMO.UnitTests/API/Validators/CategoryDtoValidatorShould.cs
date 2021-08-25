@@ -31,8 +31,8 @@ namespace Rookie.AMO.UnitTests.API.Validators
         [MemberData(nameof(CategoryTestData.ValidTexts), MemberType = typeof(CategoryTestData))]
         public void NotHaveErrorWhenPrefixIsvalid(string desc) =>
            _testRunner
-               .For(m => m.Code = desc)
-               .ShouldNotHaveErrorsFor(m => m.Code);
+               .For(m => m.Desc = desc)
+               .ShouldNotHaveErrorsFor(m => m.Desc);
 
         [Theory]
         [MemberData(nameof(CategoryTestData.InvalidNames), MemberType = typeof(CategoryTestData))]
@@ -42,8 +42,8 @@ namespace Rookie.AMO.UnitTests.API.Validators
                 .ShouldHaveErrorsFor(m => m.Name, errorMessage);
 
         [Theory]
-        [MemberData(nameof(CategoryTestData.InvalidCode), MemberType = typeof(CategoryTestData))]
-        public void HaveErrorWhenCodeIsInvalid(string desc, string errorMessage)
+        [MemberData(nameof(CategoryTestData.InvalidDescs), MemberType = typeof(CategoryTestData))]
+        public void HaveErrorWhenDescIsInvalid(string desc, string errorMessage)
         {
             var validator = new CategoryDtoValidator();
 
@@ -52,7 +52,7 @@ namespace Rookie.AMO.UnitTests.API.Validators
             {
                 Id = System.Guid.NewGuid(),
                 Name = "test",
-                Code = desc
+                Desc = desc
             });
 
             result.Errors.Count.Should().Be(1);

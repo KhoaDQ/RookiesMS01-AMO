@@ -38,8 +38,8 @@ namespace Rookie.AMO.Web.Controllers
         public async Task<ActionResult> UpdateAsync(Guid id, [FromBody] AssetUpdateRequest request)
         {
             Ensure.Any.IsNotNull(request, nameof(request));
-            var asset = await _assetService.UpdateAsync(id,request);
-            return Ok(asset);
+            await _assetService.UpdateAsync(id,request);
+            return NoContent();
         }
 
         [HttpDelete("{id}")]

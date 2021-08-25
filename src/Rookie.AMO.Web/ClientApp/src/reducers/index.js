@@ -7,6 +7,7 @@ import UserReducer from './users/UserReducer';
 import AssetReducer from './assets/AssetReducer';
 import CategoryReducer from './CategoryReducer';
 import EditUserReducer from './users/EditUserReducer';
+import EditAsset from './assets/EditAsset';
 import RequestReducer from './requests/RequestReducer';
 import ReportReducer from "./reports/ReportReducer";
 import AssignmentReducer from "./assignments/AssignmentReducer";
@@ -16,6 +17,7 @@ export default combineReducers({
   oidc: oidcReducer,
   UserReducer,
   AssetReducer,
+  EditAsset,
   CategoryReducer,
   EditUserReducer,
   ReportReducer,

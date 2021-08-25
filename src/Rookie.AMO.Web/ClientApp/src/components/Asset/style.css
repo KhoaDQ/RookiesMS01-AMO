@@ -15,17 +15,14 @@ th:hover{
 }
 .rowNotify{
     border-bottom: none;
-    white-space: nowrap;
 }
 .table_border_spacing tr:hover td:not(:last-child){
     background-color: #dee2e6;
 }
 .table_history_assigned{
-    table-layout: fixed;
-    border-spacing: 10px 0px;
-    border-collapse: separate;
+    font-size: 13px;
     margin-top: 0;
-    width:400px;
+    width: max-content;
 }
 .table_history_assigned th{
     padding: 0;
@@ -34,19 +31,11 @@ th:hover{
     margin-left: -10px;
     margin-right: 10px;
 }
-.table_history_container td{
-    padding: 0;
+.table_border_spacing .newRow td:not(:last-child){
+    background-color: rgba(108, 117, 125, 1);
+    color: white;
 }
-.table_history_container tr th:last-child{
-    width: 80px;
-}
-.table_history_container tr th:first-child{
-    width: 80px;
-}
-.assetDisable{
-    opacity: 0.4;
-    cursor: default
-}
-.assetDisable:hover{
-    background-color: default;
+.table_border_spacing .newRow:hover td:not(:last-child){
+    background-color: #dee2e6;
+    color: black;
 }

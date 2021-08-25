@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
 using EnsureThat;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Rookie.AMO.Business.Extensions;
 using Rookie.AMO.Business.Interfaces;
 using Rookie.AMO.Contracts;
-using Rookie.AMO.Contracts.Constants;
 using Rookie.AMO.Contracts.Dtos;
 using Rookie.AMO.Contracts.Dtos.Asset;
 using Rookie.AMO.DataAccessor.Data;
@@ -14,7 +12,6 @@ using Rookie.AMO.DataAccessor.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -25,33 +22,29 @@ namespace Rookie.AMO.Business.Services
         private readonly IBaseRepository<Asset> _baseRepository;
         private readonly IMapper _mapper;
         private readonly ApplicationDbContext _context;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public AssetService(IBaseRepository<Asset> baseRepository, IMapper mapper, ApplicationDbContext context, IHttpContextAccessor httpContextAccessor)
+        public AssetService(IBaseRepository<Asset> baseRepository, IMapper mapper, ApplicationDbContext context)
         {
             _baseRepository = baseRepository;
             _mapper = mapper;
             _context = context;
-            _httpContextAccessor = httpContextAccessor;
         }
         
         public async Task<AssetDto> AddAsync(AssetRequest assetRequest)
         {
             Ensure.Any.IsNotNull(assetRequest, nameof(assetRequest));
             var asset = _mapper.Map<Asset>(assetRequest);
+            // asset.Id = Guid.NewGuid();
             // Generate Asset Code
-            asset.Code = AutoGenerateAssetCode(asset); 
-            asset.CreatorId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            asset.Code =AutoGenerateAssetCode(asset);
 
-            var location = _httpContextAccessor.HttpContext.User.FindFirst(UserClaims.Location).Value;
-            asset.Location = location.ToString();// location take in creator location
-
+            asset.Location = "HCM"; // location take in creator location
 
             var item = await _baseRepository.AddAsync(asset);
             return _mapper.Map<AssetDto>(item);
         }
         
-        public string AutoGenerateAssetCode(Asset asset)
+        private string AutoGenerateAssetCode(Asset asset)
         {
             var categoryId = asset.CategoryId;
 
@@ -62,6 +55,8 @@ namespace Rookie.AMO.Business.Services
             var listAssets =  _context.Assets.ToList();
 
             var result = listAssets.Where(x => x.CategoryId == categoryId);
+
+          
 
             if (result.Count() > 0 )
             {
@@ -127,7 +122,6 @@ namespace Rookie.AMO.Business.Services
 
             query = query.Where(x => string.IsNullOrEmpty(filter.KeySearch) || x.Name.Contains(filter.KeySearch) || x.Code.Contains(filter.KeySearch));
 
-            query = query.Where(x => string.IsNullOrEmpty(filter.Location) || x.Location.Equals(filter.Location));
 
             if (!string.IsNullOrEmpty(filter.State))
             {
@@ -165,6 +159,5 @@ namespace Rookie.AMO.Business.Services
             return result;
          }
 
-       
     }
 }

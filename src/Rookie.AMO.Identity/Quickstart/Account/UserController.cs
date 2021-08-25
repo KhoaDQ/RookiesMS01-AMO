@@ -15,7 +15,6 @@ namespace Rookie.AMO.Identity.Quickstart.Account
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Policy = "ADMIN_POLICY")]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -36,12 +35,13 @@ namespace Rookie.AMO.Identity.Quickstart.Account
         [HttpGet("find")]
         public async Task<PagedResponseModel<UserDto>> PagedQueryAsync
             (string name, string type, int page, int limit, string propertyName, bool desc)
-            => await _userService.PagedQueryAsync(name, type, page, limit, propertyName, desc);
+            => await _userService.PagedQueryAsync(name, type, page, limit,propertyName,desc);
 
         [HttpPost]
         public async Task<ActionResult<UserDto>> CreateUserAsync(UserRequest user)
         {
             var userDto = await _userService.CreateUserAsync(user);
+
             return Ok(userDto);
         }
 
@@ -53,10 +53,11 @@ namespace Rookie.AMO.Identity.Quickstart.Account
         }
 
         [HttpPut("{id}")]
-        public async Task<string> Update(Guid id, [FromBody] UserUpdateRequest request)
+        public async Task<IActionResult> Update(Guid id, [FromBody] UserUpdateRequest request)
         {
-            var result = await _userService.UpdateUserAsync(id, request);
-            return result;
+            await _userService.UpdateUserAsync(id, request);
+
+            return Ok("Update successfully");
         }
     }
 }

@@ -21,19 +21,7 @@ function AssetReducer(state = initialState, action) {
 
         case types.DELETE_ASSET:
             return state;
-
-        case types.UPDATE_ASSETS:
-            return {
-                ...state, 
-                assetChange: payload
-            };
-        
-        case types.GET_ASSET_BY_ID:
-            return{
-                ...state, 
-                assetById: payload
-            };
-
+            
         default:
             return state;
     }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Rookie.AMO.Identity.Security.Requirement
 {
-    public class AdminRequirement : IAuthorizationRequirement
+    public class IdentityScopeRequirement : IAuthorizationRequirement
     {
     }
 }

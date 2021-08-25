@@ -6,10 +6,7 @@ import apiCaller from '../../apis/callApi';
 import AssignmentItem from "../../components/Assignment/AssignmentItem/";
 import AssignmentList from "../../components/Assignment/AssignmentList";
 import AssignmentPagination from "../../components/Pagination/AssignmentPagination";
-import PopupDeleteAssignment from "../../components/Popup/PopupDeleteAssignment";
-import PopupInfor from '../../components/Popup/PopupInfor';
 import { format } from 'date-fns';
-import CreateRequest from "../Request/CreateRequest.jsx";
 
 const stateList = [
   { name: "Accepted", value: "Accepted" },
@@ -32,16 +29,10 @@ function ManageAssignment() {
     totalItems: 18,
     totalPages: 1,
   })
-
-  const [isReload,setIsReload] = useState(0)
   const assignments = useSelector(state => state.AssignmentReducer);
   useEffect(() => {
     fetchAssignment()
-  }, [filters,isReload])
-
-  // return request
-  const { user } = useSelector((state) => state.oidc);
-  const {handleRequestOpen,showPopupRequest} = CreateRequest(user.profile.sub,user.profile.userName);
+  }, [filters])
 
   async function fetchAssignment() {
     const paramsString = queryString.stringify(filters);
@@ -63,18 +54,12 @@ function ManageAssignment() {
     let result = null
     if (assignments != null) {
       if (assignments.length > 0) {
-        let stateAssign = null
         result = assignments.map((assignment, index) => {
-          stateAssign = stateList.find(s=>s.value === assignment.state)
-          if(stateAssign!=undefined)
-            assignment.state = stateAssign.name
           return (
             <AssignmentItem
               key={index}
               assignment={assignment}
               index={index}
-              handleDeleteOpen={handleDeleteOpen}
-              handleRequestOpen = {handleRequestOpen}
             />
           )
         })
@@ -83,48 +68,7 @@ function ManageAssignment() {
     return result
   }
 
-
-
-  const handleModelShowFunction = (content) => {
-    setIsModalOpen(content);
-  };
-
-  // Popup delete assignment
-  const [idAssignmentDelete, setIdAssignmentDelete] = useState("");
-  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
-  const [isDelete, setIsDelete] = useState(0);
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  // Delete assignment
-  const triggerFetchAssignment = () => setIsReload(t=>!t);
-  DeleteAssignment(idAssignmentDelete, isDelete, setIsDelete, triggerFetchAssignment);
-
-  //Popup delete assignment
-  const handleDeleteOpen = (id, e) => {
-    setIdAssignmentDelete(id);
-    handleDeleteShow(true);
-  };
-
-  const handleDeleteShow = (isDeleteOpen) => {
-    setIsDeleteOpen(isDeleteOpen);
-  };
-
-  const handleDelete = (e) => {
-    setIsDelete(1);
-    handleDeleteShow(false);
-    setIsModalOpen(true);
-  };
-
-  function deletePopup() {
-      return (
-        <PopupDeleteAssignment
-          isModalOpen={isDeleteOpen}
-          handleDelete={handleDelete}
-          handleModelShow={handleDeleteShow}
-        ></PopupDeleteAssignment>
-      );
-  }
+  console.log(filters);
 
   return (
     <div className="Assignment">
@@ -142,33 +86,8 @@ function ManageAssignment() {
         setFilters={setFilters}
         paging={paging}
       />
-        {deletePopup(handleDelete, handleDeleteShow)}
-        <PopupInfor
-        title="Information"
-        content="Delete assignment successfully"
-        handleModelShow={handleModelShowFunction}
-        isModalOpen={isModalOpen}
-        pathReturn="/manage-assignment"
-      ></PopupInfor>
-      {showPopupRequest()}
     </div>
   );
-}
-function DeleteAssignment(id, isDelete, setIsDelete,triggerFetchAssignment) {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    async function deleteAssignment(id) {
-      const res = await apiCaller("Assignment/" + id, "Delete", null);
-      dispatch({ type: action.DELETE_ASSIGNMENT, payload: id });
-    }
-    if (isDelete && id != "") {
-      deleteAssignment(id).then(()=>{
-        triggerFetchAssignment();
-        setIsDelete(0);
-      });
-    }
-  }, [isDelete]);
 }
 
 export default ManageAssignment;

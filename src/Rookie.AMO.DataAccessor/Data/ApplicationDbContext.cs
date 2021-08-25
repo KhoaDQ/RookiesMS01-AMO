@@ -9,9 +9,6 @@ namespace Rookie.AMO.DataAccessor.Data
         public DbSet<Asset> Assets { get; set; }
         public DbSet<Assignment> Assignments { get; set; }
         public DbSet<Request> Requests { get; set; }
-
-        public DbSet<MappingRequest> MappingRequests { get; set; }
-
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
@@ -40,11 +37,6 @@ namespace Rookie.AMO.DataAccessor.Data
             builder.Entity<Request>(entity =>
             {
                 entity.ToTable(name: "Request");
-            });
-
-            builder.Entity<MappingRequest>(entity =>
-            {
-                entity.ToTable(name: "MappingRequests");
             });
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
