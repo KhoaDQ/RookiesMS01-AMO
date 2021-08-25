@@ -1,40 +1,42 @@
-import React, { useState, useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import apiCaller from "../../../apis/callApi";
-import * as action from "../../../actions/ManagerAsset/ActionType";
-import { Link, useHistory } from "react-router-dom";
+import React, { useState, useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import apiCaller from '../../../apis/callApi';
+import * as action from '../../../actions/ManagerAsset/ActionType';
+import * as ac from '../../../actions//IndexCom/ActionType';
+import { Link, useHistory } from 'react-router-dom';
 
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm } from "react-hook-form";
-import moment from "moment";
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm } from 'react-hook-form';
+import moment from 'moment';
 
 const EditAssets = (props) => {
   const history = useHistory();
   const dispatch = useDispatch();
+  dispatch({ type: ac.CHANGE_INDEX, payload: '/edit-assets' });
   const EditAsset = useSelector((state) => state.EditAsset);
   const CategoryReducer = useSelector((state) => state.CategoryReducer);
   const [state, setState] = useState({
-    Name: "",
-    CategoryId: "",
-    Specification: "",
+    Name: '',
+    CategoryId: '',
+    Specification: '',
     InstalledDate: moment().toDate(),
-    State: "NotAvailable",
+    State: 'NotAvailable',
   });
 
   const stateList = [
-    { name: "Assigned", value: "Assigned" },
-    { name: "Available", value: "Available" },
-    { name: "Not available", value: "NotAvailable" },
-    { name: "Waiting for recycling", value: "WaitingRecycle" },
-    { name: "Recycled", value: "Recycled" },
+    { name: 'Assigned', value: 'Assigned' },
+    { name: 'Available', value: 'Available' },
+    { name: 'Not available', value: 'NotAvailable' },
+    { name: 'Waiting for recycling', value: 'WaitingRecycle' },
+    { name: 'Recycled', value: 'Recycled' },
   ];
 
   const initAsset = FetchAsset(props.match.params.id);
   useEffect(() => {
     if (initAsset) {
       setState({
-        Name: initAsset.name || "",
+        Name: initAsset.name || '',
         CategoryId: initAsset.categoryId,
         Specification: initAsset.specification,
         InstalledDate: initAsset.installedDate,
@@ -45,10 +47,10 @@ const EditAssets = (props) => {
 
   useEffect(() => {
     async function fetchCategory() {
-      const res = await apiCaller("Category", "GET", null);
+      const res = await apiCaller('Category', 'GET', null);
 
       dispatch({
-        type: "FETCH_CATEGORY",
+        type: 'FETCH_CATEGORY',
 
         payload: res.data,
       });
@@ -73,13 +75,13 @@ const EditAssets = (props) => {
     async function EditAsset() {
       const res = await apiCaller(
         `Asset/${props.match.params.id}`,
-        "PUT",
+        'PUT',
         state
       );
       if (res.status === 200) {
-      dispatch({ type: action.UPDATE_ASSETS, payload: res.data});
+        dispatch({ type: action.UPDATE_ASSETS, payload: res.data });
       }
-      history.push("/manage-asset");
+      history.push('/manage-asset');
     }
 
     try {
@@ -96,9 +98,9 @@ const EditAssets = (props) => {
   const disabledButton = (state) => {
     if (!state.Name || !state.CategoryId || !state.Specification) return true;
     if (
-      state.Name === "" ||
-      state.CategoryId === "" ||
-      state.Specification == ""
+      state.Name === '' ||
+      state.CategoryId === '' ||
+      state.Specification == ''
     )
       return true;
     return false;
@@ -107,14 +109,14 @@ const EditAssets = (props) => {
   const schema = yup.object().shape({
     Name: yup
       .string()
-      .max(100, "Maximum 100 characters")
+      .max(100, 'Maximum 100 characters')
       .required()
       .matches(
         /^([A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff\s]*)$/gi,
-        "Allow only characters A-Z,a-z, 0-9, Space"
+        'Allow only characters A-Z,a-z, 0-9, Space'
       ),
 
-    Specification: yup.string().max(100, "Maximum 100 characters"),
+    Specification: yup.string().max(100, 'Maximum 100 characters'),
   });
 
   const {
@@ -135,7 +137,7 @@ const EditAssets = (props) => {
           </label>
           <div className="col-sm-10" className="resize">
             <input
-              {...register("Name")}
+              {...register('Name')}
               type="text"
               className="form-control"
               id="Name"
@@ -179,7 +181,7 @@ const EditAssets = (props) => {
           </label>
           <div className="col-sm-10" className="resize">
             <input
-              {...register("Specification")}
+              {...register('Specification')}
               type="text"
               className="form-control height"
               id="specification"
@@ -211,7 +213,7 @@ const EditAssets = (props) => {
                   InstalledDate: value,
                 });
               }}
-              value={moment(state.InstalledDate).format("YYYY-MM-DD")}
+              value={moment(state.InstalledDate).format('YYYY-MM-DD')}
             />
           </div>
         </div>
@@ -229,7 +231,7 @@ const EditAssets = (props) => {
                   value="Available"
                   defaultValue="option1"
                   defaultChecked={true}
-                  value={state.state === "Available"}
+                  value={state.state === 'Available'}
                   onChange={(e) => {
                     handleRadioChange(e);
                   }}
@@ -246,7 +248,7 @@ const EditAssets = (props) => {
                   id="gridRadios2"
                   value="NotAvailable"
                   defaultValue="option2"
-                  checked={state.state === "NotAvailable"}
+                  checked={state.state === 'NotAvailable'}
                   onChange={(e) => {
                     handleRadioChange(e);
                   }}
@@ -263,7 +265,7 @@ const EditAssets = (props) => {
                   id="gridRadios3"
                   value="WaitingRecycle"
                   defaultValue="option3"
-                  checked={state.state === "WaitingRecycle"}
+                  checked={state.state === 'WaitingRecycle'}
                   onChange={(e) => {
                     handleRadioChange(e);
                   }}
@@ -280,7 +282,7 @@ const EditAssets = (props) => {
                   id="gridRadios4"
                   value="Recycled"
                   defaultValue="option4"
-                  defaultChecked={state.state === "Recycled"}
+                  defaultChecked={state.state === 'Recycled'}
                   onChange={(e) => {
                     handleRadioChange(e);
                   }}
@@ -315,7 +317,7 @@ function FetchAsset(id) {
   useEffect(() => {
     async function fetch() {
       let enpoint = `Asset/${id}`;
-      const res = await apiCaller(enpoint, "GET", null);
+      const res = await apiCaller(enpoint, 'GET', null);
       dispatch({ type: action.GET_ASSET_BY_ID, payload: res.data });
     }
     fetch();

@@ -1,28 +1,30 @@
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { Link } from "react-router-dom";
-import { useEffect } from "react";
-import { useForm } from "react-hook-form";
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 
-import apiCaller from "../../../apis/callApi";
-import * as action from "../../../actions/ManagerAsset/ActionType";
-import PopupInfor from "../../../components/Popup/PopupInfor";
+import apiCaller from '../../../apis/callApi';
+import * as action from '../../../actions/ManagerAsset/ActionType';
+import * as ac from '../../../actions//IndexCom/ActionType';
+import PopupInfor from '../../../components/Popup/PopupInfor';
 
 const CreateAssets = () => {
   const dispatch = useDispatch();
+  dispatch({ type: ac.CHANGE_INDEX, payload: '/createassets' });
   const AssetReducer = useSelector((state) => state.AssetReducer);
   const CategoryReducer = useSelector((state) => state.CategoryReducer);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [errorOpen, setErrorOpen] = useState(false);
   const initAsset = {
-    Name: "",
+    Name: '',
     CategoryId: 0,
-    Specification: "",
-    InstalledDate: "",
-    State: "",
+    Specification: '',
+    InstalledDate: '',
+    State: '',
   };
   const [newAsset, setNewAsset] = useState(initAsset);
 
@@ -37,20 +39,20 @@ const CreateAssets = () => {
     Name: yup
       .string()
       .required()
-      .max(100, "Maximum 100 characters")
+      .max(100, 'Maximum 100 characters')
       .matches(
         /^([A-Z0-9._%+-]+[A-Z0-9._%+-\s]*)$/gi,
-        "Allow only characters A-Z,a-z, 0-9, Space"
+        'Allow only characters A-Z,a-z, 0-9, Space'
       ),
 
-    Specification: yup.string().max(100, "Maximum 100 characters"),
+    Specification: yup.string().max(100, 'Maximum 100 characters'),
   });
 
   useEffect(() => {
     async function fetchCategory() {
-      const res = await apiCaller("Category", "GET", null);
+      const res = await apiCaller('Category', 'GET', null);
       dispatch({
-        type: "FETCH_CATEGORY",
+        type: 'FETCH_CATEGORY',
         payload: res.data,
       });
     }
@@ -88,7 +90,7 @@ const CreateAssets = () => {
     // e.preventDefault();
 
     async function CreateAsset() {
-      const res = await apiCaller("Asset", "POST", newAsset);
+      const res = await apiCaller('Asset', 'POST', newAsset);
       dispatch({ type: action.CREATE_ASSET, payload: res.data });
     }
 
@@ -112,7 +114,7 @@ const CreateAssets = () => {
           </label>
           <div className="col-sm-10" className="resize">
             <input
-              {...register("Name")}
+              {...register('Name')}
               type="text"
               className="form-control"
               id="Name"
@@ -154,7 +156,7 @@ const CreateAssets = () => {
           </label>
           <div className="col-sm-10" className="resize">
             <input
-              {...register("Specification")}
+              {...register('Specification')}
               type="text"
               className="form-control height"
               id="Specification"
@@ -195,7 +197,7 @@ const CreateAssets = () => {
                   id="gridRadios1"
                   value="Available"
                   defaultValue="option1"
-                  defaultChecked={newAsset.State === "Available"}
+                  defaultChecked={newAsset.State === 'Available'}
                   onChange={(e) => {
                     handleRadioChange(e);
                   }}
@@ -212,7 +214,7 @@ const CreateAssets = () => {
                   id="gridRadios2"
                   value="NotAvailable"
                   defaultValue="option2"
-                  defaultChecked={newAsset.State === "NotAvailable"}
+                  defaultChecked={newAsset.State === 'NotAvailable'}
                   onChange={(e) => {
                     handleRadioChange(e);
                   }}
