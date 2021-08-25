@@ -2,6 +2,8 @@ import queryString from 'query-string';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as action from '../../actions/ManageUser/ActionType';
+import * as ac from '../../actions//IndexCom/ActionType';
+
 import apiCaller from '../../apis/callApi';
 import UserItem from '../../components/User/UserItem';
 import UserList from '../../components/User/UserList';
@@ -11,6 +13,8 @@ const stateList = [
   { name: 'Staff', value: 'Staff' },
 ];
 function ManageUser() {
+  const dispatch = useDispatch();
+  dispatch({ type: ac.CHANGE_INDEX, payload: '' });
   const [pageNumber, setPageNumber] = useState(1);
   const [paging, setPaging] = useState({
     name: '',
@@ -25,12 +29,9 @@ function ManageUser() {
   const { createdUser } = useSelector((state) => state.createUser);
   const editedUser = useSelector((state) => state.EditUserReducer);
 
-  const dispatch = useDispatch();
-
   useEffect(() => {
     async function fetch() {
       const paramsString = queryString.stringify(paging);
-      console.log(paramsString);
       let endpoint = `User/find?${paramsString}`;
       const res = await apiCaller(endpoint, 'GET', null);
       dispatch({ type: action.FETCH_USERS, payload: res.data });

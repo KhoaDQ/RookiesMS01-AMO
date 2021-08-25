@@ -12,12 +12,14 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import apiCaller from '../../../apis/callApi';
 import * as action from '../../../actions/ManageUser/ActionType';
+import * as ac from '../../../actions//IndexCom/ActionType';
 import { GetAllRolesAction } from '../../../actions/ManageUser/GetAllRolesAction';
 import PopupInfor from '../../../components/Popup/PopupInfor';
 import '../../../assets/css/Base.css';
 
 const EditUser = (props) => {
   const dispatch = useDispatch();
+  dispatch({ type: ac.CHANGE_INDEX, payload: '/edit-user' });
   const userId = props.match.params.id;
   const userEdit = useSelector((state) => state.EditUserReducer);
   const [currentUser, setCurrentUser] = useState('');
@@ -91,7 +93,6 @@ const EditUser = (props) => {
     : new Date();
   theEarliestJoinedDate.setFullYear(theEarliestJoinedDate.getFullYear() + 18);
   theEarliestJoinedDate.setDate(theEarliestJoinedDate.getDate() + 1);
-  console.log(theEarliestJoinedDate);
   const schema = yup.object().shape({
     dateOfBirth: yup.date().max(theDateOf18YearsAgo, UserUnder18),
     joinedDate: yup

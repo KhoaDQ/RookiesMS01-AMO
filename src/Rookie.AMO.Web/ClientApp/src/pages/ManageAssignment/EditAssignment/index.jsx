@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 
-import { useDispatch, useSelector, connect } from "react-redux";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { useForm } from "react-hook-form";
-import moment from "moment";
+import { useDispatch, useSelector, connect } from 'react-redux';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import { useForm } from 'react-hook-form';
+import moment from 'moment';
 
-import apiCaller from "../../../apis/callApi";
-import * as action from "../../../actions/ManagerAssignment/ActionType";
+import apiCaller from '../../../apis/callApi';
+import * as action from '../../../actions/ManagerAssignment/ActionType';
 import {
   Button,
   Row,
@@ -19,11 +19,12 @@ import {
   FormText,
   InputGroup,
   InputGroupAddon,
-} from "reactstrap";
-import { useHistory } from "react-router";
-import { Link } from "react-router-dom";
-import ModalPickUser from "../../../components/Popup/ModalPickUser";
-import ModalPickAsset from "../../../components/Popup/ModalPickAsset";
+} from 'reactstrap';
+import { useHistory } from 'react-router';
+import { Link } from 'react-router-dom';
+import ModalPickUser from '../../../components/Popup/ModalPickUser';
+import ModalPickAsset from '../../../components/Popup/ModalPickAsset';
+import * as ac from '../../../actions//IndexCom/ActionType';
 
 const EditAssignment = (props) => {
   const [isModalShow, setIsModalShow] = useState(0);
@@ -31,21 +32,22 @@ const EditAssignment = (props) => {
 
   const history = useHistory();
   const [form, setForm] = useState({
-    id: "",
-    asset: "",
+    id: '',
+    asset: '',
     assignTo: null,
     assignBy: null,
     assignDate: moment().toDate(),
-    note: "",
-    state: "",
+    note: '',
+    state: '',
   });
 
   const disableButton =
-    form.asset !== "" && form.assignTo && form.assignDate && form.note !== "";
+    form.asset !== '' && form.assignTo && form.assignDate && form.note !== '';
 
   const schema = yup.object().shape({});
 
   const dispatch = useDispatch();
+  dispatch({ type: ac.CHANGE_INDEX, payload: '/edit-assignments' });
   const AssetReducer = useSelector((state) => state.AssetReducer);
   const UserReducer = useSelector((state) => state.UserReducer);
 
@@ -56,37 +58,37 @@ const EditAssignment = (props) => {
   useEffect(() => {
     if (initAssignment) {
       setForm({
-        id: initAssignment.id || "",
-        asset: initAssignment.assetID || "",
-        assignTo: initAssignment.userID || "",
+        id: initAssignment.id || '',
+        asset: initAssignment.assetID || '',
+        assignTo: initAssignment.userID || '',
         state: initAssignment.state,
         assignDate: moment(initAssignment.assignedDate).toDate(),
-        note: initAssignment.note || "",
+        note: initAssignment.note || '',
       });
     }
   }, [initAssignment]);
 
   useEffect(() => {
     async function fetchUser() {
-      const res = await apiCaller("User", "GET", null);
+      const res = await apiCaller('User', 'GET', null);
 
       if (res.data) {
         dispatch({
-          type: "FETCH_USER",
+          type: 'FETCH_USER',
           payload: res.data,
         });
         setUsers(res.data);
       } else {
-        return alert("You not permision to get data.");
+        return alert('You not permision to get data.');
       }
     }
 
     async function fetchAsset() {
-      const res = await apiCaller("Asset", "GET", null);
+      const res = await apiCaller('Asset', 'GET', null);
 
       if (res.status === 200) {
         dispatch({
-          type: "FETCH_ASSET",
+          type: 'FETCH_ASSET',
           payload: res.data,
         });
 
@@ -103,7 +105,7 @@ const EditAssignment = (props) => {
     users.length > 0 &&
     users.map((user, index) => {
       return (
-        <option value={user.id}>{user.firstName + " " + user.lastName}</option>
+        <option value={user.id}>{user.firstName + ' ' + user.lastName}</option>
       );
     });
 
@@ -126,7 +128,7 @@ const EditAssignment = (props) => {
     // e.preventDefault();
 
     async function EditAssignment() {
-      const res = await apiCaller("Assignment/" + form.id, "PUT", {
+      const res = await apiCaller('Assignment/' + form.id, 'PUT', {
         UserID: form.assignTo,
         AssetID: form.asset,
         AssignedDate: moment(form.assignDate).toDate(),
@@ -138,7 +140,7 @@ const EditAssignment = (props) => {
         dispatch({ type: action.CREATE_ASSIGNMENT, payload: res.data });
       }
 
-      history.push("/manage-assignment");
+      history.push('/manage-assignment');
     }
 
     try {
@@ -250,7 +252,7 @@ const EditAssignment = (props) => {
                   assignDate: value,
                 });
               }}
-              value={moment(form.assignDate).format("YYYY-MM-DD")}
+              value={moment(form.assignDate).format('YYYY-MM-DD')}
             />
           </div>
         </div>
@@ -297,7 +299,7 @@ function FetchAssignment(id) {
     async function fetch() {
       let endpoint = `Assignment/${id}`;
       //console.log(endpoint);
-      const res = await apiCaller(endpoint, "GET", null);
+      const res = await apiCaller(endpoint, 'GET', null);
 
       if (res.status === 200) {
         dispatch({ type: action.FETCH_ASSIGNMENTS, payload: res.data });
