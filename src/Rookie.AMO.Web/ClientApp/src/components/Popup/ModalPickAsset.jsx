@@ -1,12 +1,12 @@
-import queryString from "query-string";
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import * as action from "../../actions/ManageUser/ActionType";
-import apiCaller from "../../apis/callApi";
-import AssetItemPicker from "../Asset/AssetItemPicker/AssetItemPicker";
-import { AiOutlineSearch } from "@react-icons/all-files/ai/AiOutlineSearch";
-import "../User/UserList/UserList.css";
-import UserPagination from "../Pagination/UserPagination";
+import queryString from 'query-string';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import * as action from '../../actions/ManageUser/ActionType';
+import apiCaller from '../../apis/callApi';
+import AssetItemPicker from '../Asset/AssetItemPicker/AssetItemPicker';
+import { AiOutlineSearch } from '@react-icons/all-files/ai/AiOutlineSearch';
+import '../User/UserList/UserList.css';
+import UserPagination from '../Pagination/UserPagination';
 import {
   Table,
   Col,
@@ -16,16 +16,16 @@ import {
   Input,
   InputGroup,
   CustomInput,
-} from "reactstrap";
-import { Modal, Button } from "react-bootstrap";
+} from 'reactstrap';
+import { Modal, Button } from 'react-bootstrap';
 
 function ModalPickAsset(props) {
   const { assets } = props;
   const [pageNumber, setPageNumber] = useState(1);
 
   const [paging, setPaging] = useState({
-    name: "",
-    type: "",
+    name: '',
+    type: '',
     page: 1,
     limit: 3,
   });
@@ -77,7 +77,6 @@ function ModalPickAsset(props) {
     let result = null;
 
     if (assets) {
-      console.log(assets);
       result = assets.map((asset, index) => {
         return (
           <AssetItemPicker

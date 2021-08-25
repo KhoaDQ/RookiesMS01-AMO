@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { FaGreaterThan } from 'react-icons/fa';
 import {
   Container,
   Row,
@@ -19,6 +20,7 @@ import { BASE_URL_AZURE } from '../../constants/config';
 const Header = (props) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [currentHeader, setCurrentHeader] = useState('Home');
+  const [currentIndex, setCurrentIndex] = useState('');
 
   const oidc = useSelector((state) => state.oidc);
   const changePasswordCallback = queryString.stringify({
@@ -59,6 +61,43 @@ const Header = (props) => {
     }
   }, [props.componentActive]);
 
+  const path = useSelector((state) => state.IndexReducer);
+  useEffect(() => {
+    switch (path) {
+      case '': {
+        setCurrentIndex('');
+        break;
+      }
+      case '/create-user': {
+        setCurrentIndex('Create User');
+        break;
+      }
+      case '/edit-user': {
+        setCurrentIndex('Edit User');
+        break;
+      }
+      case '/createassets': {
+        setCurrentIndex('Create Asset');
+        break;
+      }
+      case '/edit-assets': {
+        setCurrentIndex('Edit Asset');
+        break;
+      }
+      case '/create-assignment': {
+        setCurrentIndex('Create Assignment');
+        break;
+      }
+      case '/edit-assignments': {
+        setCurrentIndex('Edit Assignment');
+        break;
+      }
+      default: {
+        setCurrentIndex('');
+      }
+    }
+  }, [path]);
+
   return (
     <div className="header">
       <Container className="container-fluid">
@@ -67,6 +106,8 @@ const Header = (props) => {
             <Link to="/" className="header-logo">
               {currentHeader}
             </Link>
+            {path !== '' ? <FaGreaterThan className="index-icon" /> : ''}
+            {currentIndex}
           </Col>
           {user != null && (
             <Col xs="6" className="header-right">

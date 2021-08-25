@@ -13,7 +13,6 @@ import { useEffect } from 'react';
 function App(props) {
   const { user } = useSelector((state) => state.oidc);
   const [redirect, setRedirect] = useState(false);
-  const [currentPath, setCurrentPath] = useState('/');
   const [active, setActive] = useState('/');
 
   useEffect(() => {
@@ -23,8 +22,6 @@ function App(props) {
   const tranferActiveFunction = (content) => {
     setActive(content);
   };
-
-  console.log(active);
 
   return (
     <Router>

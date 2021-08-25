@@ -1,23 +1,26 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import apiCaller from "../../apis/callApi";
-import ReportReducer from "../../reducers/reports/ReportReducer";
-import ReportList from "../../components/Report/ReportList/ReportList";
-import ReportItem from "../../components/Report/ReportItem/ReportItem";
-import * as action from "../../actions/Report/ReportAction";
-import FileSaver from "file-saver";
-import * as Config from "../../constants/config";
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import apiCaller from '../../apis/callApi';
+import ReportReducer from '../../reducers/reports/ReportReducer';
+import ReportList from '../../components/Report/ReportList/ReportList';
+import ReportItem from '../../components/Report/ReportItem/ReportItem';
+import * as action from '../../actions/Report/ReportAction';
+import * as ac from '../../actions//IndexCom/ActionType';
+import FileSaver from 'file-saver';
+import * as Config from '../../constants/config';
 function Report() {
   const initialReport = [];
 
   const [report, setReport] = useState(initialReport);
   const dispatch = useDispatch();
+
+  dispatch({ type: ac.CHANGE_INDEX, payload: '' });
   const [isLoading, setIsLoading] = useState(false);
   const reports = useSelector((state) => state.ReportReducer);
 
   useEffect(() => {
     async function fetchReport() {
-      const res = await apiCaller("ReportViewer/report", "GET", null);
+      const res = await apiCaller('ReportViewer/report', 'GET', null);
       console.log(res);
       dispatch({
         type: action.FETCH_REPORTS,
@@ -29,7 +32,7 @@ function Report() {
   }, []);
 
   function handleExport() {
-      FileSaver.saveAs(`${Config.API_URL_AZURE}/${"ReportViewer/export"}`);
+    FileSaver.saveAs(`${Config.API_URL_AZURE}/${'ReportViewer/export'}`);
   }
   function showReport(reports) {
     let result = null;

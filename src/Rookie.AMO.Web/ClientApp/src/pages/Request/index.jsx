@@ -6,6 +6,7 @@ import RequestList from '../../components/Request/RequestList';
 import RequestItem from '../../components/Request/RequestItem';
 import PopupComplete from '../../components/Popup/PopupComplete';
 import PopupCancel from '../../components/Popup/PopupCancel';
+import * as ac from '../../actions//IndexCom/ActionType';
 
 const stateList = [
   { name: 'Completed', value: 'Completed' },
@@ -13,6 +14,8 @@ const stateList = [
 ];
 
 function Request() {
+  const dispatch = useDispatch();
+  dispatch({ type: ac.CHANGE_INDEX, payload: '' });
   //Table requests
   const [stateFilter, setStateFilter] = useState('');
   const [dateFilter, setDateFilter] = useState('');
@@ -38,8 +41,6 @@ function Request() {
 
   //Admin information
   const { user } = useSelector((state) => state.oidc);
-  console.log(user.profile.userName);
-  console.log(user.profile.sub);
 
   let requestPage = FetchPageRequest(
     stateFilter,
