@@ -11,7 +11,6 @@ import moment from "moment";
 
 const EditAssets = (props) => {
   const history = useHistory();
-  console.log(props.match.params.id);
   const dispatch = useDispatch();
   const EditAsset = useSelector((state) => state.EditAsset);
   const CategoryReducer = useSelector((state) => state.CategoryReducer);
@@ -56,7 +55,6 @@ const EditAssets = (props) => {
     }
     fetchCategory();
   }, []);
-  console.log(CategoryReducer);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -72,16 +70,15 @@ const EditAssets = (props) => {
   };
   const handleOnSubmit = (e) => {
     // e.preventDefault();
-    console.log(state);
     async function EditAsset() {
       const res = await apiCaller(
         `Asset/${props.match.params.id}`,
         "PUT",
         state
       );
-      console.log(res);
-      dispatch({ type: action.UPDATE_ASSETS, payload: res.data });
-
+      if (res.status === 200) {
+      dispatch({ type: action.UPDATE_ASSETS, payload: res.data});
+      }
       history.push("/manage-asset");
     }
 
@@ -130,7 +127,7 @@ const EditAssets = (props) => {
 
   return (
     <div>
-      <h5 className="right-title">Edit Assets</h5>
+      <h5 className="right-title">Edit Asset</h5>
       <form onSubmit={handleSubmit(handleOnSubmit)}>
         <div className="form-group row">
           <label htmlFor="nameAssets" className="col-sm-2 col-form-label">
@@ -318,14 +315,13 @@ function FetchAsset(id) {
   useEffect(() => {
     async function fetch() {
       let enpoint = `Asset/${id}`;
-      console.log(enpoint);
       const res = await apiCaller(enpoint, "GET", null);
       dispatch({ type: action.GET_ASSET_BY_ID, payload: res.data });
     }
     fetch();
   }, []);
 
-  const result = useSelector((state) => state.EditAsset);
+  const result = useSelector((state) => state.AssetReducer.assetById);
   return result;
 }
 

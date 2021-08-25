@@ -44,5 +44,11 @@ namespace Rookie.AMO.DataAccessor.Entities
         public string RequestedBy { get; set; }
 
         public string AcceptedBy { get; set; }
+
+        [Required]
+        public string AssignedBy { get; set; }
+
+        [Required]
+        public string AssignedTo { get; set; }
     }
 }

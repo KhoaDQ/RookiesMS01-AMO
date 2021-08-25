@@ -6,10 +6,12 @@ import * as actionCategory from '../../actions/ManagerCategory/ActionType';
 import AssetList from '../../components/Asset/AssetList';
 import AssetItem from '../../components/Asset/AssetItem';
 import PopupDetailAsset from '../../components/Popup/PopupDetailAsset';
+import AssetHistory from '../../components/Asset/AssetHistory';
 import PopupDelete from '../../components/Popup/PopupDelete';
 import PopupInfor from '../../components/Popup/PopupInfor';
 import queryString from 'query-string';
 import Moment from 'moment';
+import { FETCH_HISTORY_REQUESTS } from '../../actions/ManagerRequest/ActionType';
 const stateList = [
   { name: 'Assigned', value: 'Assigned' },
   { name: 'Available', value: 'Available' },
@@ -19,8 +21,10 @@ const stateList = [
 ];
 
 function ManageAsset() {
-  // Table assets
-  const [filterPage, setFilterPage] = useState({
+
+  const { user } = useSelector((state) => state.oidc);
+  const initFilterPage = {
+    Location: user.profile.location,
     State: 'Available, NotAvailable, Assigned',
     Category: '',
     KeySearch: '',
@@ -28,7 +32,9 @@ function ManageAsset() {
     Desc: false,
     Page: 1,
     Limit: 19,
-  });
+  }
+  // Table assets
+  const [filterPage, setFilterPage] = useState(initFilterPage);
 
   const [isLoading, setIsLoading] = useState(true);
   const [isReload, setIsReload] = useState(0);
@@ -102,6 +108,18 @@ function ManageAsset() {
     setIsModalOpen(content);
   };
 
+  const historyAsset = FetchHistory(assetDetail);
+
+  function showHistory(){
+    if(historyAsset){
+      return(
+        <AssetHistory
+          historyAsset = {historyAsset}
+        />
+      )
+    }
+  }
+
   function detailAsset() {
     if (assetDetail)
       return (
@@ -109,7 +127,9 @@ function ManageAsset() {
           asset={assetDetail}
           isModalOpen={isDetailOpen}
           handleModelShow={handleModelShow}
-        />
+        >
+          {showHistory()}
+        </PopupDetailAsset>
       );
   }
 
@@ -120,10 +140,16 @@ function ManageAsset() {
 
       if (assets != null) {
         if (assets.length > 0) {
-          if (assetChange != undefined) {
-            let a = assets.findIndex((a) => (a.id = assetChange.id));
-            if (a > -1) assets.splice(a, 1);
-            console.log(a);
+          console.log(filterPage)
+          console.log(initFilterPage)
+          if (assetChange != undefined && queryString.stringify(filterPage) === queryString.stringify(initFilterPage)) {
+            let a = assets.findIndex((a) => (a.id === assetChange.id));
+            if (a > -1){
+              assets.splice(a, 1);
+              a = assets.findIndex((a) => (a.id === assetChange.id));
+              if (a>-1)
+                assets.splice(a, 1);
+            }
             assets.splice(0, 0, assetChange);
           }
 
@@ -231,5 +257,20 @@ function FetchCategories() {
 
   return categories;
 }
+function FetchHistory(asset){
+  const dispatch = useDispatch();
 
+  useEffect(() => {
+    async function fetch() {
+      const res = await apiCaller('Request/' + asset.id, 'GET', null);
+      dispatch({ type: FETCH_HISTORY_REQUESTS, payload: res.data });
+    }
+    if(asset!=undefined && 'id' in asset)
+      fetch();
+  }, [asset]);
+  
+  const historyAsset = useSelector((state) => state.RequestReducer.historyAsset);
+
+  return historyAsset;
+}
 export default ManageAsset;

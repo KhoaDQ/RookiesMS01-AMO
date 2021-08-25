@@ -15,8 +15,6 @@ export default function Filter(props) {
     var selectAllOption = [{name: "All",value: ""}]
 
     let [optionSelect,setOptionSelect] = useState(defaultOption !== undefined?defaultOption:selectAllOption)
-    
-    
 
     const handleSelect=(e)=>{
       if(optionSelect !== undefined){

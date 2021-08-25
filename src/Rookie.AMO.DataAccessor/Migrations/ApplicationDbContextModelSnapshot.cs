@@ -151,8 +151,16 @@ namespace Rookie.AMO.DataAccessor.Migrations
                     b.Property<Guid>("AssetID")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("AssignedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("AssignedDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("AssignedTo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Note")
                         .HasMaxLength(1000)
