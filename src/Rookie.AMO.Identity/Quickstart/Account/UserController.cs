@@ -42,7 +42,6 @@ namespace Rookie.AMO.Identity.Quickstart.Account
         public async Task<ActionResult<UserDto>> CreateUserAsync(UserRequest user)
         {
             var userDto = await _userService.CreateUserAsync(user);
-
             return Ok(userDto);
         }
 

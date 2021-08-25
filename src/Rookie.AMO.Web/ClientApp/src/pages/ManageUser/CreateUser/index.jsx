@@ -125,7 +125,7 @@ const CreateUser = () => {
               name="firstName"
               value={newUser.firstName}
               onChange={handleInputChange}
-              maxlength="100"
+              maxLength="100"
             />
             {errors.firstName && (
               <p className="error-message">{errors.firstName.message}</p>
@@ -145,7 +145,7 @@ const CreateUser = () => {
               name="lastName"
               value={newUser.lastName}
               onChange={handleInputChange}
-              maxlength="100"
+              maxLength="100"
             />
             {errors.lastName && (
               <p className="error-message">{errors.lastName.message}</p>
