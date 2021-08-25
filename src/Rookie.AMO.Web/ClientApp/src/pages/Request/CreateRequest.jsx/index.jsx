@@ -26,9 +26,9 @@ export default function CreateRequest(userID, requestBy) {
     }
 
     let{AssignmentID, UserID, RequestedBy} = request;
-    console.log(AssignmentID)
+
     if(AssignmentID!=="" && UserID!== "" && RequestedBy!== "")
-      returnRequest(request).then((res)=>{console.log(res)})
+      returnRequest(request)
   },[request])
 
   const handleRequestOpen = (assignment) =>{
