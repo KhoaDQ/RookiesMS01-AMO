@@ -71,17 +71,19 @@ const PopupDetailAsset = (props) => {
                 <Row className="header_detail">
                 <Col  xs="3">History</Col>
                 <Col xs="9" className="table_history_container">
-                    <Table className="table_history_assigned table_border_spacing">
-                        <thead>
-                          <tr>
-                            <th>Date</th>
-                            <th>Assigned By</th>
-                            <th>Assigned To</th>
-                            <th>Returned Date</th>
-                          </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </Table>
+                <Table className="table_history_assigned">
+                  <thead>
+                  <tr>
+                      <th>Date</th>
+                      <th>Assigned To</th>
+                      <th>Assigned By</th>
+                      <th>Returned Date</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                    {props.children}
+                   </tbody>
+                </Table>
                     </Col>
                 </Row>
               </Container>

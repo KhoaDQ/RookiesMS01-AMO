@@ -52,6 +52,7 @@ namespace Rookie.AMO.Business
                                                             .MapFrom(s => s.Asset.Code))
                                                   .ForMember(dest => dest.AssetName, opt => opt
                                                             .MapFrom(s => s.Asset.Name));
+            CreateMap<Request, RequestHistoryDto>();
         }
     }
 }

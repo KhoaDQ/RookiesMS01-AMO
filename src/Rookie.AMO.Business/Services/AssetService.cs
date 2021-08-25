@@ -127,6 +127,7 @@ namespace Rookie.AMO.Business.Services
 
             query = query.Where(x => string.IsNullOrEmpty(filter.KeySearch) || x.Name.Contains(filter.KeySearch) || x.Code.Contains(filter.KeySearch));
 
+            query = query.Where(x => string.IsNullOrEmpty(filter.Location) || x.Location.Equals(filter.Location));
 
             if (!string.IsNullOrEmpty(filter.State))
             {
