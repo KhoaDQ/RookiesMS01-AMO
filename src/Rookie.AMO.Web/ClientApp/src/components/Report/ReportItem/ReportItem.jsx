@@ -10,7 +10,7 @@ function ReportItem(props) {
       <td>{report.assigned}</td>
       <td>{report.available}</td>
       <td>{report.notAvailable}</td>
-      <td>{report.waitingRecycle}</td>
+      <td>{report.waitingForRecycling}</td>
       <td>{report.recycled}</td>
     </tr>
   );

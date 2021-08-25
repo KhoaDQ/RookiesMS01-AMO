@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using EnsureThat;
 using Rookie.AMO.Business.Extensions;
 using Rookie.AMO.Business.Interfaces;
 using Rookie.AMO.Contracts;
@@ -18,50 +17,14 @@ namespace Rookie.AMO.Business.Services
     public class RequestService : IRequestService
     {
         private readonly IBaseRepository<Request> _baseRepository;
-        private readonly IBaseRepository<Assignment> _assignmentRepository;
-        private readonly IBaseRepository<MappingRequest> _mappingRepository;
         private readonly IMapper _mapper;
         private readonly ApplicationDbContext _context;
 
-        public RequestService(IBaseRepository<Request> baseRepository,IBaseRepository<Assignment> assignmentRepository, IBaseRepository<MappingRequest> mappingRepository, IMapper mapper, ApplicationDbContext context)
+        public RequestService(IBaseRepository<Request> baseRepository, IMapper mapper, ApplicationDbContext context)
         {
             _baseRepository = baseRepository;
-            _assignmentRepository = assignmentRepository;
-            _mappingRepository = mappingRepository;
             _mapper = mapper;
             _context = context;
-        }
-
-        public async Task<RequestDto> AddAsync(RequestAddRequest requestAddRequest)
-        {
-            Ensure.Any.IsNotNull(requestAddRequest, nameof(requestAddRequest));
-            var request = _mapper.Map<Request>(requestAddRequest);
-
-            var assignment = await _assignmentRepository.GetByIdAsync(requestAddRequest.AssignmentID);
-
-            request.AssetID = assignment.AssetID;
-            request.AssignedDate = assignment.AssignedDate;
-            request.State = StateList.WaitingReturn;
-            request.AssignedBy = assignment.AssignedBy;
-            request.AssignedTo = assignment.AssignedTo;
-
-            var item = await _baseRepository.AddAsync(request);
-
-            var mapping = new MappingRequest();
-            mapping.AssignmentId = assignment.Id;
-            mapping.RequestId = item.Id;
-            await _mappingRepository.AddAsync(mapping);
-
-            
-            return _mapper.Map<RequestDto>(item);
-        }
-
-        public async Task<IEnumerable<RequestHistoryDto>> GetByIdAssetAsync(Guid assetId)
-        {
-            var query = await _baseRepository.GetAllAsync();
-            var history = query.Where(x => x.AssetID == assetId);
-
-            return _mapper.Map<List<RequestHistoryDto>>(history);
         }
 
         public async Task CompleteAsync(Guid id, string adminUsername, Guid adminId)
@@ -75,7 +38,7 @@ namespace Rookie.AMO.Business.Services
 
             var asset = await _context.Assets.FindAsync(request.AssetID);
             asset.State = StateList.Available;
-            
+
             var assignment = (from a in _context.Assignments
                               where a.AssetID == request.AssetID
                               select a).FirstOrDefault();

@@ -10,8 +10,6 @@ namespace Rookie.AMO.Business.Interfaces
 {
     public interface IRequestService
     {
-        Task<IEnumerable<RequestHistoryDto>> GetByIdAssetAsync(Guid assetId);
-        Task<RequestDto> AddAsync(RequestAddRequest requestAddRequest);
         Task<PagedResponseModel<RequestDto>> PagedQueryAsync(FilterRequestsModel filter);
         Task CompleteAsync(Guid id, string adminUsername, Guid adminId);
         Task DeleteAsync(Guid id);

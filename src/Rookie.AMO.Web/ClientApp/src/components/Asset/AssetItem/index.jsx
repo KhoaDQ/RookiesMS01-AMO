@@ -1,25 +1,26 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { IoMdCreate } from "@react-icons/all-files/io/IoMdCreate";
 import { IoIosCloseCircleOutline } from "@react-icons/all-files/io/IoIosCloseCircleOutline";
 import { Link } from "react-router-dom";
 import "../style.css";
+import axios from 'axios';
 function AssetItem(props) {
-    let { asset, index } = props;
-    let isDisable = (asset.state ==="Assigned");
+    let { asset, index, stateList } = props
+
     return (
-        <tr onClick = {(e)=>{props.handleDetail(asset,e)}} className = {index === -1 ? "newRow": ""}>
+        <tr onClick = {(e)=>{props.handleDetail(asset,e)}} className = {index == -1 ? "newRow": ""}>
             <td >{asset.code}</td>
             <td>{asset.name}</td>
             <td>{asset.categoryName}</td>
             <td>{asset.state}</td>
             <td onClick={e => e.stopPropagation()}>
                 <span className="icon-nash icon-nash--black">
-                <Link to={isDisable?undefined:`/edit-assets/${asset.id}`}>
-                        <IoMdCreate className = {isDisable?"assetDisable":""}/>
+                <Link to={ `/edit-assets/${asset.id}`}>
+                        <IoMdCreate />
                     </Link>
                 </span>
                 <span className="icon-nash icon-nash--red">
-                    <IoIosCloseCircleOutline className = {isDisable?"assetDisable":""} onClick={isDisable?undefined:(e) => {props.handleDeleteOpen(asset.id,e)}}/>
+                    <IoIosCloseCircleOutline onClick={(e) => {props.handleDeleteOpen(asset.id,e)}}/>
                 </span>
             </td>
         </tr>

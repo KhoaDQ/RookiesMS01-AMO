@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import "./Popup.css";
 import { AiOutlineCloseSquare } from "react-icons/ai";
+import AssetList from "../Asset/AssetList";
 import { Container, Row, Col, Table } from 'reactstrap';
 
 const PopupDetailAsset = (props) => {
@@ -22,6 +24,7 @@ const PopupDetailAsset = (props) => {
     <div className="popupdetail_asset popupdetail popup">
       <div className={"modal " + (isModalOpen ? "modal__open" : "modal__close")}>
         <div className="modal__overlay"></div>
+
         <div className="modal__body">
           <div className="auth-form">
             <div className="auth-form__header">
@@ -71,19 +74,15 @@ const PopupDetailAsset = (props) => {
                 <Row className="header_detail">
                 <Col  xs="3">History</Col>
                 <Col xs="9" className="table_history_container">
-                <Table className="table_history_assigned">
-                  <thead>
-                  <tr>
-                      <th>Date</th>
-                      <th>Assigned To</th>
-                      <th>Assigned By</th>
-                      <th>Returned Date</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                    {props.children}
-                   </tbody>
-                </Table>
+                    <Table className="table_history_assigned table_border_spacing">
+                        <thead>
+                            <th>Date</th>
+                            <th>Assigned By</th>
+                            <th>Assigned To</th>
+                            <th>Returned Date</th>
+                        </thead>
+                        <tbody></tbody>
+                    </Table>
                     </Col>
                 </Row>
               </Container>

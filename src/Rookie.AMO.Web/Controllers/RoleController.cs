@@ -7,9 +7,7 @@ using Rookie.AMO.Web.DataProviders;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Rookie.AMO.Web.Extensions;
 
 namespace Rookie.AMO.Web.Controllers
 {
@@ -26,9 +24,6 @@ namespace Rookie.AMO.Web.Controllers
 
         [HttpGet]
         public async Task<IEnumerable<RoleDto>> GetAllRolesAsync()
-        {
-            var cookie = HttpContext.Request.Cookies.GetString();
-            return await _roleService.GetAllRolesAsync(cookie);
-        }
+            => await _roleService.GetAllRolesAsync(HttpContext.Request.Headers["Authorization"]);
     }
 }

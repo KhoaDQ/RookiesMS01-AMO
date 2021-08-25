@@ -1,30 +1,28 @@
-import queryString from 'query-string';
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import * as action from '../../actions/ManageUser/ActionType';
-import apiCaller from '../../apis/callApi';
-import UserItem from '../../components/User/UserItem';
-import UserList from '../../components/User/UserList';
-import PopupDelete from '../../components/Popup/PopupDelete';
+import queryString from "query-string";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import * as action from "../../actions/ManageUser/ActionType";
+import apiCaller from "../../apis/callApi";
+import UserItem from "../../components/User/UserItem";
+import UserList from "../../components/User/UserList";
+import PopupDelete from "../../components/Popup/PopupDelete";
 const stateList = [
-  { name: 'Admin', value: 'Admin' },
-  { name: 'Staff', value: 'Staff' },
-];
+  { name: "Admin", value: "Admin" },
+  { name: "Staff", value: "Staff" }
+]
 function ManageUser() {
   const [pageNumber, setPageNumber] = useState(1);
   const [paging, setPaging] = useState({
-    name: '',
-    type: '',
+    name: "",
+    type: "",
     page: 1,
     limit: 19,
-    propertyName: 'StaffCode',
+    propertyName: "StaffCode",
     desc: false,
   });
 
   const userPage = useSelector((state) => state.UserReducer);
   const { createdUser } = useSelector((state) => state.createUser);
-  const editedUser = useSelector((state) => state.EditUserReducer);
-
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -32,7 +30,7 @@ function ManageUser() {
       const paramsString = queryString.stringify(paging);
       console.log(paramsString);
       let endpoint = `User/find?${paramsString}`;
-      const res = await apiCaller(endpoint, 'GET', null);
+      const res = await apiCaller(endpoint, "GET", null);
       dispatch({ type: action.FETCH_USERS, payload: res.data });
     }
     fetch();
@@ -49,28 +47,19 @@ function ManageUser() {
         var index = userPage.items.findIndex((x) => x.id === createdUser.id);
         if (index === -1) {
           userPage.items.pop();
-        } else {
+        }
+        else {
           userPage.items.splice(index, 1);
         }
         userPage.items.unshift(createdUser);
       }
-      if (editedUser.id != null) {
-        let index = userPage.items.findIndex(
-          (user) => user.id === editedUser.id
-        );
-        if (index > -1) userPage.items.splice(index, 1);
-        userPage.items.splice(0, 0, editedUser);
-      }
 
       result = userPage.items.map((user, index) => {
-        return (
-          <UserItem
-            key={index}
-            user={user}
-            index={index}
-            handleDeleteOpen={handleDeleteOpen}
-          />
-        );
+        return <UserItem
+          key={index}
+          user={user}
+          index={index}
+          handleDeleteOpen={handleDeleteOpen} />;
       });
     }
 

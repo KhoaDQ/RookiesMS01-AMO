@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React,{useState, useEffect} from "react";
 import { Table } from "reactstrap";
 import { AiOutlineSearch } from "@react-icons/all-files/ai/AiOutlineSearch";
 import {AiFillCaretDown} from "@react-icons/all-files/ai/AiFillCaretDown";
@@ -89,7 +89,7 @@ function AssetList(props){
         <Col md={3}>
           <Filter
             options = {props.stateList}
-            defaultOption = {props.stateList.filter(s=> s.value === 'Available' || s.value === 'NotAvailable' || s.value === 'Assigned')}
+            defaultOption = {props.stateList.filter(s=> s.value == 'Available' || s.value == 'NotAvailable' || s.value == 'Assigned')}
             displayValue = "name"
             placeholder="State"
             handleFilter = {handleFilterState}/>

@@ -40,7 +40,5 @@ namespace Rookie.AMO.DataAccessor.Entities
         public string AssignedBy { get; set; }
 
         public string AssignedTo { get; set; }
-
-        public virtual MappingRequest MappingRequest { get; set; }
     }
 }

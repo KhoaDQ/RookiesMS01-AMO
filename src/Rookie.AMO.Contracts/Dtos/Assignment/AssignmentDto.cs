@@ -25,10 +25,5 @@ namespace Rookie.AMO.Contracts.Dtos.Assignment
 
         public string Note { get; set; }
         public string Category { get; set; }
-
-        public Guid AssetID { get; set; }
-        public Guid UserID { get; set; }
-
-        public bool IsReturnRequest { get; set; }
     }
 }

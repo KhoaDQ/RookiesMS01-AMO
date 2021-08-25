@@ -31,14 +31,18 @@ namespace Rookie.AMO.UnitTests.API.Validators.TestData
             };
         }
 
-        public static IEnumerable<object[]> InvalidCode()
+        public static IEnumerable<object[]> InvalidDescs()
         {
             return new object[][]
             {
                 new object[]
                 {
-                    
-                    "AB" ,
+                    "Mattis adipiscing magnis montes semper. Amet risus venenatis." +
+                    "Mattis adipiscing magnis montes semper. Amet risus venenatis." +
+                    "Mattis adipiscing magnis montes semper. Amet risus venenatis." +
+                    "Mattis adipiscing magnis montes semper. Amet risus venenatis." +
+                    "Mattis adipiscing magnis montes semper. Amet risus venenatis." +
+                    "Mattis adipiscing magnis montes semper. Amet risus venenatis. " ,
                     string.Format(ErrorTypes.Common.MaxLengthError, ValidationRules.CategoryRules.MaxLenghCharactersForDesc)
                 }
             };

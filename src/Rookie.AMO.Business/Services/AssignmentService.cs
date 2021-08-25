@@ -17,7 +17,6 @@ namespace Rookie.AMO.Business.Services
     public class AssignmentService : IAssignmentService
     {
         private readonly IBaseRepository<Assignment> _baseRepository;
-        private readonly IBaseRepository<MappingRequest> _mappingRepository;
         private readonly IMapper _mapper;
         private readonly ApplicationDbContext _context;
 
@@ -78,9 +77,8 @@ namespace Rookie.AMO.Business.Services
 
         public async Task<IEnumerable<AssignmentDto>> GetByUserIdAsync(Guid userId)
         {
-            var assignments = await _baseRepository.GetAllAsync();
-            var assignmentsByUser = assignments.Where(x => x.UserID == userId && DateTime.Compare(x.AssignedDate.Date, DateTime.Now.Date) <= 0);
-            return _mapper.Map<IEnumerable<AssignmentDto>>(assignmentsByUser);
+            var assignments = await _baseRepository.GetByAsync(x => x.UserID == userId && x.AssignedDate <= DateTime.Now);
+            return _mapper.Map<IEnumerable<AssignmentDto>>(assignments);
         }
 
         public async Task<PagedResponseModel<AssignmentDto>> PagedQueryAsync(FilterAssignmentsModel filter)
@@ -138,13 +136,5 @@ namespace Rookie.AMO.Business.Services
             };
         }
 
-
-        public async Task AcceptRespond(Guid id)
-        {
-            var assignments = await _context.Assignments.FindAsync(id);
-
-            assignments.State = StateList.Accepted;
-            await _context.SaveChangesAsync();
-        }
     }
 }

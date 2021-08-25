@@ -17,8 +17,6 @@ namespace Rookie.AMO.Contracts.Dtos.Asset
 
         public string State { get; set; }
 
-        public string CreateId { get; set; }
-
         public Guid CategoryId { get; set; }
     }
 }
