@@ -1,48 +1,78 @@
-import React from "react";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { useEffect } from "react";
-import { useSelector } from "react-redux";
-import callApi from "../../apis/callApi";
-import { GET_ASSIGNMENT_BY_ID } from "../../actions/ManagerAssignment/ActionType";
-import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
-import { Table } from "reactstrap";
-import { Link } from "react-router-dom";
-import { IoMdCheckmark } from "@react-icons/all-files/io/IoMdCheckmark";
-import { IoIosCloseCircleOutline } from "@react-icons/all-files/io/IoIosCloseCircleOutline";
-import { MdSettingsBackupRestore } from "@react-icons/all-files/md/MdSettingsBackupRestore";
-import PopupDetail from "../../components/Popup/PopupDetail";
-import "./home.css";
+import React from 'react';
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import callApi from '../../apis/callApi';
+import { GET_ASSIGNMENT_BY_ID } from '../../actions/ManagerAssignment/ActionType';
+import { AiFillCaretDown, AiFillCaretUp } from 'react-icons/ai';
+import { Table } from 'reactstrap';
+import { FaCheck } from '@react-icons/all-files/fa/FaCheck';
+import { FaTimes } from '@react-icons/all-files/fa/FaTimes';
+import { MdSettingsBackupRestore } from '@react-icons/all-files/md/MdSettingsBackupRestore';
+import PopupDetail from '../../components/Popup/PopupDetail';
+import PopupComplete from '../../components/Popup/PopupComplete';
+import './home.css';
 import { format } from 'date-fns';
-import CreateRequest from "../Request/CreateRequest.jsx";
+import CreateRequest from '../Request/CreateRequest.jsx';
 
 const stateList = {
-  Accepted: "Accepted",
-  WaitingAccept:"Waiting for Acceptance"
-}
+  Accepted: 'Accepted',
+  WaitingAccept: 'Waiting for Acceptance',
+};
+
 function Home() {
   const dispatch = useDispatch();
+  //Popup accept assignment
+  const [idAssignmentAccept, setIdAssignmentAccept] = useState('');
+  const [isAcceptOpen, setIsAcceptOpen] = useState(false);
+  const [isAccept, setIsAccept] = useState(0);
+
+  //Popup decline assignment
+  const [idAssignmentDecline, setIdAssignmentDecline] = useState('');
+  const [isDeclineOpen, setIsDeclineOpen] = useState(false);
+  const [isDecline, setIsDecline] = useState(0);
+
   const { user } = useSelector((state) => state.oidc);
   const assignments = useSelector((state) => state.AssignmentReducer);
 
   async function fetchAssignment() {
     let endpoint = `assignment/user/${user.profile.sub}`;
-    const res = await callApi(endpoint, "GET", null);
+    const res = await callApi(endpoint, 'GET', null);
     dispatch({ type: GET_ASSIGNMENT_BY_ID, payload: res.data });
   }
 
+  async function fetch() {
+    if (isAccept === 1) {
+      let endpoint = `assignment/accept/${idAssignmentAccept}`;
+      const res = await callApi(endpoint, 'PUT', null);
+      setIsAccept(0);
+    }
+    if (isDecline === 1) {
+      let endpoint = `assignment/${idAssignmentDecline}`;
+      const res = await callApi(endpoint, 'DELETE', null);
+      setIsDecline(0);
+    }
+  }
+
   useEffect(() => {
-    if (user != null) {
+    if (user != null || isAccept === 0 || isDecline === 0) {
       fetchAssignment();
     }
-  }, [user])
+  }, [user, isAccept, isDecline]);
+
+  useEffect(() => {
+    if (isAccept === 1 || isDecline === 1) {
+      fetch();
+    }
+  }, [isAccept, isDecline]);
 
   const initSort = {
-    assetCode: { propertyName: "assetCode", desc: true },
-    assetName: { propertyName: "assetName", desc: true },
-    category: { propertyName: "category", desc: true },
-    assignedDate: { propertyName: "assignedDate", desc: true },
-    state: { propertyName: "state", desc: true },
+    assetCode: { propertyName: 'assetCode', desc: true },
+    assetName: { propertyName: 'assetName', desc: true },
+    category: { propertyName: 'category', desc: true },
+    assignedDate: { propertyName: 'assignedDate', desc: true },
+    state: { propertyName: 'state', desc: true },
   };
 
   const [optionSort, setOptionSort] = useState(initSort);
@@ -63,17 +93,54 @@ function Home() {
   };
 
   // return request
-  const {handleRequestOpen,showPopupRequest} = CreateRequest(user.profile.sub,user.profile.userName);
+  const { handleRequestOpen, showPopupRequest } = CreateRequest(
+    user.profile.sub,
+    user.profile.userName
+  );
+
+  //Popup accept
+  const handleAcceptOpen = (id, e) => {
+    setIdAssignmentAccept(id);
+    setIsAcceptOpen(true);
+    handleAcceptShow(true);
+  };
+
+  const handleAcceptShow = (isOpen) => {
+    setIsAcceptOpen(isOpen);
+  };
+
+  const handleAccept = (e) => {
+    setIsAccept(1);
+    handleAcceptShow(false);
+    console.log(idAssignmentAccept);
+  };
+
+  //Popup decline
+  const handleDeclineOpen = (id, e) => {
+    setIdAssignmentDecline(id);
+    setIsDeclineOpen(true);
+    handleDeclineShow(true);
+  };
+
+  const handleDeclineShow = (isOpen) => {
+    setIsDeclineOpen(isOpen);
+  };
+
+  const handleDecline = (e) => {
+    setIsDecline(1);
+    handleDeclineShow(false);
+    console.log(idAssignmentDecline);
+  };
 
   return (
     <div className="home">
       <h5 className="right-title">My Assignment</h5>
       <Table className="table_border_spacing">
         <thead>
-          <tr style={{ cursor: "pointer" }}>
+          <tr style={{ cursor: 'pointer' }}>
             <th
               onClick={() => {
-                handleClickSort("assetCode");
+                handleClickSort('assetCode');
               }}
             >
               Asset Code
@@ -85,7 +152,7 @@ function Home() {
             </th>
             <th
               onClick={() => {
-                handleClickSort("assetName");
+                handleClickSort('assetName');
               }}
             >
               Asset Name
@@ -97,7 +164,7 @@ function Home() {
             </th>
             <th
               onClick={() => {
-                handleClickSort("category");
+                handleClickSort('category');
               }}
             >
               Category
@@ -109,7 +176,7 @@ function Home() {
             </th>
             <th
               onClick={() => {
-                handleClickSort("assignedDate");
+                handleClickSort('assignedDate');
               }}
             >
               Assigned Date
@@ -121,7 +188,7 @@ function Home() {
             </th>
             <th
               onClick={() => {
-                handleClickSort("state");
+                handleClickSort('state');
               }}
             >
               State
@@ -132,14 +199,20 @@ function Home() {
         </thead>
         <tbody>
           {assignments.length > 0 ? (
-            showAssignments(assignments, showDetail, handleRequestOpen)
+            showAssignments(
+              assignments,
+              showDetail,
+              handleRequestOpen,
+              handleAcceptOpen,
+              handleDeclineOpen
+            )
           ) : (
             <tr
-              style={{ width: "200px", display: "block", margin: "0 auto" }}
+              style={{ width: '200px', display: 'block', margin: '0 auto' }}
               className="rowNotify"
             >
-              {" "}
-              No assignments are found!{" "}
+              {' '}
+              No assignments are found!{' '}
             </tr>
           )}
         </tbody>
@@ -150,12 +223,27 @@ function Home() {
         handleModelShow={setOpenDetailModal}
         isModalOpen={openDetailModal}
       ></PopupDetail>
+      <PopupComplete
+        isModalOpen={isAcceptOpen}
+        handleComplete={handleAccept}
+        handleModelShow={handleAcceptShow}
+      ></PopupComplete>
+      <PopupComplete
+        isModalOpen={isDeclineOpen}
+        handleComplete={handleDecline}
+        handleModelShow={handleDeclineShow}
+      ></PopupComplete>
       {showPopupRequest()}
     </div>
   );
 }
-
-function showAssignments(assignments, showDetail, handleRequestOpen) {
+function showAssignments(
+  assignments,
+  showDetail,
+  handleRequestOpen,
+  handleAcceptOpen,
+  handleDeclineOpen
+) {
   let result = [];
   if (assignments != null || assignments.length > 0) {
     result = assignments.map((assignment, index) => {
@@ -166,16 +254,52 @@ function showAssignments(assignments, showDetail, handleRequestOpen) {
           <td>{assignment.category}</td>
           <td>{format(new Date(assignment.assignedDate), 'dd/MM/yyyy')}</td>
           <td>{stateList[assignment.state]}</td>
-          <td onClick={e => e.stopPropagation()}>
-            <span className="icon-nash icon-nash--black">
-              <Link>
-                <IoMdCheckmark />
-              </Link>
+          <td onClick={(e) => e.stopPropagation()}>
+            <span
+              className={
+                'icon-nash ' +
+                (assignment.state === 'WaitingAccept'
+                  ? 'icon-nash--black'
+                  : 'icon-nash--black-dis')
+              }
+            >
+              <FaCheck
+                onClick={
+                  assignment.state === 'WaitingAccept'
+                    ? (e) => {
+                        handleAcceptOpen(assignment.id, e);
+                      }
+                    : undefined
+                }
+              />
             </span>
-            <span className="icon-nash icon-nash--red">
-              <IoIosCloseCircleOutline />
+            <span
+              className={
+                'icon-nash ' +
+                (assignment.state === 'WaitingAccept'
+                  ? 'icon-nash--red'
+                  : 'icon-nash--red-dis')
+              }
+            >
+              <FaTimes
+                onClick={
+                  assignment.state === 'WaitingAccept'
+                    ? (e) => {
+                        handleDeclineOpen(assignment.id, e);
+                      }
+                    : undefined
+                }
+              />
             </span>
-            <span className="icon-nash icon-nash--blue" onClick = {()=>handleRequestOpen(assignment)}>
+            <span
+              className={
+                'icon-nash ' +
+                (assignment.state === 'Accepted'
+                  ? 'icon-nash--blue'
+                  : 'icon-nash--blue-dis')
+              }
+              onClick={() => handleRequestOpen(assignment)}
+            >
               <MdSettingsBackupRestore />
             </span>
           </td>
