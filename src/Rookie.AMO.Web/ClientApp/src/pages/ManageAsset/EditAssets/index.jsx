@@ -20,8 +20,16 @@ const EditAssets = (props) => {
     CategoryId: "",
     Specification: "",
     InstalledDate: moment().toDate(),
-    State: "Not Available",
+    State: "NotAvailable",
   });
+
+  const stateList = [
+    { name: "Assigned", value: "Assigned" },
+    { name: "Available", value: "Available" },
+    { name: "Not available", value: "NotAvailable" },
+    { name: "Waiting for recycling", value: "WaitingRecycle" },
+    { name: "Recycled", value: "Recycled" },
+  ];
 
   const initAsset = FetchAsset(props.match.params.id);
   useEffect(() => {
@@ -256,9 +264,9 @@ const EditAssets = (props) => {
                   type="radio"
                   name="state"
                   id="gridRadios3"
-                  value="Waiting"
+                  value="WaitingRecycle"
                   defaultValue="option3"
-                  checked={state.state === "Waiting"}
+                  checked={state.state === "WaitingRecycle"}
                   onChange={(e) => {
                     handleRadioChange(e);
                   }}

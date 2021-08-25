@@ -58,7 +58,7 @@ const EditAssignment = (props) => {
       setForm({
         id: initAssignment.id || "",
         asset: initAssignment.assetID || "",
-        assignTo: initAssignment.user_ID || "",
+        assignTo: initAssignment.userID || "",
         state: initAssignment.state,
         assignDate: moment(initAssignment.assignedDate).toDate(),
         note: initAssignment.note || "",
@@ -83,7 +83,7 @@ const EditAssignment = (props) => {
 
     async function fetchAsset() {
       const res = await apiCaller("Asset", "GET", null);
-      
+
       if (res.status === 200) {
         dispatch({
           type: "FETCH_ASSET",
@@ -127,7 +127,7 @@ const EditAssignment = (props) => {
 
     async function EditAssignment() {
       const res = await apiCaller("Assignment/" + form.id, "PUT", {
-        User_ID: form.assignTo,
+        UserID: form.assignTo,
         AssetID: form.asset,
         AssignedDate: moment(form.assignDate).toDate(),
         Note: form.note,
@@ -136,9 +136,9 @@ const EditAssignment = (props) => {
 
       if (res.data) {
         dispatch({ type: action.CREATE_ASSIGNMENT, payload: res.data });
-
-        history.push("/manage-assignment");
       }
+
+      history.push("/manage-assignment");
     }
 
     try {
