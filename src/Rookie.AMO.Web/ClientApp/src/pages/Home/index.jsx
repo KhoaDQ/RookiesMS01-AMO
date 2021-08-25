@@ -159,6 +159,7 @@ function showAssignments(assignments, showDetail, handleRequestOpen) {
   let result = [];
   if (assignments != null || assignments.length > 0) {
     result = assignments.map((assignment, index) => {
+      console.log(assignment.isReturnRequest)
       return (
         <tr key={assignment.id} onClick={() => showDetail(assignment)}>
           <td>{assignment.assetCode}</td>
@@ -173,10 +174,10 @@ function showAssignments(assignments, showDetail, handleRequestOpen) {
               </Link>
             </span>
             <span className="icon-nash icon-nash--red">
-              <IoIosCloseCircleOutline />
+              <IoIosCloseCircleOutline className={assignment.isReturnRequest?"returnDisable":""}/>
             </span>
-            <span className="icon-nash icon-nash--blue" onClick = {()=>handleRequestOpen(assignment)}>
-              <MdSettingsBackupRestore />
+            <span className="icon-nash icon-nash--blue" onClick = {assignment.state === 'Accepted' && !assignment.isReturnRequest?()=>handleRequestOpen(assignment):undefined}>
+              <MdSettingsBackupRestore className={assignment.state === 'Accepted' && !assignment.isReturnRequest?"":"returnDisable"}/>
             </span>
           </td>
         </tr>

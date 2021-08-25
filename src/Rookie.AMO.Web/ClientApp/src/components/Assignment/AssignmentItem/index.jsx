@@ -78,13 +78,15 @@ function AssignmentItem(props) {
                 : 'icon-nash--blue-dis')
             }
           >
-            <MdSettingsBackupRestore
+            <MdSettingsBackupRestore className={assignment.isReturnRequest?"returnDisable":""}
               onClick={
-                assignment.state == 'Accepted'
-                  ? () => {
+                assignment.state === 'Accepted' && !assignment.isReturnRequest
+                  ? 
+                   () => {
                       props.handleRequestOpen(assignment);
                     }
-                  : undefined
+                    :undefined
+                  
               }
             />
           </span>
