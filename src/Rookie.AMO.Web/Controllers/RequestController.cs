@@ -49,5 +49,9 @@ namespace Rookie.AMO.Web.Controllers
             await _requestService.DeleteAsync(id);
             return NoContent();
         }
+
+        [HttpGet("{assetId}")]
+        public async Task<IEnumerable<RequestHistoryDto>> GetHistoryAsync([FromRoute] Guid assetId)
+         => await _requestService.GetByIdAssetAsync(assetId);
     }
 }

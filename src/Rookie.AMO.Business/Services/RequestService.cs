@@ -40,9 +40,19 @@ namespace Rookie.AMO.Business.Services
             request.AssetID = assignment.AssetID;
             request.AssignedDate = assignment.AssignedDate;
             request.State = StateList.WaitingReturn;
+            request.AssignedBy = assignment.AssignedBy;
+            request.AssignedTo = assignment.AssignedTo;
 
             var item = await _baseRepository.AddAsync(request);
             return _mapper.Map<RequestDto>(item);
+        }
+
+        public async Task<IEnumerable<RequestHistoryDto>> GetByIdAssetAsync(Guid assetId)
+        {
+            var query = await _baseRepository.GetAllAsync();
+            var history = query.Where(x => x.AssetID == assetId && x.ReturnedDate.HasValue);
+
+            return _mapper.Map<List<RequestHistoryDto>>(history);
         }
 
         public async Task CompleteAsync(Guid id, string adminUsername, Guid adminId)

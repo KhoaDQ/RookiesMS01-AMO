@@ -9,6 +9,11 @@ function RequestReducer(state = initialState, action) {
     case types.FETCH_REQUESTS:
       return payload;
 
+    case types.FETCH_HISTORY_REQUESTS:
+      return {
+        ...state,
+        historyAsset: payload
+      };
     default:
       return state;
   }

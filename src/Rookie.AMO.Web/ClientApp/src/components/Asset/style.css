@@ -21,9 +21,11 @@ th:hover{
     background-color: #dee2e6;
 }
 .table_history_assigned{
-    font-size: 13px;
+    table-layout: fixed;
+    border-spacing: 10px 0px;
+    border-collapse: separate;
     margin-top: 0;
-    width: max-content;
+    width:400px;
 }
 .table_history_assigned th{
     padding: 0;
@@ -32,11 +34,12 @@ th:hover{
     margin-left: -10px;
     margin-right: 10px;
 }
-.table_border_spacing .newRow td:not(:last-child){
-    background-color: rgba(108, 117, 125, 1);
-    color: white;
+.table_history_container td{
+    padding: 0;
 }
-.table_border_spacing .newRow:hover td:not(:last-child){
-    background-color: #dee2e6;
-    color: black;
+.table_history_container tr th:last-child{
+    width: 80px;
+}
+.table_history_container tr th:first-child{
+    width: 80px;
 }
