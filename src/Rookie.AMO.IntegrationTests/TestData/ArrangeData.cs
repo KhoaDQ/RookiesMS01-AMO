@@ -7,7 +7,6 @@ namespace Rookie.AMO.IntegrationTests.TestData
         public static Category Category() => new()
         {
             Name = "LA",
-            Desc = "Laptop",
         };
     }
 }

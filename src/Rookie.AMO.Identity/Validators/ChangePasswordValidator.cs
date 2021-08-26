@@ -21,15 +21,15 @@ namespace Rookie.AMO.Identity.Validators
                 .WithMessage(UserContants.NewPasswordAndConfirmNewPasswordIsNotTheSame);
 
             RuleFor(x => x.ConfirmPassword)
-                .Matches(@"^[^\s][A-z0-9\W]{7,30}$")
+                .Matches(@"^[A-Za-z0-9\S]{8,30}$")
                 .WithMessage(string.Format(UserContants.TheCharacterIsInvalidNotAllowSpaceCharacter, "Confirm Password"));
 
             RuleFor(x => x.NewPassword)
-                .Matches(@"^[^\s][A-z0-9\W]{7,30}$")
+                .Matches(@"^[A-Za-z0-9\S]{8,30}$")
                 .WithMessage(string.Format(UserContants.TheCharacterIsInvalidNotAllowSpaceCharacter, "New Password"));
 
             RuleFor(x => x.OldPassword)
-                .Matches(@"^[^\s][A-z0-9\W]{7,30}$")
+                .Matches(@"^[A-Za-z0-9\S]{8,30}$")
                 .WithMessage(string.Format(UserContants.TheCharacterIsInvalidNotAllowSpaceCharacter, "Password"));
         }
 
