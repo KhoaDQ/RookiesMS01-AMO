@@ -25,7 +25,6 @@ th:hover{
     border-spacing: 10px 0px;
     border-collapse: separate;
     margin-top: 0;
-    width:400px;
 }
 .table_history_assigned th{
     padding: 0;
