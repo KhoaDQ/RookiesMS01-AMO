@@ -11,7 +11,8 @@ import { FaCheck } from '@react-icons/all-files/fa/FaCheck';
 import { FaTimes } from '@react-icons/all-files/fa/FaTimes';
 import { MdSettingsBackupRestore } from '@react-icons/all-files/md/MdSettingsBackupRestore';
 import PopupDetail from '../../components/Popup/PopupDetail';
-import PopupComplete from '../../components/Popup/PopupComplete';
+import PopupAccept from '../../components/Popup/PopupAccept';
+import PopupDecline from '../../components/Popup/PopupDecline';
 import './home.css';
 import { format } from 'date-fns';
 import CreateRequest from '../Request/CreateRequest.jsx';
@@ -224,16 +225,16 @@ function Home() {
         handleModelShow={setOpenDetailModal}
         isModalOpen={openDetailModal}
       ></PopupDetail>
-      <PopupComplete
+      <PopupAccept
         isModalOpen={isAcceptOpen}
         handleComplete={handleAccept}
         handleModelShow={handleAcceptShow}
-      ></PopupComplete>
-      <PopupComplete
+      ></PopupAccept>
+      <PopupDecline
         isModalOpen={isDeclineOpen}
         handleComplete={handleDecline}
         handleModelShow={handleDeclineShow}
-      ></PopupComplete>
+      ></PopupDecline>
       {showPopupRequest()}
     </div>
   );
