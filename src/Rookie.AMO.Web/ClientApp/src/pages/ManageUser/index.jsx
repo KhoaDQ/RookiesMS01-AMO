@@ -7,7 +7,9 @@ import * as ac from '../../actions//IndexCom/ActionType';
 import apiCaller from '../../apis/callApi';
 import UserItem from '../../components/User/UserItem';
 import UserList from '../../components/User/UserList';
-import PopupDelete from '../../components/Popup/PopupDelete';
+
+import PopupInfor from '../../components/Popup/PopupInfor';
+import PopupDisableUser from '../../components/Popup/PopupDisableUser';
 const stateList = [
   { name: 'Admin', value: 'Admin' },
   { name: 'Staff', value: 'Staff' },
@@ -16,6 +18,9 @@ function ManageUser() {
   const dispatch = useDispatch();
   dispatch({ type: ac.CHANGE_INDEX, payload: '' });
   const [pageNumber, setPageNumber] = useState(1);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [userEdit, setUserEdit] = useState('');
   const [paging, setPaging] = useState({
     name: '',
     type: '',
@@ -39,9 +44,27 @@ function ManageUser() {
     fetch();
   }, [paging]);
 
-  function handleDeleteOpen() {
-    console.log('okie');
+  async function handleDeleteOpen(id) {
+    try {
+      const res = await apiCaller(`Assignment/CanBeDisable/${id}`, 'GET', null);
+      if (res.data) {
+        handleDeleteShow(true);
+        setUserEdit(id)
+      } else {
+        setIsModalOpen(true);
+      }
+    } catch (error) {
+
+    }
   }
+
+  const handleDelete = async () => {
+    handleDeleteShow(false);
+    const res = await apiCaller(`User/${userEdit}`, 'DELETE', null);
+    console.log(res);
+    dispatch({ type: action.DELETE_USER, id: userEdit });
+  };
+
   const showUsers = () => {
     let result = null;
 
@@ -78,6 +101,12 @@ function ManageUser() {
     return result;
   };
 
+  const handleModelShowFunction = (content) => {
+    setIsModalOpen(content);
+  };
+  const handleDeleteShow = (isDeleteOpen) => {
+    setIsDeleteOpen(isDeleteOpen);
+  };
   return (
     <UserList
       stateList={stateList}
@@ -89,7 +118,21 @@ function ManageUser() {
       paging={paging}
     >
       {showUsers()}
+
+      <PopupInfor
+        title="Can not disable user"
+        content="There are valid assignments belonging to this user. Please close all assignments before disabling user"
+        handleModelShow={handleModelShowFunction}
+        isModalOpen={isModalOpen}
+      ></PopupInfor>
+
+      <PopupDisableUser
+        isModalOpen={isDeleteOpen}
+        handleDelete={handleDelete}
+        handleModelShow={handleDeleteShow}
+      />
     </UserList>
+
   );
 }
 

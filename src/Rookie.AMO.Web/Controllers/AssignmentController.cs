@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using EnsureThat;
 using Microsoft.AspNetCore.Mvc;
@@ -63,6 +64,21 @@ namespace Rookie.AMO.Web.Controllers
         public async Task<PagedResponseModel<AssignmentDto>> FindAsync([FromQuery] FilterAssignmentsModel filterAssignmentsModel)
         {
             return await _assignmentService.PagedQueryAsync(filterAssignmentsModel);
+        }
+        //[HttpGet]
+        //public async Task<IActionResult> CanBeDisableUserAsync(Guid userId)
+        //{
+        //    var assignments = await _assignmentService.GetByUserIdAsync(userId);
+        //    var can = assignments.Count() == 0;
+        //    return Ok(can);
+        //}
+
+        [HttpGet("CanBeDisable/{userId}")]
+        public async Task<IActionResult> CanBeDisableUserAsync(Guid userId)
+        {
+            var assignments = await _assignmentService.GetByUserIdAsync(userId);
+            var can = assignments.Count() == 0;
+            return Ok(can);
         }
     }
 }
