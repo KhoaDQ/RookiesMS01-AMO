@@ -51,7 +51,12 @@ namespace Rookie.AMO.Identity.Business.Services
                 new Claim("location", user.Location)
             };
 
-            await _userManager.AddClaimsAsync(user, claims);
+            var addClaimsResult = await _userManager.AddClaimsAsync(user, claims);
+
+            if (!addClaimsResult.Succeeded)
+            {
+                throw new Exception("Unexpected errors! Add claims operation is not success.");
+            }
 
             var addRoleResult = await _userManager.AddToRoleAsync(user, userRequest.Type);
 
@@ -87,7 +92,7 @@ namespace Rookie.AMO.Identity.Business.Services
 
         public async Task<IEnumerable<UserDto>> GetAllAsync()
         {
-            return _mapper.Map<IEnumerable<UserDto>>(await _userManager.Users.ToListAsync());
+            return _mapper.Map<IEnumerable<UserDto>>(_userManager.Users);
         }
 
         public async Task<UserDto> GetByIdAsync(Guid userId)

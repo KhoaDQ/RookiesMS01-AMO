@@ -17,6 +17,5 @@ namespace Rookie.AMO.DataAccessor.Enums
         WaitingAccept = 7,
         WaitingRecycle = 8,
         WaitingReturn = 9,
-        
     }
 }
