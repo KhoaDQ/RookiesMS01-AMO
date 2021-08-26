@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
-import { useDispatch, useSelector, connect } from 'react-redux';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
-import { useForm } from 'react-hook-form';
-import moment from 'moment';
+import { useDispatch, useSelector, connect } from "react-redux";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
+import moment from "moment";
 
-import apiCaller from '../../../apis/callApi';
-import * as action from '../../../actions/ManagerAssignment/ActionType';
+import apiCaller from "../../../apis/callApi";
+import * as action from "../../../actions/ManagerAssignment/ActionType";
 import {
   Button,
   Row,
@@ -19,33 +19,33 @@ import {
   FormText,
   InputGroup,
   InputGroupAddon,
-} from 'reactstrap';
-import { useHistory } from 'react-router';
-import { Link } from 'react-router-dom';
-import ModalPickUser from '../../../components/Popup/ModalPickUser';
-import ModalPickAsset from '../../../components/Popup/ModalPickAsset';
-import * as ac from '../../../actions//IndexCom/ActionType';
-import PopupInfor from '../../../components/Popup/PopupInfor';
+} from "reactstrap";
+import { useHistory } from "react-router";
+import { Link } from "react-router-dom";
+import ModalPickUser from "../../../components/Popup/ModalPickUser";
+import ModalPickAsset from "../../../components/Popup/ModalPickAsset";
+import * as ac from "../../../actions//IndexCom/ActionType";
+import PopupInfor from "../../../components/Popup/PopupInfor";
 
 const EditAssignment = (props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form, setForm] = useState({
-    id: '',
-    asset: '',
+    id: "",
+    asset: "",
     assignTo: null,
     assignBy: null,
     assignDate: moment().toDate(),
-    note: '',
-    state: '',
+    note: "",
+    state: "",
   });
 
   const disableButton =
-    form.asset !== '' && form.assignTo && form.assignDate && form.note !== '';
+    form.asset !== "" && form.assignTo && form.assignDate && form.note !== "";
 
   const schema = yup.object().shape({});
 
   const dispatch = useDispatch();
-  dispatch({ type: ac.CHANGE_INDEX, payload: '/edit-assignments' });
+  dispatch({ type: ac.CHANGE_INDEX, payload: "/edit-assignments" });
   const AssetReducer = useSelector((state) => state.AssetReducer);
   const UserReducer = useSelector((state) => state.UserReducer);
 
@@ -56,37 +56,37 @@ const EditAssignment = (props) => {
   useEffect(() => {
     if (initAssignment) {
       setForm({
-        id: initAssignment.id || '',
-        asset: initAssignment.assetID || '',
-        assignTo: initAssignment.userID || '',
+        id: initAssignment.id || "",
+        asset: initAssignment.assetID || "",
+        assignTo: initAssignment.userID || "",
         state: initAssignment.state,
         assignDate: moment(initAssignment.assignedDate).toDate(),
-        note: initAssignment.note || '',
+        note: initAssignment.note || "",
       });
     }
   }, [initAssignment]);
 
   useEffect(() => {
     async function fetchUser() {
-      const res = await apiCaller('User', 'GET', null);
+      const res = await apiCaller("User", "GET", null);
 
       if (res.data) {
         dispatch({
-          type: 'FETCH_USER',
+          type: "FETCH_USER",
           payload: res.data,
         });
         setUsers(res.data);
       } else {
-        return alert('You not permision to get data.');
+        return alert("You not permision to get data.");
       }
     }
 
     async function fetchAsset() {
-      const res = await apiCaller('Asset', 'GET', null);
+      const res = await apiCaller("Asset", "GET", null);
 
       if (res.status === 200) {
         dispatch({
-          type: 'FETCH_ASSET',
+          type: "FETCH_ASSET",
           payload: res.data,
         });
 
@@ -107,7 +107,7 @@ const EditAssignment = (props) => {
     users.length > 0 &&
     users.map((user, index) => {
       return (
-        <option value={user.id}>{user.firstName + ' ' + user.lastName}</option>
+        <option value={user.id}>{user.firstName + " " + user.lastName}</option>
       );
     });
 
@@ -130,7 +130,7 @@ const EditAssignment = (props) => {
     // e.preventDefault();
 
     async function EditAssignment() {
-      const res = await apiCaller('Assignment/' + form.id, 'PUT', {
+      const res = await apiCaller("Assignment/" + form.id, "PUT", {
         UserID: form.assignTo,
         AssetID: form.asset,
         AssignedDate: moment(form.assignDate).toDate(),
@@ -154,29 +154,30 @@ const EditAssignment = (props) => {
   };
 
   return (
-    <div>
-      <h5 className="right-title">Edit Assignment</h5>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <br></br>
-        <div className="form-group row">
-          <label htmlFor="inputUser" className="col-sm-2 col-form-label">
-            User
-          </label>
-          <div className="col-sm-10" className="resize">
-            <select
-              className="custom-select custom-select-lg mb-3"
-              className="form-control"
-              value={form.assignTo}
-              name="assignTo"
-              onChange={(e) => setForm({ ...form, assignTo: e.target.value })}
-              required={true}
-            >
-              <option value={0} defaultChecked>
-                Select User
-              </option>
-              {listUser}
-            </select>
-            {/* <InputGroup>
+    <div className="row">
+      <div className="col-8">
+        <h5 className="right-title mb-5">Edit Assignment</h5>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <br></br>
+          <div className="form-group row">
+            <label htmlFor="inputUser" className="col-3 col-form-label">
+              User
+            </label>
+            <div className="col-9 resize">
+              <select
+                className="custom-select custom-select-lg mb-3"
+                className="form-control"
+                value={form.assignTo}
+                name="assignTo"
+                onChange={(e) => setForm({ ...form, assignTo: e.target.value })}
+                required={true}
+              >
+                <option value={0} defaultChecked>
+                  Select User
+                </option>
+                {listUser}
+              </select>
+              {/* <InputGroup>
               <Input />
               <InputGroupAddon
                 addonType="append"
@@ -192,31 +193,31 @@ const EditAssignment = (props) => {
                 }}
               />
             </InputGroup> */}
+            </div>
           </div>
-        </div>
-        <br></br>
-        <div className="form-group row">
-          <label
-            htmlFor="inputcategoryAssets"
-            className="col-sm-2 col-form-label"
-          >
-            Asset
-          </label>
-          <div className="col-sm-10" className="resize">
-            <select
-              className="custom-select custom-select-lg mb-3"
-              className="form-control"
-              value={form.asset}
-              name="asset"
-              onChange={(e) => setForm({ ...form, asset: e.target.value })}
-              required={true}
+          <br></br>
+          <div className="form-group row">
+            <label
+              htmlFor="inputcategoryAssets"
+              className="col-sm-3 col-form-label"
             >
-              <option value={0} defaultChecked>
-                Select Asset
-              </option>
-              {listAsset}
-            </select>
-            {/* <InputGroup>
+              Asset
+            </label>
+            <div className="col-sm-9 resize">
+              <select
+                className="custom-select custom-select-lg mb-3"
+                className="form-control"
+                value={form.asset}
+                name="asset"
+                onChange={(e) => setForm({ ...form, asset: e.target.value })}
+                required={true}
+              >
+                <option value={0} defaultChecked>
+                  Select Asset
+                </option>
+                {listAsset}
+              </select>
+              {/* <InputGroup>
               <Input />
               <InputGroupAddon
                 addonType="append"
@@ -233,69 +234,74 @@ const EditAssignment = (props) => {
                 }}
               />
             </InputGroup> */}
+            </div>
           </div>
-        </div>
-        <br></br>
-        <div className="form-group row">
-          <label htmlFor="installedDate" className="col-sm-2 col-form-label">
-            Assigned Date
-          </label>
-          <div className="col-sm-10" className="resize">
-            <input
-              type="date"
-              className="form-control"
-              id="AssignedDate"
-              name="AssignedDate"
-              onChange={(e) => {
-                const value = e.target?.value;
+          <br></br>
+          <div className="form-group row">
+            <label htmlFor="installedDate" className="col-3 col-form-label">
+              Assigned Date
+            </label>
+            <div className="col-9 resize">
+              <input
+                type="date"
+                className="form-control"
+                id="AssignedDate"
+                name="AssignedDate"
+                onChange={(e) => {
+                  const value = e.target?.value;
 
-                setForm({
-                  ...form,
-                  assignDate: value,
-                });
-              }}
-              value={moment(form.assignDate).format('YYYY-MM-DD')}
-            />
+                  setForm({
+                    ...form,
+                    assignDate: value,
+                  });
+                }}
+                value={moment(form.assignDate).format("YYYY-MM-DD")}
+              />
+            </div>
           </div>
-        </div>
-        <br></br>
-        <div className="form-group row">
-          <label
-            htmlFor="specificationCategory"
-            className="col-sm-2 col-form-label"
-          >
-            Note
-          </label>
-          <div className="col-sm-10" className="resize">
-            <input
-              type="text"
-              className="form-control height"
-              id="NoteAssignment"
-              onChange={(e) => setForm({ ...form, note: e.target.value })}
-              value={form.note}
-            />
+          <br></br>
+          <div className="form-group row">
+            <label
+              htmlFor="specificationCategory"
+              className="col-sm-3 col-form-label"
+            >
+              Note
+            </label>
+            <div className="col-sm-9 resize">
+              <textarea
+                type="text"
+                className="form-control height"
+                id="NoteAssignment"
+                onChange={(e) => setForm({ ...form, note: e.target.value })}
+                value={form.note}
+              />
+            </div>
           </div>
-        </div>
-        <br></br>
-
-        <button
-          type="submit"
-          class="btn btn-outline-danger margin color"
-          disabled={!disableButton}
-        >
-          Save
-        </button>
-        <button type="button" class="btn btn-outline-danger color1">
-          <Link to="/manage-assignment">Cancel</Link>
-        </button>
-      </form>
-      <PopupInfor
-        title="Information"
-        content="Edit assignment successfully"
-        handleModelShow={handleModelShowFunction}
-        isModalOpen={isModalOpen}
-        pathReturn="/manage-assignment"
-      ></PopupInfor>
+          <br></br>
+          <div className="d-flex flex-row-reverse">
+            <button
+              type="button"
+              className="btn btn-outline-danger margin color1"
+            >
+              <Link to="/manage-assignment">Cancel</Link>
+            </button>
+            <button
+              type="submit"
+              class="btn btn-outline-danger margin color"
+              disabled={!disableButton}
+            >
+              Save
+            </button>
+          </div>
+        </form>
+        <PopupInfor
+          title="Information"
+          content="Edit assignment successfully"
+          handleModelShow={handleModelShowFunction}
+          isModalOpen={isModalOpen}
+          pathReturn="/manage-assignment"
+        ></PopupInfor>
+      </div>
     </div>
   );
 };
@@ -308,7 +314,7 @@ function FetchAssignment(id) {
     async function fetch() {
       let endpoint = `Assignment/${id}`;
       //console.log(endpoint);
-      const res = await apiCaller(endpoint, 'GET', null);
+      const res = await apiCaller(endpoint, "GET", null);
 
       if (res.status === 200) {
         dispatch({ type: action.FETCH_ASSIGNMENTS, payload: res.data });

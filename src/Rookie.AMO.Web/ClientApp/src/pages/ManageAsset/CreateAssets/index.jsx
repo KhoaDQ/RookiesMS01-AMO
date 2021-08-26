@@ -155,7 +155,7 @@ const CreateAssets = () => {
             Specification
           </label>
           <div className="col-sm-10" className="resize">
-            <input
+            <textarea
               {...register('Specification')}
               type="text"
               className="form-control height"
