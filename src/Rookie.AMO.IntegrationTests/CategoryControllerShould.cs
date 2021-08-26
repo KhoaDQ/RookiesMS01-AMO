@@ -39,7 +39,7 @@ namespace Rookie.AMO.IntegrationTests
             var categoryService = new CategoryService(_categoryRepository, _mapper);
             var categoryController = new CategoryController(categoryService);
 
-            var newCategory = new CategoryDto { Name = "Test Category", Desc = "TC" };
+            var newCategory = new CategoryRequest { Name = "Test Category" };
 
             // Act
             var result = await categoryController.CreateAsync(newCategory);
@@ -52,8 +52,6 @@ namespace Rookie.AMO.IntegrationTests
             var returnValue = Assert.IsType<CategoryDto>(createdResult.Value);
 
             Assert.Equal(newCategory.Name, returnValue.Name);
-            Assert.Equal(newCategory.Desc, returnValue.Desc);
-
           
             returnValue.Id.Should().NotBe(Guid.Empty);
         }
@@ -62,13 +60,13 @@ namespace Rookie.AMO.IntegrationTests
         public async Task Add_Exist_Category_ExistedName()
         {
             // Arrange
-            var existCategory = new Category { Id = Guid.NewGuid(), Name = "Laptop", Desc = "LT" };
+            var existCategory = new Category { Id = Guid.NewGuid(), Name = "Laptop" };
             await _categoryRepository.AddAsync(existCategory);
 
             var categoryService = new CategoryService(_categoryRepository, _mapper);
             var categoryController = new CategoryController(categoryService);
 
-            var newCategory = new CategoryDto { Name = "Laptop 2", Desc = "ABC" };
+            var newCategory = new CategoryRequest { Name = "Laptop 2" };
 
             // Act
             var result = await categoryController.CreateAsync(newCategory);
@@ -80,7 +78,6 @@ namespace Rookie.AMO.IntegrationTests
             var createdResult = Assert.IsType<CreatedResult>(result.Result);
             var returnValue = Assert.IsType<CategoryDto>(createdResult.Value);
 
-            Assert.Equal(newCategory.Desc, returnValue.Desc);
             Assert.Equal(newCategory.Name, returnValue.Name);
 
             returnValue.Should().NotBeNull();
@@ -90,10 +87,10 @@ namespace Rookie.AMO.IntegrationTests
         public async Task Get_All_Categories()
         {
             //Arrange
-            var category1 = new Category { Name = "Cate 1", Desc = "Code1" };
-            var category2 = new Category { Name = "Cate 2", Desc = "Code2" };
-            var category3 = new Category { Name = "Cate 3", Desc = "Code3" };
-            var category4 = new Category { Name = "Cate 4", Desc = "Code4" };
+            var category1 = new Category { Name = "Cate 1"/*, Desc = "Code1"*/ };
+            var category2 = new Category { Name = "Cate 2"/*, Desc = "Code2"*/ };
+            var category3 = new Category { Name = "Cate 3"/*, Desc = "Code3"*/ };
+            var category4 = new Category { Name = "Cate 4"/*, Desc = "Code4"*/ };
             await _categoryRepository.AddAsync(category1);
             await _categoryRepository.AddAsync(category2);
             await _categoryRepository.AddAsync(category3);
