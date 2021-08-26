@@ -43,7 +43,7 @@ namespace Rookie.AMO.Web.Controllers
             return _userService.PagedQueryAsync(name, type, page, limit, propertyName, desc, cookie);
         }
         [HttpDelete("{userId}")]
-        public Task<IActionResult> DisableUserAsync(Guid userId)
+        public Task<bool> DisableUserAsync(Guid userId)
         {
             var cookie = HttpContext.Request.Cookies.GetString();
             return _userService.DisableUserAsync(userId, cookie);
