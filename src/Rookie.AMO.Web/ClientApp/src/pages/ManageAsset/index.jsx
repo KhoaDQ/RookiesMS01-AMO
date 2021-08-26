@@ -13,6 +13,7 @@ import PopupInfor from '../../components/Popup/PopupInfor';
 import queryString from 'query-string';
 import Moment from 'moment';
 import { FETCH_HISTORY_REQUESTS } from '../../actions/ManagerRequest/ActionType';
+import PopupCannotDelete from '../../components/Popup/PopupCannotDelete';
 const stateList = [
   { name: 'Assigned', value: 'Assigned' },
   { name: 'Available', value: 'Available' },
@@ -95,13 +96,28 @@ function ManageAsset() {
   };
 
   function deletePopup() {
-    return (
-      <PopupDelete
-        isModalOpen={isDeleteOpen}
-        handleDelete={handleDelete}
-        handleModelShow={handleDeleteShow}
-      ></PopupDelete>
-    );
+    const history = CheckHistory(idAssetDelete);
+    if(history)
+    if(history.length != 0){
+      console.log(history)
+      return (
+        <PopupCannotDelete
+          isModalOpen={isDeleteOpen}
+          handleModelShow={handleDeleteShow}
+          idAsset={idAssetDelete}
+        >
+        </PopupCannotDelete>
+      );
+    }
+    else{
+      return (
+        <PopupDelete
+          isModalOpen={isDeleteOpen}
+          handleDelete={handleDelete}
+          handleModelShow={handleDeleteShow}
+        ></PopupDelete>
+      );
+    }
   }
 
   const handleModelShowFunction = (content) => {
@@ -265,6 +281,25 @@ function FetchHistory(asset) {
     }
     if (asset != undefined && 'id' in asset) fetch();
   }, [asset]);
+
+  const historyAsset = useSelector(
+    (state) => state.RequestReducer.historyAsset
+  );
+
+  return historyAsset;
+}
+
+function CheckHistory(id) {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    async function fetch() {
+      const res = await apiCaller('Request/' + id, 'GET', null);
+      dispatch({ type: FETCH_HISTORY_REQUESTS, payload: res.data });
+    }
+    if (id) 
+      fetch();
+  }, [id]);
 
   const historyAsset = useSelector(
     (state) => state.RequestReducer.historyAsset
