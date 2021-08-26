@@ -17,7 +17,7 @@ namespace Rookie.AMO.Business.Services
     public class AssignmentService : IAssignmentService
     {
         private readonly IBaseRepository<Assignment> _baseRepository;
-        private readonly IBaseRepository<MappingRequest> _mappingRepository;
+        private readonly IBaseRepository<Asset> _assetRepository;
         private readonly IMapper _mapper;
         private readonly ApplicationDbContext _context;
 
@@ -33,6 +33,14 @@ namespace Rookie.AMO.Business.Services
             Ensure.Any.IsNotNull(assignmentRequest, nameof(assignmentRequest));
             var assignment = _mapper.Map<Assignment>(assignmentRequest);
             assignment.State = (StateList)EnumConverExtension.GetValueInt<StateList>("WaitingAccept");
+
+            var asset = (from a in _context.Assets
+             where a.Id == assignment.AssetID
+             select a).FirstOrDefault();
+
+            asset.State = StateList.Assigned;
+            _context.Update(asset);
+
             var item = await _baseRepository.AddAsync(assignment);
             return _mapper.Map<AssignmentDto>(item);
         }
