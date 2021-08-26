@@ -1,6 +1,25 @@
-#tools {
-    width: 18%;
+.icon-nash--red-dis {
+  color: rgb(253, 159, 159);
 }
-.returnDisable{
-    opacity: 0.4;
+
+.icon-nash--black-dis {
+  color: rgb(148, 148, 148);
+}
+
+.icon-nash--blue-dis {
+  color: rgb(208, 192, 252);
+}
+
+.icon-nash--blue-dis:hover,
+.icon-nash--black-dis:hover,
+.icon-nash--red-dis:hover {
+  cursor: default;
+}
+
+#tools {
+  width: 18%;
+}
+.returnDisable {
+  opacity: 0.4;
+  cursor: default;
 }

@@ -18,7 +18,7 @@ namespace Rookie.AMO.Web.DataProviders
         [Post(Endpoints.User)]
         Task<UserDto> CreateUserAsync(UserRequest user, [Header("Cookie")] string cookie);
         [Delete(Endpoints.User)]
-        Task<IActionResult> DisableUserAsync(Guid userId, [Header("Cookie")] string cookie);
+        Task<bool> DisableUserAsync(Guid userId, [Header("Cookie")] string cookie);
         [Put(Endpoints.User + "/{id}")]
         Task<string> UpdateUserAsync(Guid id, UserUpdateRequest user, [Header("Cookie")] string cookie);
         [Get(Endpoints.User + "/find")]

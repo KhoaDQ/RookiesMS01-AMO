@@ -23,7 +23,7 @@ const PopupDetailAsset = (props) => {
       <div className={"modal " + (isModalOpen ? "modal__open" : "modal__close")}>
         <div className="modal__overlay"></div>
         <div className="modal__body">
-          <div className="auth-form">
+          <div className="auth-form-asset">
             <div className="auth-form__header">
               <div className="row">
                 <div className="col-md-8">

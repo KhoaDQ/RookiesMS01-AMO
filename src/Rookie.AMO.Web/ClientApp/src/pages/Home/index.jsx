@@ -7,11 +7,12 @@ import callApi from '../../apis/callApi';
 import { GET_ASSIGNMENT_BY_ID } from '../../actions/ManagerAssignment/ActionType';
 import { AiFillCaretDown, AiFillCaretUp } from 'react-icons/ai';
 import { Table } from 'reactstrap';
-import { Link } from 'react-router-dom';
-import { IoMdCheckmark } from '@react-icons/all-files/io/IoMdCheckmark';
-import { IoIosCloseCircleOutline } from '@react-icons/all-files/io/IoIosCloseCircleOutline';
+import { FaCheck } from '@react-icons/all-files/fa/FaCheck';
+import { FaTimes } from '@react-icons/all-files/fa/FaTimes';
 import { MdSettingsBackupRestore } from '@react-icons/all-files/md/MdSettingsBackupRestore';
 import PopupDetail from '../../components/Popup/PopupDetail';
+import PopupAccept from '../../components/Popup/PopupAccept';
+import PopupDecline from '../../components/Popup/PopupDecline';
 import './home.css';
 import { format } from 'date-fns';
 import CreateRequest from '../Request/CreateRequest.jsx';
@@ -22,9 +23,17 @@ const stateList = {
   WaitingAccept: 'Waiting for Acceptance',
 };
 function Home() {
-  localStorage.setItem('indexCom', '');
-
   const dispatch = useDispatch();
+  //Popup accept assignment
+  const [idAssignmentAccept, setIdAssignmentAccept] = useState('');
+  const [isAcceptOpen, setIsAcceptOpen] = useState(false);
+  const [isAccept, setIsAccept] = useState(0);
+
+  //Popup decline assignment
+  const [idAssignmentDecline, setIdAssignmentDecline] = useState('');
+  const [isDeclineOpen, setIsDeclineOpen] = useState(false);
+  const [isDecline, setIsDecline] = useState(0);
+
   dispatch({ type: ac.CHANGE_INDEX, payload: '' });
   const { user } = useSelector((state) => state.oidc);
   const assignments = useSelector((state) => state.AssignmentReducer);
@@ -35,11 +44,30 @@ function Home() {
     dispatch({ type: GET_ASSIGNMENT_BY_ID, payload: res.data });
   }
 
+  async function fetch() {
+    if (isAccept === 1) {
+      let endpoint = `assignment/accept/${idAssignmentAccept}`;
+      const res = await callApi(endpoint, 'PUT', null);
+      setIsAccept(0);
+    }
+    if (isDecline === 1) {
+      let endpoint = `assignment/${idAssignmentDecline}`;
+      const res = await callApi(endpoint, 'DELETE', null);
+      setIsDecline(0);
+    }
+  }
+
   useEffect(() => {
-    if (user != null) {
+    if (user != null || isAccept === 0 || isDecline === 0) {
       fetchAssignment();
     }
-  }, [user]);
+  }, [user, isAccept, isDecline]);
+
+  useEffect(() => {
+    if (isAccept === 1 || isDecline === 1) {
+      fetch();
+    }
+  }, [isAccept, isDecline]);
 
   const initSort = {
     assetCode: { propertyName: 'assetCode', desc: true },
@@ -71,6 +99,40 @@ function Home() {
     user.profile.sub,
     user.profile.userName
   );
+
+  //Popup accept
+  const handleAcceptOpen = (id, e) => {
+    setIdAssignmentAccept(id);
+    setIsAcceptOpen(true);
+    handleAcceptShow(true);
+  };
+
+  const handleAcceptShow = (isOpen) => {
+    setIsAcceptOpen(isOpen);
+  };
+
+  const handleAccept = (e) => {
+    setIsAccept(1);
+    handleAcceptShow(false);
+    console.log(idAssignmentAccept);
+  };
+
+  //Popup decline
+  const handleDeclineOpen = (id, e) => {
+    setIdAssignmentDecline(id);
+    setIsDeclineOpen(true);
+    handleDeclineShow(true);
+  };
+
+  const handleDeclineShow = (isOpen) => {
+    setIsDeclineOpen(isOpen);
+  };
+
+  const handleDecline = (e) => {
+    setIsDecline(1);
+    handleDeclineShow(false);
+    console.log(idAssignmentDecline);
+  };
 
   return (
     <div className="home">
@@ -139,7 +201,13 @@ function Home() {
         </thead>
         <tbody>
           {assignments.length > 0 ? (
-            showAssignments(assignments, showDetail, handleRequestOpen)
+            showAssignments(
+              assignments,
+              showDetail,
+              handleRequestOpen,
+              handleAcceptOpen,
+              handleDeclineOpen
+            )
           ) : (
             <tr
               style={{ width: '200px', display: 'block', margin: '0 auto' }}
@@ -157,16 +225,31 @@ function Home() {
         handleModelShow={setOpenDetailModal}
         isModalOpen={openDetailModal}
       ></PopupDetail>
+      <PopupAccept
+        isModalOpen={isAcceptOpen}
+        handleComplete={handleAccept}
+        handleModelShow={handleAcceptShow}
+      ></PopupAccept>
+      <PopupDecline
+        isModalOpen={isDeclineOpen}
+        handleComplete={handleDecline}
+        handleModelShow={handleDeclineShow}
+      ></PopupDecline>
       {showPopupRequest()}
     </div>
   );
 }
-
-function showAssignments(assignments, showDetail, handleRequestOpen) {
+function showAssignments(
+  assignments,
+  showDetail,
+  handleRequestOpen,
+  handleAcceptOpen,
+  handleDeclineOpen
+) {
   let result = [];
   if (assignments != null || assignments.length > 0) {
     result = assignments.map((assignment, index) => {
-      console.log(assignment.isReturnRequest)
+      console.log(assignment.isReturnRequest);
       return (
         <tr key={assignment.id} onClick={() => showDetail(assignment)}>
           <td>{assignment.assetCode}</td>
@@ -175,16 +258,61 @@ function showAssignments(assignments, showDetail, handleRequestOpen) {
           <td>{format(new Date(assignment.assignedDate), 'dd/MM/yyyy')}</td>
           <td>{stateList[assignment.state]}</td>
           <td onClick={(e) => e.stopPropagation()}>
-            <span className="icon-nash icon-nash--black">
-              <Link>
-                <IoMdCheckmark />
-              </Link>
+            <span
+              className={
+                'icon-nash ' +
+                (assignment.state === 'WaitingAccept'
+                  ? 'icon-nash--black'
+                  : 'icon-nash--black-dis')
+              }
+            >
+              <FaCheck
+                onClick={
+                  assignment.state === 'WaitingAccept'
+                    ? (e) => {
+                        handleAcceptOpen(assignment.id, e);
+                      }
+                    : undefined
+                }
+              />
             </span>
-            <span className="icon-nash icon-nash--red">
-              <IoIosCloseCircleOutline className={assignment.isReturnRequest?"returnDisable":""}/>
+            <span
+              className={
+                'icon-nash ' +
+                (assignment.state === 'WaitingAccept'
+                  ? 'icon-nash--red'
+                  : 'icon-nash--red-dis')
+              }
+            >
+              <FaTimes
+                onClick={
+                  assignment.state === 'WaitingAccept'
+                    ? (e) => {
+                        handleDeclineOpen(assignment.id, e);
+                      }
+                    : undefined
+                }
+              />
             </span>
-            <span className="icon-nash icon-nash--blue" onClick = {assignment.state === 'Accepted' && !assignment.isReturnRequest?()=>handleRequestOpen(assignment):undefined}>
-              <MdSettingsBackupRestore className={assignment.state === 'Accepted' && !assignment.isReturnRequest?"":"returnDisable"}/>
+            <span
+              className={
+                'icon-nash ' +
+                (assignment.state === 'Accepted'
+                  ? 'icon-nash--blue'
+                  : 'icon-nash--blue-dis')
+              }
+            >
+              <MdSettingsBackupRestore
+                onClick={
+                  assignment.state === 'Accepted' && !assignment.isReturnRequest
+                    ? () => handleRequestOpen(assignment)
+                    : undefined
+                }
+                className = {
+                  assignment.state === 'Accepted' && !assignment.isReturnRequest
+                  ? "":"returnDisable"
+                }
+              />
             </span>
           </td>
         </tr>

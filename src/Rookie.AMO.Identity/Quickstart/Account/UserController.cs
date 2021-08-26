@@ -46,10 +46,9 @@ namespace Rookie.AMO.Identity.Quickstart.Account
         }
 
         [HttpDelete]
-        public async Task<ActionResult> DisableUserAsync(Guid userId)
+        public async Task<bool> DisableUserAsync(Guid userId)
         {
-            await _userService.DisableUserAsync(userId);
-            return Ok();
+            return await _userService.DisableUserAsync(userId);
         }
 
         [HttpPut("{id}")]

@@ -68,7 +68,7 @@ namespace Rookie.AMO.Identity.Business.Services
             return _mapper.Map<UserDto>(user);
         }
 
-        public async Task DisableUserAsync(Guid userId)
+        public async Task< bool> DisableUserAsync(Guid userId)
         {
             var user = await _userManager.FindByIdAsync(userId.ToString());
             if (user == null)
@@ -76,7 +76,12 @@ namespace Rookie.AMO.Identity.Business.Services
                 throw new NotFoundException("User not found!");
             }
             user.Disable = true;
-            await _userManager.UpdateAsync(user);
+            var result = await _userManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                return true;
+            }
+            return false;
         }
 
         public async Task EnableUserAsync(Guid userId)

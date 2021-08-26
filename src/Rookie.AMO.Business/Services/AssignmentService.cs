@@ -17,7 +17,7 @@ namespace Rookie.AMO.Business.Services
     public class AssignmentService : IAssignmentService
     {
         private readonly IBaseRepository<Assignment> _baseRepository;
-        private readonly IBaseRepository<MappingRequest> _mappingRepository;
+        private readonly IBaseRepository<Asset> _assetRepository;
         private readonly IMapper _mapper;
         private readonly ApplicationDbContext _context;
 
@@ -33,11 +33,19 @@ namespace Rookie.AMO.Business.Services
             Ensure.Any.IsNotNull(assignmentRequest, nameof(assignmentRequest));
             var assignment = _mapper.Map<Assignment>(assignmentRequest);
             assignment.State = (StateList)EnumConverExtension.GetValueInt<StateList>("WaitingAccept");
+
+            var asset = (from a in _context.Assets
+             where a.Id == assignment.AssetID
+             select a).FirstOrDefault();
+
+            asset.State = StateList.Assigned;
+            _context.Update(asset);
+
             var item = await _baseRepository.AddAsync(assignment);
             return _mapper.Map<AssignmentDto>(item);
         }
 
-   
+
         public async Task DeleteAsync(Guid id)
         {
             await _baseRepository.DeleteAsync(id);
@@ -88,7 +96,7 @@ namespace Rookie.AMO.Business.Services
 
             var query = _baseRepository.Entities;
 
-            query = query.Where(x => string.IsNullOrEmpty(filter.KeySearch)|| x.Asset.Name.Contains(filter.KeySearch)
+            query = query.Where(x => string.IsNullOrEmpty(filter.KeySearch) || x.Asset.Name.Contains(filter.KeySearch)
                                 || x.Asset.Code.Contains(filter.KeySearch) || x.AssignedTo.Contains(filter.KeySearch));
 
 
@@ -100,14 +108,14 @@ namespace Rookie.AMO.Business.Services
             }
             if (filter.AssignedDate != default(DateTime))
             {
-                query = query.Where(x =>x.AssignedDate.Date.CompareTo(filter.AssignedDate.Date) == 0);
+                query = query.Where(x => x.AssignedDate.Date.CompareTo(filter.AssignedDate.Date) == 0);
             }
 
 
             switch (filter.OrderProperty)
             {
                 case "AssetCode":
-                    if(filter.Desc)
+                    if (filter.Desc)
                         query = query.OrderByDescending(a => a.Asset.Code);
                     else
                         query = query.OrderBy(a => a.Asset.Code);
@@ -139,12 +147,14 @@ namespace Rookie.AMO.Business.Services
         }
 
 
-        public async Task AcceptRespond(Guid id)
+        public async Task<int> AcceptRespond(Guid id)
         {
-            var assignments = await _context.Assignments.FindAsync(id);
+            var assignment = await _context.Assignments.FindAsync(id);
+            var asset = await _context.Assets.FindAsync(assignment.AssetID);
 
-            assignments.State = StateList.Accepted;
-            await _context.SaveChangesAsync();
+            asset.State = StateList.Assigned;
+            assignment.State = StateList.Accepted;
+            return await _context.SaveChangesAsync();
         }
     }
 }
