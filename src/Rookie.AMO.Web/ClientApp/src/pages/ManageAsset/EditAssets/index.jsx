@@ -9,6 +9,7 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import moment from 'moment';
+import PopupInfor from '../../../components/Popup/PopupInfor';
 
 const EditAssets = (props) => {
   const history = useHistory();
@@ -16,6 +17,7 @@ const EditAssets = (props) => {
   dispatch({ type: ac.CHANGE_INDEX, payload: '/edit-assets' });
   const EditAsset = useSelector((state) => state.EditAsset);
   const CategoryReducer = useSelector((state) => state.CategoryReducer);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [state, setState] = useState({
     Name: '',
     CategoryId: '',
@@ -58,6 +60,10 @@ const EditAssets = (props) => {
     fetchCategory();
   }, []);
 
+  const handleModelShowFunction = (content) => {
+    setIsModalOpen(content);
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setState({ ...state, [name]: value });
@@ -81,7 +87,7 @@ const EditAssets = (props) => {
       if (res.status === 200) {
         dispatch({ type: action.UPDATE_ASSETS, payload: res.data });
       }
-      history.push('/manage-asset');
+      setIsModalOpen(true);
     }
 
     try {
@@ -218,7 +224,7 @@ const EditAssets = (props) => {
           </div>
         </div>
         <br></br>
-        <fieldset className="form-group">
+        <fieldset className="form-group" id="State">
           <div className="row">
             <legend className="col-form-label col-sm-2 pt-0">State</legend>
             <div className="col-sm-10">
@@ -226,12 +232,10 @@ const EditAssets = (props) => {
                 <input
                   className="form-check-input"
                   type="radio"
-                  name="state"
+                  name="State"
                   id="gridRadios1"
                   value="Available"
-                  defaultValue="option1"
-                  defaultChecked={true}
-                  value={state.state === 'Available'}
+                  checked={state.State === 'Available'}
                   onChange={(e) => {
                     handleRadioChange(e);
                   }}
@@ -244,11 +248,10 @@ const EditAssets = (props) => {
                 <input
                   className="form-check-input"
                   type="radio"
-                  name="state"
+                  name="State"
                   id="gridRadios2"
                   value="NotAvailable"
-                  defaultValue="option2"
-                  checked={state.state === 'NotAvailable'}
+                  checked={state.State === 'NotAvailable'}
                   onChange={(e) => {
                     handleRadioChange(e);
                   }}
@@ -261,11 +264,10 @@ const EditAssets = (props) => {
                 <input
                   className="form-check-input"
                   type="radio"
-                  name="state"
+                  name="State"
                   id="gridRadios3"
                   value="WaitingRecycle"
-                  defaultValue="option3"
-                  checked={state.state === 'WaitingRecycle'}
+                  checked={state.State === 'WaitingRecycle'}
                   onChange={(e) => {
                     handleRadioChange(e);
                   }}
@@ -278,11 +280,10 @@ const EditAssets = (props) => {
                 <input
                   className="form-check-input"
                   type="radio"
-                  name="state"
+                  name="State"
                   id="gridRadios4"
                   value="Recycled"
-                  defaultValue="option4"
-                  defaultChecked={state.state === 'Recycled'}
+                  checked={state.State === 'Recycled'}
                   onChange={(e) => {
                     handleRadioChange(e);
                   }}
@@ -306,6 +307,13 @@ const EditAssets = (props) => {
           <Link to="/manage-asset">Cancel</Link>
         </button>
       </form>
+      <PopupInfor
+        title="Information"
+        content="Edit asset successfully"
+        handleModelShow={handleModelShowFunction}
+        isModalOpen={isModalOpen}
+        pathReturn="/manage-asset"
+      ></PopupInfor>
     </div>
   );
 };

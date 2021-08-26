@@ -25,12 +25,10 @@ import { Link } from 'react-router-dom';
 import ModalPickUser from '../../../components/Popup/ModalPickUser';
 import ModalPickAsset from '../../../components/Popup/ModalPickAsset';
 import * as ac from '../../../actions//IndexCom/ActionType';
+import PopupInfor from '../../../components/Popup/PopupInfor';
 
 const EditAssignment = (props) => {
-  const [isModalShow, setIsModalShow] = useState(0);
-  const [isModalAsset, setIsModalAsset] = useState(0);
-
-  const history = useHistory();
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [form, setForm] = useState({
     id: '',
     asset: '',
@@ -100,6 +98,10 @@ const EditAssignment = (props) => {
     fetchAsset();
   }, []);
 
+  const handleModelShowFunction = (content) => {
+    setIsModalOpen(content);
+  };
+
   const listUser =
     users &&
     users.length > 0 &&
@@ -140,7 +142,7 @@ const EditAssignment = (props) => {
         dispatch({ type: action.CREATE_ASSIGNMENT, payload: res.data });
       }
 
-      history.push('/manage-assignment');
+      setIsModalOpen(true);
     }
 
     try {
@@ -287,6 +289,13 @@ const EditAssignment = (props) => {
           <Link to="/manage-assignment">Cancel</Link>
         </button>
       </form>
+      <PopupInfor
+        title="Information"
+        content="Edit assignment successfully"
+        handleModelShow={handleModelShowFunction}
+        isModalOpen={isModalOpen}
+        pathReturn="/manage-assignment"
+      ></PopupInfor>
     </div>
   );
 };

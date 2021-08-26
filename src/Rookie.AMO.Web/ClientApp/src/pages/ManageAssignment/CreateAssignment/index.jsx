@@ -11,6 +11,7 @@ import * as action from '../../../actions/ManagerAssignment/ActionType';
 import * as ac from '../../../actions//IndexCom/ActionType';
 import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
+import { AiOutlineSearch } from '@react-icons/all-files/ai/AiOutlineSearch';
 
 import {
   Row,
@@ -26,10 +27,11 @@ import {
 import ModalPickUser from '../../../components/Popup/ModalPickUser';
 import { Button, ButtonToolbar } from 'react-bootstrap';
 import ModalPickAsset from '../../../components/Popup/ModalPickAsset';
+import PopupInfor from '../../../components/Popup/PopupInfor';
 
 const CreateAssignment = () => {
   const admin = useSelector((state) => state.oidc.user);
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalShow, setIsModalShow] = useState(0);
   const [isModalAsset, setIsModalAsset] = useState(0);
 
@@ -60,6 +62,10 @@ const CreateAssignment = () => {
     resolver: yupResolver(schema),
   });
 
+  const handleModelShowFunction = (content) => {
+    setIsModalOpen(content);
+  };
+
   const onSubmit = (e) => {
     // e.preventDefault();
     async function CreateAssignment() {
@@ -75,9 +81,8 @@ const CreateAssignment = () => {
 
       if (res.data) {
         dispatch({ type: action.CREATE_ASSIGNMENT, payload: res.data });
-
-        history.push('/manage-assignment');
       }
+      setIsModalOpen(true);
     }
 
     try {
@@ -104,7 +109,9 @@ const CreateAssignment = () => {
                 addonType="append"
                 onClick={() => setIsModalShow(1)}
               >
-                <Button color="secondary">To the Right!</Button>
+                <Button className="btn-danger">
+                  <AiOutlineSearch />
+                </Button>
               </InputGroupAddon>
               <ModalPickUser
                 setNameUser={setNameUser}
@@ -132,7 +139,9 @@ const CreateAssignment = () => {
                 addonType="append"
                 onClick={() => setIsModalAsset(1)}
               >
-                <Button color="secondary">To the Right!</Button>
+                <Button className="btn-danger">
+                  <AiOutlineSearch />
+                </Button>
               </InputGroupAddon>
               <ModalPickAsset
                 setNameAsset={setNameAsset}
@@ -199,6 +208,13 @@ const CreateAssignment = () => {
           <Link to="/manage-assignment">Cancel</Link>
         </button>
       </form>
+      <PopupInfor
+        title="Information"
+        content="Create assignment successfully"
+        handleModelShow={handleModelShowFunction}
+        isModalOpen={isModalOpen}
+        pathReturn="/manage-assignment"
+      ></PopupInfor>
     </div>
   );
 };
