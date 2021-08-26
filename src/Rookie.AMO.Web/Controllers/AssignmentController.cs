@@ -14,7 +14,7 @@ namespace Rookie.AMO.Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AssignmentController : ControllerBase 
+    public class AssignmentController : ControllerBase
     {
         private readonly IAssignmentService _assignmentService;
         public AssignmentController(IAssignmentService assignmentService)
@@ -34,7 +34,7 @@ namespace Rookie.AMO.Web.Controllers
         public async Task<ActionResult> UpdateAsync(Guid id, [FromBody] AssignmentUpdateRequest request)
         {
             Ensure.Any.IsNotNull(request, nameof(request));
-            await _assignmentService.UpdateAsync(id,request);
+            await _assignmentService.UpdateAsync(id, request);
             return NoContent();
         }
 
@@ -64,6 +64,17 @@ namespace Rookie.AMO.Web.Controllers
         public async Task<PagedResponseModel<AssignmentDto>> FindAsync([FromQuery] FilterAssignmentsModel filterAssignmentsModel)
         {
             return await _assignmentService.PagedQueryAsync(filterAssignmentsModel);
+        }
+
+        [HttpPut("accept/{id}")]
+        public async Task<ActionResult> AcceptAsync([FromRoute] Guid id)
+        {
+            var result = await _assignmentService.AcceptRespond(id);
+            if (result == 0)
+            {
+                return BadRequest();
+            }
+            return Ok();
         }
         //[HttpGet]
         //public async Task<IActionResult> CanBeDisableUserAsync(Guid userId)

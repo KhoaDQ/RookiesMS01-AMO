@@ -37,7 +37,7 @@ namespace Rookie.AMO.Business.Services
             return _mapper.Map<AssignmentDto>(item);
         }
 
-   
+
         public async Task DeleteAsync(Guid id)
         {
             await _baseRepository.DeleteAsync(id);
@@ -88,7 +88,7 @@ namespace Rookie.AMO.Business.Services
 
             var query = _baseRepository.Entities;
 
-            query = query.Where(x => string.IsNullOrEmpty(filter.KeySearch)|| x.Asset.Name.Contains(filter.KeySearch)
+            query = query.Where(x => string.IsNullOrEmpty(filter.KeySearch) || x.Asset.Name.Contains(filter.KeySearch)
                                 || x.Asset.Code.Contains(filter.KeySearch) || x.AssignedTo.Contains(filter.KeySearch));
 
 
@@ -100,14 +100,14 @@ namespace Rookie.AMO.Business.Services
             }
             if (filter.AssignedDate != default(DateTime))
             {
-                query = query.Where(x =>x.AssignedDate.Date.CompareTo(filter.AssignedDate.Date) == 0);
+                query = query.Where(x => x.AssignedDate.Date.CompareTo(filter.AssignedDate.Date) == 0);
             }
 
 
             switch (filter.OrderProperty)
             {
                 case "AssetCode":
-                    if(filter.Desc)
+                    if (filter.Desc)
                         query = query.OrderByDescending(a => a.Asset.Code);
                     else
                         query = query.OrderBy(a => a.Asset.Code);
@@ -139,12 +139,14 @@ namespace Rookie.AMO.Business.Services
         }
 
 
-        public async Task AcceptRespond(Guid id)
+        public async Task<int> AcceptRespond(Guid id)
         {
-            var assignments = await _context.Assignments.FindAsync(id);
+            var assignment = await _context.Assignments.FindAsync(id);
+            var asset = await _context.Assets.FindAsync(assignment.AssetID);
 
-            assignments.State = StateList.Accepted;
-            await _context.SaveChangesAsync();
+            asset.State = StateList.Assigned;
+            assignment.State = StateList.Accepted;
+            return await _context.SaveChangesAsync();
         }
     }
 }
