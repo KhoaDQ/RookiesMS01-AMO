@@ -307,6 +307,10 @@ function showAssignments(
                     ? () => handleRequestOpen(assignment)
                     : undefined
                 }
+                className = {
+                  assignment.state === 'Accepted' && !assignment.isReturnRequest
+                  ? "":"returnDisable"
+                }
               />
             </span>
           </td>

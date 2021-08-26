@@ -75,13 +75,22 @@ namespace Rookie.AMO.Business.Services
 
             var asset = await _context.Assets.FindAsync(request.AssetID);
             asset.State = StateList.Available;
-            
+
             var assignment = (from a in _context.Assignments
                               where a.AssetID == request.AssetID
                               select a).FirstOrDefault();
 
-            if (assignment != null)
+            var mapping = (from a in _context.MappingRequests
+                              where a.AssignmentId== assignment.Id
+                              select a).FirstOrDefault();
+
+
+            if (assignment != null && mapping != null)
+            {
+                _context.MappingRequests.Remove(mapping);
                 _context.Assignments.Remove(assignment);
+            }
+               
 
             await _context.SaveChangesAsync();
         }
