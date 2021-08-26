@@ -21,6 +21,7 @@ namespace Rookie.AMO.Contracts.Dtos.User
         public string Gender { get; set; }
         public string Type { get; set; }
         public string CodeStaff { get; set; }
+        public bool Disable { get; set; }
         public string Location { get; set; }
         public int ChangePasswordTimes { get; set; }
     }

@@ -29,12 +29,20 @@ function UserItem(props) {
         <td>{dateString}</td>
         <td >{user.type}</td>
         <td onClick={e => e.stopPropagation()}>
-          <span className="icon-nash icon-nash--black">
-            <Link to={`/edit-user/${user.id}`}>
-              <IoMdCreate />
+          <span className="icon-nash">
+            <Link to={user.disable ? undefined : `/edit-user/${user.id}`}>
+              <IoMdCreate className={
+                user.disable
+                  ? 'icon-nash--black-dis'
+                  : 'icon-nash--black'} />
             </Link>
           </span>
-          <span className="icon-nash icon-nash--red" onClick={() => { props.handleDeleteOpen(user.codeStaff) }}>
+          <span
+            className={
+              user.disable
+                ? 'icon-nash icon-nash--red-dis'
+                : 'icon-nash icon-nash--red'}
+            onClick={user.disable ? undefined : () => { props.handleDeleteOpen(user.id) }}>
             <IoIosCloseCircleOutline />
           </span>
         </td>
