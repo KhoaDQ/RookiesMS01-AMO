@@ -81,6 +81,7 @@ namespace Rookie.AMO.Business.Services
         }
         public async Task DeleteAsync(Guid id)
         {
+            _context.Assignments.RemoveRange(_context.Assignments.Where(a => a.AssetID == id));
             await _baseRepository.DeleteAsync(id);
         }
 
