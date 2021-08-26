@@ -17,6 +17,7 @@ namespace Rookie.AMO.Business.Services
     public class AssignmentService : IAssignmentService
     {
         private readonly IBaseRepository<Assignment> _baseRepository;
+        private readonly IBaseRepository<MappingRequest> _mappingRepository;
         private readonly IMapper _mapper;
         private readonly ApplicationDbContext _context;
 

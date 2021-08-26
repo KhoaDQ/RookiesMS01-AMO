@@ -11,6 +11,7 @@ const PopupReturnRequest = (props) => {
 
   const handleCancel = () => {
     setIsModalOpen(false);
+    props.setIsModalOpen(false);
   };
 
   return (

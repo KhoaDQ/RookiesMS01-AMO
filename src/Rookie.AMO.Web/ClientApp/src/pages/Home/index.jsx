@@ -15,12 +15,12 @@ import PopupComplete from '../../components/Popup/PopupComplete';
 import './home.css';
 import { format } from 'date-fns';
 import CreateRequest from '../Request/CreateRequest.jsx';
+import * as ac from '../../actions//IndexCom/ActionType';
 
 const stateList = {
   Accepted: 'Accepted',
   WaitingAccept: 'Waiting for Acceptance',
 };
-
 function Home() {
   const dispatch = useDispatch();
   //Popup accept assignment
@@ -33,6 +33,7 @@ function Home() {
   const [isDeclineOpen, setIsDeclineOpen] = useState(false);
   const [isDecline, setIsDecline] = useState(0);
 
+  dispatch({ type: ac.CHANGE_INDEX, payload: '' });
   const { user } = useSelector((state) => state.oidc);
   const assignments = useSelector((state) => state.AssignmentReducer);
 
@@ -247,6 +248,7 @@ function showAssignments(
   let result = [];
   if (assignments != null || assignments.length > 0) {
     result = assignments.map((assignment, index) => {
+      console.log(assignment.isReturnRequest);
       return (
         <tr key={assignment.id} onClick={() => showDetail(assignment)}>
           <td>{assignment.assetCode}</td>
@@ -298,9 +300,14 @@ function showAssignments(
                   ? 'icon-nash--blue'
                   : 'icon-nash--blue-dis')
               }
-              onClick={() => handleRequestOpen(assignment)}
             >
-              <MdSettingsBackupRestore />
+              <MdSettingsBackupRestore
+                onClick={
+                  assignment.state === 'Accepted' && !assignment.isReturnRequest
+                    ? () => handleRequestOpen(assignment)
+                    : undefined
+                }
+              />
             </span>
           </td>
         </tr>

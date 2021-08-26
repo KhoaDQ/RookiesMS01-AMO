@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import apiCaller from '../../apis/callApi';
 import * as action from '../../actions/ManagerAsset/ActionType';
 import * as actionCategory from '../../actions/ManagerCategory/ActionType';
+import * as ac from '../../actions//IndexCom/ActionType';
 import AssetList from '../../components/Asset/AssetList';
 import AssetItem from '../../components/Asset/AssetItem';
 import PopupDetailAsset from '../../components/Popup/PopupDetailAsset';
@@ -21,7 +22,6 @@ const stateList = [
 ];
 
 function ManageAsset() {
-
   const { user } = useSelector((state) => state.oidc);
   const initFilterPage = {
     Location: user.profile.location,
@@ -32,7 +32,7 @@ function ManageAsset() {
     Desc: false,
     Page: 1,
     Limit: 19,
-  }
+  };
   // Table assets
   const [filterPage, setFilterPage] = useState(initFilterPage);
 
@@ -110,13 +110,9 @@ function ManageAsset() {
 
   const historyAsset = FetchHistory(assetDetail);
 
-  function showHistory(){
-    if(historyAsset){
-      return(
-        <AssetHistory
-          historyAsset = {historyAsset}
-        />
-      )
+  function showHistory() {
+    if (historyAsset) {
+      return <AssetHistory historyAsset={historyAsset} />;
     }
   }
 
@@ -140,15 +136,16 @@ function ManageAsset() {
 
       if (assets != null) {
         if (assets.length > 0) {
-          console.log(filterPage)
-          console.log(initFilterPage)
-          if (assetChange != undefined && queryString.stringify(filterPage) === queryString.stringify(initFilterPage)) {
-            let a = assets.findIndex((a) => (a.id === assetChange.id));
-            if (a > -1){
+          if (
+            assetChange != undefined &&
+            queryString.stringify(filterPage) ===
+              queryString.stringify(initFilterPage)
+          ) {
+            let a = assets.findIndex((a) => a.id === assetChange.id);
+            if (a > -1) {
               assets.splice(a, 1);
-              a = assets.findIndex((a) => (a.id === assetChange.id));
-              if (a>-1)
-                assets.splice(a, 1);
+              a = assets.findIndex((a) => a.id === assetChange.id);
+              if (a > -1) assets.splice(a, 1);
             }
             assets.splice(0, 0, assetChange);
           }
@@ -227,6 +224,7 @@ function FetchPageAsset(filterPage, isReload) {
       let endpoint = `Asset/find?${paramsString}`;
       const res = await apiCaller(endpoint, 'GET', null);
       dispatch({ type: action.FETCH_ASSETS, payload: res.data });
+      dispatch({ type: ac.CHANGE_INDEX, payload: '' });
     }
     fetch();
   }, [filterPage, isReload]);
@@ -257,7 +255,7 @@ function FetchCategories() {
 
   return categories;
 }
-function FetchHistory(asset){
+function FetchHistory(asset) {
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -265,11 +263,12 @@ function FetchHistory(asset){
       const res = await apiCaller('Request/' + asset.id, 'GET', null);
       dispatch({ type: FETCH_HISTORY_REQUESTS, payload: res.data });
     }
-    if(asset!=undefined && 'id' in asset)
-      fetch();
+    if (asset != undefined && 'id' in asset) fetch();
   }, [asset]);
-  
-  const historyAsset = useSelector((state) => state.RequestReducer.historyAsset);
+
+  const historyAsset = useSelector(
+    (state) => state.RequestReducer.historyAsset
+  );
 
   return historyAsset;
 }

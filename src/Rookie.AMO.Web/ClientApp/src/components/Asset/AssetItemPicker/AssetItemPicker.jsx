@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-function UserItemPick(props) {
+function AssetItemPick(props) {
   let { asset, setCurrentAsset, currentAsset } = props;
 
   //console.log(asset.id === currentAsset.id);
@@ -19,10 +19,11 @@ function UserItemPick(props) {
           <input
             type="radio"
             name="select"
-            checked={asset.id === currentAsset.id}
+            checked={asset.id === currentAsset?.id}
             onChange={onChange}
           />
         </td>
+        <td>{asset.code}</td>
         <td>{asset.name}</td>
         <td>{asset.categoryName}</td>
         <td>{asset.state}</td>
@@ -30,4 +31,4 @@ function UserItemPick(props) {
     </Fragment>
   );
 }
-export default UserItemPick;
+export default AssetItemPick;

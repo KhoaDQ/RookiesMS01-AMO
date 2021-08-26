@@ -43,3 +43,10 @@ th:hover{
 .table_history_container tr th:first-child{
     width: 80px;
 }
+.assetDisable{
+    opacity: 0.4;
+    cursor: default
+}
+.assetDisable:hover{
+    background-color: default;
+}

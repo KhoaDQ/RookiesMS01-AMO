@@ -16,14 +16,16 @@ import {
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import PopupInfor from '../../../components/Popup/PopupInfor';
+import * as action from '../../../actions/IndexCom/ActionType';
 
 const CreateUser = () => {
   const dispatch = useDispatch();
+  dispatch({ type: action.CHANGE_INDEX, payload: '/create-user' });
+
   const { user } = useSelector((state) => state.oidc);
   const { roles } = useSelector((state) => state.getAllRoles);
   const [modalOpen, setModalOpen] = useState(false);
   const [errorOpen, setErrorOpen] = useState(false);
-
   const options = roles.map((role, index) => (
     <option value={role.name} key={index}>
       {role.name}
@@ -82,7 +84,6 @@ const CreateUser = () => {
     ? new Date(newUser.dateOfBirth)
     : new Date();
   theEarliestJoinedDate.setFullYear(theEarliestJoinedDate.getFullYear() + 18);
-  console.log(theEarliestJoinedDate);
   const schema = yup.object().shape({
     firstName: yup.string().matches(/^[A-Za-z]+$/, TheCharacterIsInvalid),
     lastName: yup.string().matches(/^[^\s][A-Za-z\s]+$/, TheCharacterIsInvalid),
