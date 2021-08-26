@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using EnsureThat;
 using Microsoft.AspNetCore.Mvc;
@@ -74,6 +75,21 @@ namespace Rookie.AMO.Web.Controllers
                 return BadRequest();
             }
             return Ok();
+        }
+        //[HttpGet]
+        //public async Task<IActionResult> CanBeDisableUserAsync(Guid userId)
+        //{
+        //    var assignments = await _assignmentService.GetByUserIdAsync(userId);
+        //    var can = assignments.Count() == 0;
+        //    return Ok(can);
+        //}
+
+        [HttpGet("CanBeDisable/{userId}")]
+        public async Task<IActionResult> CanBeDisableUserAsync(Guid userId)
+        {
+            var assignments = await _assignmentService.GetByUserIdAsync(userId);
+            var can = assignments.Count() == 0;
+            return Ok(can);
         }
     }
 }
