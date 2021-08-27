@@ -12,7 +12,6 @@ namespace Rookie.AMO.Identity.Quickstart.Account
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Policy = "ADMIN_POLICY")]
     public class RoleController : ControllerBase
     {
         private readonly IRoleService _roleService;
