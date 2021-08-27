@@ -39,7 +39,8 @@ namespace Rookie.AMO.Identity
                     {
                         builder.AllowAnyOrigin()
                         .AllowAnyMethod()
-                        .AllowAnyHeader();
+                        .AllowAnyHeader()
+                        .AllowCredentials();
                     });
             });
 
