@@ -38,22 +38,26 @@ namespace Rookie.AMO.Business.Services
             var request = _mapper.Map<Request>(requestAddRequest);
 
             var assignment = await _assignmentRepository.GetByIdAsync(requestAddRequest.AssignmentID);
+            var checkIsRequest = _context.MappingRequests.Where(a => a.AssignmentId== assignment.Id).FirstOrDefault();
+            if (checkIsRequest != null)
+            {
+                request.AssetID = assignment.AssetID;
+                request.AssignedDate = assignment.AssignedDate;
+                request.State = StateList.WaitingReturn;
+                request.AssignedBy = assignment.AssignedBy;
+                request.AssignedTo = assignment.AssignedTo;
 
-            request.AssetID = assignment.AssetID;
-            request.AssignedDate = assignment.AssignedDate;
-            request.State = StateList.WaitingReturn;
-            request.AssignedBy = assignment.AssignedBy;
-            request.AssignedTo = assignment.AssignedTo;
+                var item = await _baseRepository.AddAsync(request);
 
-            var item = await _baseRepository.AddAsync(request);
+                var mapping = new MappingRequest();
+                mapping.AssignmentId = assignment.Id;
+                mapping.RequestId = item.Id;
+                await _mappingRepository.AddAsync(mapping);
 
-            var mapping = new MappingRequest();
-            mapping.AssignmentId = assignment.Id;
-            mapping.RequestId = item.Id;
-            await _mappingRepository.AddAsync(mapping);
 
-            
-            return _mapper.Map<RequestDto>(item);
+                return _mapper.Map<RequestDto>(item);
+            }
+            return null;
         }
 
         public async Task<IEnumerable<RequestHistoryDto>> GetByIdAssetAsync(Guid assetId)
